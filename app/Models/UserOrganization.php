@@ -26,4 +26,14 @@ class UserOrganization extends Model
     {
         return $this->belongsTo(Organization::class);
     }
+
+
+
+    function organization_user(){
+        return $this->hasOne('App\Models\User' , 'id' , 'user_id');
+        
+    }
+
+
+
 }

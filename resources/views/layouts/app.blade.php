@@ -3,8 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="csrf-token" content="{{ csrf_token() }}">
-
+        <meta name="csrf-token"  id="csrf-token"  content="{{ csrf_token() }}">
         <title>{{ config('app.name', 'Laravel') }}</title>
 
         <!-- Fonts -->
@@ -76,9 +75,15 @@
                     </x-slot>
 
                     <x-slot name="content">
-                        <!-- <x-dropdown-link :href="route('profile.edit')">
+                        {{-- <x-dropdown-link :href="route('profile.edit')">
                             {{ __('Profile') }}
-                        </x-dropdown-link> -->
+                        </x-dropdown-link> --}}
+
+
+                        <x-dropdown-link href="#" onclick="OpenResetModel()">
+                            {{ __('Reset Password') }}
+                        </x-dropdown-link>
+
 
                         <!-- Authentication -->
                         <form method="POST" action="{{ route('logout') }}">
@@ -90,6 +95,7 @@
                                 {{ __('Log Out') }}
                             </x-dropdown-link>
                         </form>
+                        
                     </x-slot>
                 </x-dropdown>
             </div>
@@ -105,6 +111,13 @@
         </div>
         <!-- /.navbar -->
         <!-- jQuery -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="{{ asset('views/Common.js') }}"></script>
+         <!-- SweetAlert2 -->
+          {{-- <script src="{{ asset('plugins/sweetalert2/sweetalert2.min.js') }}"></script> --}}
+
+
+        <script src="{{ asset('views/profile/profile.js') }}"></script>
         <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
         <!-- Bootstrap 4 -->
         <script src="{{ asset('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>

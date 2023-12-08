@@ -23,7 +23,7 @@ class Organization extends Model
     public function services()
     {
         return $this->belongsToMany(Service::class, 'organization_services')
-            ->withPivot(['id', 'connection_parameters', 'service_name'])
+            ->withPivot(['id', 'connection_parameters', 'service_name' ,'service_nick_name'])
             ->withTimestamps();
     }
 

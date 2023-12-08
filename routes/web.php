@@ -8,8 +8,10 @@ use App\Http\Controllers\SystemUserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\OrganizationController;
+use App\Http\Controllers\UserOrganizationController;
 use App\Http\Controllers\OrganizationServicesController;
 use \App\Http\Controllers\ServiceController;
+use \App\Http\Controllers\PermissionController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -25,12 +27,24 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
+
+
+
+
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('reset-password', [ProfileController::class, 'reset_password'])->name('reset-password');
+
+
+    //Extra Route :
+    Route::post('get-permissions-attribute', [PermissionController::class, 'get_permissions'])->name('permissions');
+    
+
+    // Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    // Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    // Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::prefix('services/{service}')->group(function() {
         Route::prefix('users')->group(function() {
@@ -65,12 +79,34 @@ Route::prefix('organizations')->middleware(['role:superadmin','auth'])->group(fu
     Route::post('/add', [OrganizationController::class, 'save'])->name('organizations.save');
     Route::get('/edit/{organization}', [OrganizationController::class, 'view'])->name('organizations.view');
     Route::put('/edit/{organiztion}',[OrganizationController::class, 'edit'])->name('organizations.edit');
+   
     Route::prefix('/services')->group(function(){
+        Route::POST('/add-service',[OrganizationServicesController::class, 'add'])->name('organizations.services.add-service');
         Route::post('/edit/{id}',[OrganizationServicesController::class, 'edit'])->name('organization.services.edit');
-        Route::post('/add',[OrganizationServicesController::class, 'add'])->name('organizations.services.new');
+        Route::POST('/update-service',[OrganizationServicesController::class, 'update'])->name('organizations.services.update-service');
         Route::delete("/delete/{id}",[OrganizationServicesController::class, 'delete'])->name('organizations.services.delete');
-        Route::put('/update_connection_parameters/{id}',[OrganizationServicesController::class, 'updateConnectionParameters'])->name('organizations.services.connection_parameters');
+
+        Route::post('/get_service_type',[OrganizationServicesController::class, 'get_service_type'])->name('organizations.services.get_service_type');
+        // Route::post('/add',[OrganizationServicesController::class, 'add'])->name('organizations.services.new');
+        // Route::post('/add',[OrganizationServicesController::class, 'add'])->name('organizations.services.new');
+        // Route::put('/update_connection_parameters/{id}',[OrganizationServicesController::class, 'updateConnectionParameters'])->name('organizations.services.connection_parameters');
     });
+
+    Route::prefix('/user')->group(function(){
+
+        Route::post('/get-organization-user',[UserOrganizationController::class, 'get_org_user'])->name('organizations.user.get-organization-user');
+        Route::post('/store',[UserOrganizationController::class, 'store'])->name('organizations.user.store');
+        Route::post('/edit',[UserOrganizationController::class, 'edit'])->name('organization.user.edit');
+        Route::post('/update',[UserOrganizationController::class, 'update'])->name('organization.user.update');
+        Route::post("/delete",[UserOrganizationController::class, 'delete'])->name('organizations.user.delete');
+
+        Route::post('/check-user-email',[UserOrganizationController::class, 'check_user_email'])->name('organizations.user.check-user-email');
+    });
+
+
+
+
+
 });
 
 //Route::prefix('services')->middleware(['auth','role:superadmin'])->group(function(){

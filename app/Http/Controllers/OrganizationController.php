@@ -16,6 +16,7 @@ class OrganizationController extends Controller
     //
 
     public function index(Request $request){
+        $request->session()->forget('tab');
         $organizations = Organization::all();
         return view('organizations.index',compact('organizations'));
     }
@@ -25,6 +26,10 @@ class OrganizationController extends Controller
     }
 
     public function save(Request $request){
+
+        $tab = 'Organization-home';
+        $request->session()->put('tab', $tab);
+
         $validated = $request->validate([
             'name' => 'required|unique:organizations|max:255',
             'phone' => 'required|unique:organizations|max:20',
@@ -45,17 +50,24 @@ class OrganizationController extends Controller
             $request->session()->flash('msg', 'Organization saved successfully');
             return redirect('organizations');
         }
+
         $request->session()->flash('error', 'Can\'t add organization');
         return back()->withInput();
     }
 
     public function view(Organization $organization, Request $request){
+
         $services = Service::all();
         $organizationServices = $organization->services()->get();
+
         return view('organizations.edit',compact('organization','organizationServices', 'services'));
     }
 
     public function edit(Organization $organization, Request $request){
+
+        $tab = 'Organization-home';
+        $request->session()->put('tab', $tab);
+
         $organization = Organization::findOrFail($request->id);
         $validator = Validator::make($request->all(), [
             'name' => [

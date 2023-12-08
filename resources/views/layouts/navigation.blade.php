@@ -30,9 +30,11 @@
                 </p>
             </a>
             </li>
+
             @foreach($services as $service)
-                @if($service->name=='Dialer')
-                <li class="nav-item @if($sub_menu==strtolower($service->name)) {{ 'menu-open' }} @endif">
+                @if($service->name == 'Dialer')
+
+                <li class="nav-item @if($sub_menu == strtolower($service->name)) {{ 'menu-open' }} @endif">
                     <a href="#" class="nav-link @if($sub_menu==strtolower($service->name)) {{ 'active' }} @endif">
                     <i class="nav-icon fas fa-tty"></i>
                     <p>

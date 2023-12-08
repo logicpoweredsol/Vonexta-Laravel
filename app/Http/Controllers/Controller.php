@@ -15,6 +15,9 @@ class Controller extends BaseController
     protected $services;
 
     protected function getServices(){
+
+        dd('ok');
+        
         return Service::all();
     }
 }
