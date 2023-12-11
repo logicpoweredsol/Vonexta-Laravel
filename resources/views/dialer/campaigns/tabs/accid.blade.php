@@ -1,7 +1,7 @@
 <table id="accidDT" class="table table-striped table-hover vonexta-table">
                             <thead>
                                 <tr>
-                                    <th>#</th>
+                                    {{-- <th>#</th> --}}
                                     <th>Campaign ID</th>
                                     <th>Campaign Name</th>
                                     <th>Area Code</th>
@@ -12,9 +12,9 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>
+                                    {{-- <td>
                                         1
-                                    </td>
+                                    </td> --}}
                                     <td>
                                         TESTCAMP
                                     </td>

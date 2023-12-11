@@ -35,7 +35,7 @@
         <table id="usersDT" class="table table-bordered table-striped table-hover">
             <thead>
                 <tr>
-                    <th>#</th>
+                    {{-- <th>#</th> --}}
                     <th>Name</th>
                     <th>Email</th>
                     <th>Status</th>
@@ -49,9 +49,9 @@
                 @foreach($UserOrganization as $user)
 
                         <tr>
-                            <td>
+                            {{-- <td>
                                 {{ $loop->index + 1 }}
-                            </td>
+                            </td> --}}
                             <td>
                                 {{ $user->organization_user->name }}
                             </td>
@@ -60,11 +60,15 @@
                             </td>
                         
                             <td>
+                                
                                 @if($user->organization_user->active==1)
-                                    <span class="badge badge-success">Active</span>
+                                {{-- <span class="badge badge-success"> <strong>Active</strong> </span> --}}
+                                    <span class="text-success"> <strong>Active</strong> </span>
                                 @else
-                                    <span class="badge badge-danger">Inactive</span>
+                                <span class="text-danger"> <strong>Not Active</strong></span>
+                                {{-- <span class="badge badge-danger"> <strong>Not Active</strong></span> --}}
                                 @endif
+
                             </td>
 
                             @php

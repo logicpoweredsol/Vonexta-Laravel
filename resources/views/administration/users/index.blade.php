@@ -68,7 +68,7 @@
             <table id="usersDT" class="table table-bordered table-striped table-hover">
                 <thead>
                     <tr>
-                        <th>#</th>
+                        {{-- <th>#</th> --}}
                         <th>Name</th>
                         <th>Email</th>
                         <!-- <th>Phone</th> -->
@@ -79,9 +79,9 @@
                 <tbody>
                     @foreach($users as $user)
                         <tr>
-                            <td>
+                            {{-- <td>
                                 {{ $loop->index + 1 }}
-                            </td>
+                            </td> --}}
                             <td>
                                 {{ $user->name }}
                             </td>
@@ -92,11 +92,20 @@
                                 {{ $user->phone }}
                             </td> -->
                             <td>
+
                                 @if($user->active==1)
+                                    {{-- <span class="badge badge-success"> <strong>Active</strong> </span> --}}
+                                    <span class="text-success"> <strong>Active</strong> </span>
+                                @else
+                                    <span class="text-danger"> <strong>Not Active</strong></span>
+                                    {{-- <span class="badge badge-danger"> <strong>Not Active</strong></span> --}}
+                                @endif
+
+                                {{-- @if($user->active==1)
                                     <span class="badge badge-success">Active</span>
                                 @else
                                     <span class="badge badge-danger">Inactive</span>
-                                @endif
+                                @endif --}}
                             </td>
                             <td>
                                 @if(Auth::user()->can('edit users'))
