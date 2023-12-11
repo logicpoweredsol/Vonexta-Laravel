@@ -1,4 +1,15 @@
+@php
+$main_menu =  request()->segment(1);
+$sub_menu = request()->segment(2);
+$sub_menu_main = null!==request()->segment(3) && !is_numeric(request()->segment(3)) ? request()->segment(3) : '';
+$sub_menu_sub = null!==request()->segment(4) && !is_numeric(request()->segment(4)) ? request()->segment(4) : '';
+@endphp
+
+
+
+
 <!-- Main Sidebar Container -->
+
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="{{ route('dashboard') }}" class="brand-link" style='height: 55px;'>

@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('organization_services', function (Blueprint $table) {
-            $table->string('service_name');
+            $table->string('service_name')->nullable();
         });
     }
 
@@ -21,8 +21,10 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('organization_services', function (Blueprint $table) {
-            $table->string('service_name');
-        });
+        Schema::dropIfExists('organization_services');
+
+        // Schema::table('organization_services', function (Blueprint $table) {
+        //     $table->string('service_name');
+        // });
     }
 };

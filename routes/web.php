@@ -38,8 +38,8 @@ Route::middleware('auth')->group(function () {
     Route::get('reset-password', [ProfileController::class, 'reset_password'])->name('reset-password');
 
 
-    //Extra Route :
-    Route::post('get-permissions-attribute', [PermissionController::class, 'get_permissions'])->name('permissions');
+    // //Extra Route :
+    // Route::post('get-permissions-attribute', [PermissionController::class, 'get_permissions'])->name('permissions');
     
 
     // Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -93,10 +93,8 @@ Route::prefix('organizations')->middleware(['role:superadmin','auth'])->group(fu
     });
 
     Route::prefix('/user')->group(function(){
-
-        Route::post('/get-organization-user',[UserOrganizationController::class, 'get_org_user'])->name('organizations.user.get-organization-user');
         Route::post('/store',[UserOrganizationController::class, 'store'])->name('organizations.user.store');
-        Route::post('/edit',[UserOrganizationController::class, 'edit'])->name('organization.user.edit');
+        Route::get('/edit/{user_id}/{org_id}',[UserOrganizationController::class, 'edit']);
         Route::post('/update',[UserOrganizationController::class, 'update'])->name('organization.user.update');
         Route::post("/delete",[UserOrganizationController::class, 'delete'])->name('organizations.user.delete');
 

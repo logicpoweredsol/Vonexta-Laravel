@@ -12,132 +12,197 @@ use Spatie\Permission\Models\Permission;
 use Illuminate\Support\Facades\Validator;
 use App\Models\UserOrganization;
 use App\Models\Organization;
+use App\Models\UserHaveService;
 
 
 
 class UserOrganizationController extends Controller
 {
     //
-
-    public function get_org_user(Request $request){
-
-       
-        $UserOrganization = UserOrganization::with('organization_user')->where('organization_id',$request->organization_id)->get();
-        return $UserOrganization;
-    }
-
-
     public function store(Request $request){
-        $tab = 'Organization-user';    
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'email_verified_at' => date("Y-m-d H:i:s"),
+        // dd($request->all());
+        $tab = 'Organization-user'; 
+        $request->session()->put('tab', $tab);
+        $request->session()->put('tab-action', 'org-user');
+      
+
+        $validator = Validator::make($request->all(),[
+            "name" => "required|string|max:50",
+            "email" => "required|email|unique:App\Models\User,email",
+            "password" => "required|string|min:8",
+            "role" => "required",
+            "Services" => "required|array"
         ]);
+
+        if($validator->fails()){
+            $request->session()->put('tab-action', 'add-org-user');
+            return redirect()->back()->withInput()->withErrors($validator);
+        }
+
+        $user = new User();
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = Hash::make($request->password);
+        $user->email_verified_at = date("Y-m-d H:i:s");
+        $user->save();
+
+        $last_user = User::orderBy('id','desc')->first();
+
 
          // dd($request->role);
          $role = Role::findByName($request->role);
-
          $user->assignRole($role);
-         if(count($request->permissions)){
-             //assign all the selected permissions to the user...
-             $user->givePermissionTo($request->permissions);
+
+
+         if($role->name == 'admin'){
+            $all_Permission =  Permission::pluck("name")->toArray();
+            $user->givePermissionTo($all_Permission);
          }
- 
-         //add this user into the same organization as of the logged in user...
-         $organization = Organization::where('id',$request->organizations_id)->first();
- 
+        
+         foreach($request->Services as  $i=>$ser){
+            $UserHaveService = new UserHaveService();
+            $UserHaveService->organization_services_id =  $request->Services[$i];
+            $UserHaveService->service_id =  get_serive_id($request->Services[$i]);
+            $UserHaveService->user_id = $last_user->id;
+            $UserHaveService->organization_id = $request->org_id;
+            $UserHaveService->save();
+
+         }
+
+        //  //add this user into the same organization as of the logged in user...
+         $organization = Organization::where('id',$request->org_id)->first();
+
          $user->organizations()->attach($organization,["is_organization_admin" => $user->hasRole("admin") ? 1 : 0]);
-         return redirect()->back()->with('success', 'User added successfully')->with('tab', $tab);
+
+         return redirect()->back()->with('success', 'User added successfully');
 
 
         
     }
 
-    public function edit(Request $request){
-        $user = User::find($request->user_id);
+    public function edit($user_id ,$org_id){
+
+        
+        $tab = 'Organization-user'; 
+        session()->put('tab', $tab);
+        session()->put('tab-action', 'edit-org-user');
+
+        $user = User::find($user_id);
+        $organization = Organization::find($org_id);
+        $organizationServices = $organization->services()->get();
+        $user_have_service = UserHaveService::where('organization_id' ,$org_id)->where('user_id' ,$user_id)->pluck("organization_services_id")->toArray();
         $roles = Role::where('name', '!=', 'superadmin')->get();
         $userRoles = $user->getRoleNames();
-        $permissions = Permission::all();
-        $userPermissions = $user->getAllPermissions()->pluck("name")->toArray();
         $Data = [
-                "roles"=> $roles ,
-                "userRoles"=> $userRoles,
-                "permissions"=>  $permissions,
-                "userPermissions"=> $userPermissions,
-                "user" => $user
-            ];
-        return $Data;
+            "user"=> $user ,
+            "organization"=> $organization,
+            "organizationServices"=>  $organizationServices,
+            "user_have_service"=> $user_have_service,
+            "userRoles" => $userRoles,
+            'roles'=>$roles
+        ];
+
+    
+
+        session()->put('org-user-edit', $Data);
+        return redirect()->back();
     }
 
     public function update(Request $request){
 
-        $tab = 'Organization-user'; 
 
-        $user = User::find($request->edit_org_user_id);
+        $tab = 'Organization-user'; 
+        $request->session()->put('tab', $tab);
+        $request->session()->put('tab-action', 'org-user');
+
+
+        $validator = Validator::make($request->all(),[
+            "name" => "required|string|max:50",
+
+            "email" => [
+                "required",
+                "email",
+                Rule::unique('users')->ignore($request->user_id),
+            ],
+            "role" => "required",
+            "Services" => "required|array"
+        ]);
+
+
+        if($validator->fails()){
+            $request->session()->put('tab-action', 'edit-org-user');
+            return redirect()->back()->withInput()->withErrors($validator);
+        }
+
+
+
+        $user_have_service = UserHaveService::where('organization_id' ,$request->org_id)->where('user_id' ,$request->user_id)->get();
+        foreach($user_have_service as $user_have){
+            $user_have->delete();
+        }
+
+
+        $user = User::find($request->user_id);
         $user->name = $request->name;
         $user->email = $request->email;
-
         if($request->password != null &&  $request->password != ''){
             $user->password = Hash::make($request->password);
         }
 
+
         $user->active = $request->active;
         $user->syncRoles([$request->role]);
-        //revoke all permissions by default... if assigned any permissions they will be set below...
-        $user->revokePermissionTo($user->getAllPermissions());
-        if($request->has('permissions') && null!==$request->permissions){
-            // if(!is_array($request->permissions)){
-            //     return redirect()->back()->withInput()->withErrors(['permissions' => "Error in permission assignment"]);
-            // }
+
+        if($request->role != 'admin'){
             $user->revokePermissionTo($user->getAllPermissions());
-            if(count($request->permissions)){
-                //assign all the selected permissions to the user...
-                $user->givePermissionTo($request->permissions);
-            }
-        }
+         }
+
+
+
+        foreach($request->Services as  $i=>$ser){
+            $UserHaveService = new UserHaveService();
+            $UserHaveService->organization_services_id =  $request->Services[$i];
+            $UserHaveService->user_id = $request->user_id;
+            $UserHaveService->organization_id = $request->org_id;
+            $UserHaveService->service_id =  get_serive_id($request->Services[$i]);
+            $UserHaveService->save();
+
+
+         }
+
         $user->save();
-        return redirect()->back()->with('success', 'User Update successfully')->with('tab', $tab);
+        return redirect()->back()->with('success', 'User Update successfully');
        
     }
 
 
 
     public function delete(Request $request){
-        $tab = 'Organization-user';
+
+        $tab = 'Organization-user'; 
+        $request->session()->put('tab', $tab);
+        $request->session()->put('tab-action', 'org-user');
+
         $user = User::find($request->user_id);
         $user->organizations()->detach();
-        $user->delete();
-    
-        // Set session variable
-        $request->session()->put('tab', $tab);
-    
+        if($user->getAllPermissions()){
+            $user->revokePermissionTo($user->getAllPermissions());
+        }
+
+
+        $user_have_service = UserHaveService::where('organization_id' ,$request->org_id)->where('user_id' ,$request->user_id)->get();
+        foreach($user_have_service as $user_have){
+            $user_have->delete();
+        }
+
+        
+      
+        $user->delete();    
         return response()->json(["status" => true, "message" => "User deleted successfully."], 200);
     }
 
 
-    // public function delete(Request $request){
-    //     $tab = 'Organization-user';
-    //     $user = user::find($request->user_id);
-
-    //     // $organization = $user->organizations->first();
-    //     // $adminUsers = $organization->users->filter(function ($user){
-    //     //     return $user->hasRole('admin');
-    //     // })->count();
-    //     // if($adminUsers<=1){
-    //     //     return response()->json(["status" => false,'error' => "Cannot delete only admin of the organization."],403);
-    //     // }
-    //     $user->organizations()->detach();
-    //     $user->delete();
-
-
-        
-    //     return response()->json(["status" => true, "message" => "User deleted successfully."], 200);
-    // }
-
-
-
+    
     function check_user_email(Request $request) {
         $status = 0;
 

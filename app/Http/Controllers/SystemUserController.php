@@ -19,10 +19,12 @@ class SystemUserController extends Controller
     public function index(){
         //get users of logged in user's organization...
         $user = Auth::user();
+        
         $organization = $user->organizations->first();
         if(!$user->hasRole('admin')){
             abort(403);
         }
+
         $users = $organization->users->except($user->id);
         return view('administration.users.index',compact('users'));
     }

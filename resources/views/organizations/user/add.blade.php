@@ -1,85 +1,92 @@
-@extends('layouts.app')
-@push('css')
+<form id="" action="{{route('organizations.user.store')}}" method="post" class="form-horizontal">
+    @csrf
+    <!-- Default box -->
+    <input type="hidden" name="org_id" value="{{ $organization->id }}">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Add User</h3>
 
-@endpush
-@section('content')
-    <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper">
-        <!-- Content Header (Page header) -->
-        <section class="content-header">
-            <div class="container-fluid">
-                <div class="row mb-2">
-                    <div class="col-sm-6">
-                        <h1>Users</h1>
-                    </div>
-                    <div class="col-sm-6">
-                        <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
-                            <li class="breadcrumb-item"><a href="#">System Settings</a></li>
-                            <li class="breadcrumb-item active">Users</li>
-                        </ol>
-                    </div>
-                </div>
-            </div><!-- /.container-fluid -->
-        </section>
+            <div class="card-tools">
+                <a href="javascript:;" onclick="change_tab('org-user');" class="btn btn-sm btn-primary">
+                Users List 
+                </a>
+            </div>
 
-        <!-- Main content -->
-        <section class="content">
-            <!-- form start -->
-            <form id="systemUsersForm" action="" method="post" class="form-horizontal">
-                @csrf
-                <!-- Default box -->
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Add User</h3>
-                    </div>
-                    <div class="card-body">
-                        <div class="form-group row">
-                            <label for="name" class="col-sm-2 col-form-label">Name</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" id="name" name="name"  placeholder="Name of the user" >
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="email" class="col-sm-2 col-form-label">Email</label>
-                            <div class="col-sm-10">
-                                <input type="email" class="form-control " id="email" name="email"  placeholder="Email">
-                                
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="password" class="col-sm-2 col-form-label">Password</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" id="password" name="password"  placeholder="Password">
-                               
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="role" class="col-sm-2 col-form-label">Role</label>
-                            <div class="col-sm-10">
-                                <select class="form-control" id="role" name="role">
-                                    <option value="admin">Admin</option>
-                                    <option value="user">User</option>
-                                </select>
-                               
-                            </div>
-                        </div>
-                       
-                    </div>
-                    <!-- /.card-body -->
-                    <div class="card-footer">
-                        <button type="submit" class="btn btn-primary float-right">Save</button>
-                        <a href="javascript:;" class="btn btn-default">Cancel</a>
-                    </div>
-                    <!-- /.card-footer-->
+        </div>
+        <div class="card-body">
+            <div class="form-group row">
+                <label for="name" class="col-sm-2 col-form-label">Name</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name')  }}" placeholder="Name of the user" @error('name') aria-invalid="true" @enderror>
+                    <span class="error">
+                    @error('name')
+                        <label id="name-error" class="error invalid-feedback" for="name" style="display: inline-block;">{{ $message }}</label>
+                    @enderror
+                </span>
                 </div>
-                <!-- /.card -->
-            </form>
-        </section>
-    <!-- /.content -->
+            </div>
+            <div class="form-group row">
+                <label for="email" class="col-sm-2 col-form-label">Email</label>
+                <div class="col-sm-10">
+                    <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email')  }}" placeholder="Email" @error('email') aria-invalid="true" @enderror>
+                    <span class="error">
+                        @error('email')
+                            <label id="email-error" class="error invalid-feedback" for="email" style="display: inline-block;">{{ $message }}</label>
+                        @enderror
+                    </span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="password" class="col-sm-2 col-form-label">Password</label>
+                <div class="col-sm-10">
+                    <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password" value="{{ old('password')  }}" placeholder="Password"  @error('password') aria-invalid="true" @enderror>
+                    <span class="error">
+                        @error('password')
+                        <label id="password-error" class="error invalid-feedback" for="password" style="display: inline-block;">{{ $message }}</label>
+                    @enderror
+                    </span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="role" class="col-sm-2 col-form-label">Role</label>
+                <div class="col-sm-10">
+                    <select class="form-control" id="role" name="role" value="{{ old('role')  }}">
+                        <option value="admin">Admin</option>
+                        <option value="user">User</option>
+                    </select>
+                    <span class="error"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="Services_row" class="col-sm-2 col-form-label">Services</label>
+                <div class="col-sm-10">
+                    <div class="row" id="Services_row" @error('Services') aria-invalid="true" @enderror>
+                        @foreach($organizationServices as $Services)
+                            <div class="col-sm-6 mb-3">
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="{{ str_replace(" ", "_", $Services->pivot->service_nick_name) }}" name="Services[]" data-bootstrap-switch data-off-color="danger" data-on-color="success" checked value="{{ $Services->pivot->id }}">
+                                    <label class="form-check-label" for="{{ str_replace(" ", "_", $Services->pivot->service_nick_name) }}"> {{ ucwords($Services->pivot->service_nick_name)}}</label>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                    <span class="error">
+                        @error('Services')
+                            <label id="Services-error" class="error invalid-feedback" for="Services_row" style="display: inline-block;">{{ $message }}</label>
+                        @enderror
+                    </span>
+                </div>
+            </div>
+        </div>
+        <!-- /.card-body -->
+        <div class="card-footer">
+            <button type="submit" class="btn btn-primary float-right">Save</button>
+            <a href="javascript:;" onclick="change_tab('org-user');"  class="btn btn-default">Cancel</a>
+        </div>
+        <!-- /.card-footer-->
     </div>
-    <!-- /.content-wrapper -->
-@endSection
+    <!-- /.card -->
+</form>
 
 @push('scripts')
     <!-- Bootstrap Switch -->
@@ -87,6 +94,6 @@
     <!-- jquery-validation -->
     <script src="{{ asset('plugins/jquery-validation/jquery.validate.min.js') }}"></script>
     <script src="{{ asset('plugins/jquery-validation/additional-methods.min.js') }}"></script>
-    <script src="{{ asset('views/system/users/add.js') }}"></script>
+    {{-- <script src="{{ asset('views/system/users/add.js') }}"></script> --}}
     <script src="{{ asset('views/system/users/common.js') }}"></script>
 @endpush

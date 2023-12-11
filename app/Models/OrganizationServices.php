@@ -20,4 +20,12 @@ class OrganizationServices extends Model
     {
         return $this->belongsTo(Service::class);
     }
+
+    function service_deatil(){
+        return $this->hasOne('App\Models\Service' , 'id' , 'service_id');
+    }
+
+  
+
+
 }

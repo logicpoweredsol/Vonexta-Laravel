@@ -9,6 +9,7 @@ use App\Models\OrganizationServices;
 use App\Models\Automation;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
+use App\Models\UserOrganization;
 use DB;
 
 class OrganizationController extends Controller
@@ -59,8 +60,9 @@ class OrganizationController extends Controller
 
         $services = Service::all();
         $organizationServices = $organization->services()->get();
+        $UserOrganization = UserOrganization::with('organization_user')->where('organization_id',$organization->id)->get();
 
-        return view('organizations.edit',compact('organization','organizationServices', 'services'));
+        return view('organizations.edit',compact('organization','organizationServices', 'services','UserOrganization'));
     }
 
     public function edit(Organization $organization, Request $request){
@@ -104,4 +106,6 @@ class OrganizationController extends Controller
         $request->session()->flash('error', 'Can\'t update organization');
         return back()->withInput();
     }
+
+
 }

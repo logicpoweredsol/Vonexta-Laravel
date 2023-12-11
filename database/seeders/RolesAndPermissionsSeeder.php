@@ -8,7 +8,8 @@ use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 
 class RolesAndPermissionsSeeder extends Seeder
-{
+{ 
+    
     /**
      * Run the database seeds.
      */
@@ -31,6 +32,10 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::create(['name' => 'edit services']);
         Permission::create(['name' => 'view services']);
         Permission::create(['name' => 'delete services']);
+        Permission::create(['name' => 'create campaigns']);
+        Permission::create(['name' => 'edit campaigns']);
+        Permission::create(['name' => 'view campaigns']);
+        Permission::create(['name' => 'delete campaigns']);
 
         // create roles and assign created permissions
 
@@ -42,7 +47,22 @@ class RolesAndPermissionsSeeder extends Seeder
         // $role = Role::create(['name' => 'moderator'])
         //     ->givePermissionTo(['publish articles', 'unpublish articles']);
 
-        $role = Role::create(['name' => 'superadmin']);
+        Role::create([
+            'name' => 'admin',
+            'guard_name'=>'web'
+         ]);
+         Role::create([
+            'name' => 'user',
+            'guard_name'=>'web'
+         ]);
+
+         $role = Role::create([
+            'name' => 'superadmin',
+            'guard_name'=>'web'
+         ]);
+
+     
+        // $role = Role::create(['name' => 'superadmin']);
         $role->givePermissionTo(Permission::all());
     }
 }

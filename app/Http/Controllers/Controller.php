@@ -11,13 +11,8 @@ use App\Models\Service;
 class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
-
-    protected $services;
-
-    protected function getServices(){
-
-        dd('ok');
-        
-        return Service::all();
-    }
+    // protected $services;
+    // protected function getServices(){        
+    //     return Service::all();
+    // }
 }

@@ -20,17 +20,17 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      */
-    public function boot(): void
-    {
-        //
-        $commonData = [
-            'services' => Service::all(),
-            'main_menu' => request()->segment(1),
-            'sub_menu' => request()->segment(2),
-            'sub_menu_main' => null!==request()->segment(3) && !is_numeric(request()->segment(3)) ? request()->segment(3) : '',
-            'sub_menu_sub' => null!==request()->segment(4) && !is_numeric(request()->segment(4)) ? request()->segment(4) : '',
-        ];
-        View::share($commonData);
-        Schema::defaultStringLength(125);
-    }
+    // public function boot(): void
+    // {
+    //     //
+    //     $commonData = [
+    //         'services' => Service::all(),
+    //         'main_menu' => request()->segment(1),
+    //         'sub_menu' => request()->segment(2),
+    //         'sub_menu_main' => null!==request()->segment(3) && !is_numeric(request()->segment(3)) ? request()->segment(3) : '',
+    //         'sub_menu_sub' => null!==request()->segment(4) && !is_numeric(request()->segment(4)) ? request()->segment(4) : '',
+    //     ];
+    //     View::share($commonData);
+    //     Schema::defaultStringLength(125);
+    // }
 }
