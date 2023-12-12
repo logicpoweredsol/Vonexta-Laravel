@@ -109,8 +109,8 @@ Route::prefix('accounts')->middleware(['role:superadmin','auth'])->group(functio
     Route::get('/add',[SuperAdminController::class, 'add'])->name('accounts.new');
     Route::post('/store',[SuperAdminController::class, 'store'])->name('accounts.store');
     Route::get('/edit/{user}',[SuperAdminController::class, 'edit'])->name('accounts.edit');
-    Route::post('/update',[SuperAdminController::class, 'update'])->name('organization.update');
-    Route::post("/delete",[SuperAdminController::class, 'delete'])->name('organizations.delete');
+    Route::post('/update',[SuperAdminController::class, 'update'])->name('accounts.update');
+    Route::post("/delete",[SuperAdminController::class, 'delete'])->name('accounts.delete');
 
 });
 

@@ -24,10 +24,6 @@ class SuperAdminController extends Controller
         $superadminUsers = User::whereHas('roles', function ($query) {
             $query->where('name', 'superadmin');
         })->get();
-
-
-        
-
         return view('superadmin.index',compact('superadminUsers'));
     }
 
@@ -69,6 +65,50 @@ class SuperAdminController extends Controller
             return redirect()->back()->withInput()->withErrors(['error' => $e->getMessage()]);
         }
     }
+
+
+    public function edit($userID)  {
+        $User = User::find($userID);
+        return view('superadmin.edit',compact('User'));
+    }
+
+
+
+    public function update(Request $request) {
+
+        try {
+            $validator = Validator::make($request->all(), [
+                "name" => "required|string|max:50",
+                "email" => [
+                    "required",
+                    "email",
+                    Rule::unique('users')->ignore($request->id),
+                ],
+
+            ]);
+    
+            if ($validator->fails()) {
+                return redirect()->back()->withInput()->withErrors($validator);
+            }
+            $update_user = User::where('id',$request->id)->first();
+            $update_user->name = $request->name;
+            $update_user->email  = $request->email;
+            $update_user->active  = $request->active;
+
+            if($request->password != "" && $request->password !=null){
+                $update_user->password = Hash::make($request->password);
+            }
+            $update_user->save();
+    
+            return redirect('accounts')->with('success', 'Successfully account has been Updated');
+        } catch (\Exception $e) {
+            return redirect()->back()->withInput()->withErrors(['error' => $e->getMessage()]);
+        }
+    }
+
+
+
+
 
 
 
