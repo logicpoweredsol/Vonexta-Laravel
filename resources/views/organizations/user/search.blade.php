@@ -1,3 +1,10 @@
+<style>
+    .bootstrap-switch.bootstrap-switch-wrapper.bootstrap-switch-animate{
+        width: 80px !important;
+    }
+</style>
+
+
 <div class="card">
     <div class="card-header">
       <h3 class="card-title">All Users</h3>

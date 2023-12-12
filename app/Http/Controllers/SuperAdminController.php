@@ -20,10 +20,10 @@ class SuperAdminController extends Controller
         if(!$user->hasRole('superadmin')){
             abort(403);
         }
-
+        $currentUserId = Auth::id(); // Get the ID of the currently authenticated user
         $superadminUsers = User::whereHas('roles', function ($query) {
             $query->where('name', 'superadmin');
-        })->get();
+        })->where('id', '!=', $currentUserId)->get();
         return view('superadmin.index',compact('superadminUsers'));
     }
 

@@ -8,7 +8,6 @@
    
 @endphp
 
-
     <form id="" action="{{route('organization.user.update')}}" method="post" class="form-horizontal">
         @csrf
 

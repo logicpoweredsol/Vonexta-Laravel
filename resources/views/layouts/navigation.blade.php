@@ -219,28 +219,31 @@ $sub_menu_sub = null!==request()->segment(4) && !is_numeric(request()->segment(4
 
             @endforeach
 
-           
 
 
+            @if (!auth()->user()->hasRole('user'))
             <li class="nav-item @if($main_menu == 'administration') {{ 'menu-open' }} @endif">
-                    <a href="#" class="nav-link @if($main_menu=='administration') {{ 'active' }} @endif">
+                <a href="#" class="nav-link @if($main_menu=='administration') {{ 'active' }} @endif">
                     <i class="nav-icon fas fa-tools"></i>
-                    <p>
-                        Administration
+                    <p>Administration
                         <i class="right fas fa-angle-left"></i>
                     </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="{{ route('administration.users') }}" class="nav-link @if($sub_menu=='users') {{ 'active' }} @endif">
-                            <i class="nav-icon fas fa-users"></i>
-                                <p>
-                                    Users
-                                </p>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
+                </a>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                        <a href="{{ route('administration.users') }}" class="nav-link @if($sub_menu=='users') {{ 'active' }} @endif">
+                        <i class="nav-icon fas fa-users"></i>
+                            <p>
+                                Users
+                            </p>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            @endif
+            
+
+
         </ul>
       </nav>
       <!-- /.sidebar-menu -->
