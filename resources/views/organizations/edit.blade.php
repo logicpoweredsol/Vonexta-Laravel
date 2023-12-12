@@ -367,13 +367,13 @@
                     <div class="form-group row">
                         <label for="edit_service_name" class="col-sm-12 col-md-4 col-lg-4 col-form-label">Service slug</label>
                         <div class="col-sm-12 col-md-8 col-lg-8">
-                            <input type="text" class="form-control" id="edit_service_name" name="service_name" placeholder="Service slug">
+                            <input type="text" class="form-control" id="edit_service_name" required name="service_name" placeholder="Service slug">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="edit_service_nick" class="col-sm-12 col-md-4 col-lg-4 col-form-label">Nick name</label>
                         <div class="col-sm-12 col-md-8 col-lg-8">
-                            <input type="text" class="form-control" id="edit_service_nick" name="service_name" placeholder="nick name">
+                            <input type="text" class="form-control" id="edit_service_nick" required name="service_name" placeholder="nick name">
                         </div>
                     </div>
 

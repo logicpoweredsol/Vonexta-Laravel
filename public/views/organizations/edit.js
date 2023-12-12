@@ -357,91 +357,7 @@ $(document).ready(function () {
     
 
 
-    // $(document).on('click', '#btnAddConnectionParameters', function (){
-    //     $("#btnAddConnectionParameters").prop('disabled',true);
-    //     let url = `${baseUrl}/organizations/services/add-service`;
-    //     let formData = $('#formConnectionParameters').serialize();
-    //     var serive_name = $("#serive_name").val();
-    //     var org_serice_id = $("#org_serice_id").val();
-    //     var org_id = $("#org_id").val();
-
-    //     $.ajax({
-    //         url:  url,
-    //         method: 'POST',
-    //         headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
-    //         data: {
-    //             'formData': formData,
-    //             'serive_name':serive_name,
-    //             'org_serice_id':org_serice_id,
-    //             'org_id':org_id,
-    //         },
-    //         success: function (response) {
-
-    //             if(response.status){
-    //                 Swal.fire({
-    //                     icon: 'success',
-    //                     title: 'Service added',
-    //                     text: 'Service added successfully',
-    //                 }).then((result) => {
-    //                     if (result.isConfirmed) {
-    //                         $('#formConnectionParameters')[0].reset();
-    //                         $('#modalConnectionParameters').modal('hide');
-    //                         window.location.reload();
-    //                     }
-    //                 });
-    //             }else{
-    //                 Swal.fire({
-    //                     icon: 'error',
-    //                     title: 'Error',
-    //                     text: 'Something went wrong. Please try again.',
-    //                 });
-    //             }
-
-
-    //         },
-    //         error: function (xhr, status, error) {},
-    //     });
-    // });
-
-
-
-    // $(document).on('click', '#btnAddConnectionParameters', function (){
-    //     let url = `${baseUrl}/organizations/services/update_connection_parameters/`;
-    //     let formData = $('#formConnectionParameters').serialize();
-    //     $.ajax({
-    //         url: url,
-    //         type: 'POST',
-    //         data: formData,
-    //         success: function (response) {
-    //            if(response.status){
-    //                Swal.fire({
-    //                    icon: 'success',
-    //                    title: 'Service added',
-    //                    text: 'Service added successfully',
-    //                }).then((result) => {
-    //                    if (result.isConfirmed) {
-    //                        $('#formConnectionParameters')[0].reset();
-    //                        $('#modalConnectionParameters').modal('hide');
-    //                        window.location.reload();
-    //                    }
-    //                });
-    //            }else{
-    //                Swal.fire({
-    //                    icon: 'error',
-    //                    title: 'Error',
-    //                    text: 'Something went wrong. Please try again.',
-    //                });
-    //            }
-    //         },
-    //         error: function (error) {
-    //             Swal.fire({
-    //                 icon: 'error',
-    //                 title: 'Error',
-    //                 text: 'Something went wrong. Please try again.',
-    //             });
-    //         }
-    //     });
-    // });
+    
 
 
 
@@ -451,7 +367,7 @@ $(document).ready(function () {
         $("#btnUpdateOgService").prop('disabled', true);
     
         // Validate the form fields
-        if(validateForm()) {
+        if(updatevalidateForm()) {
             // All fields are filled, proceed with the AJAX request
             let url = `${baseUrl}/organizations/services/update-service`;
             let formData = $('#formEditOgService').serialize();
@@ -474,8 +390,8 @@ $(document).ready(function () {
                     if(response.status){
                         Swal.fire({
                             icon: 'success',
-                            title: 'Service added',
-                            text: 'Service added successfully',
+                            title: 'Service Update',
+                            text: 'Service Update successfully',
                         }).then((result) => {
                             if (result.isConfirmed) {
                                 $('#formEditOgService')[0].reset();
@@ -503,8 +419,7 @@ $(document).ready(function () {
 
 
     function validateForm() {
-        // Add your validation logic here
-        // For example, check if each required field has a value
+
         var isValid = true;
     
         $('#formConnectionParameters [required]').each(function() {
@@ -522,70 +437,62 @@ $(document).ready(function () {
     }
 
 
-    // $(document).on('click', '#btnUpdateOgService', function (){
-    //     let url = `${baseUrl}/organizations/services/update_connection_parameters/${$('#ogService_id').val()}`;
-    //     let formData = $('#formEditOgService').serialize();
-    //     $.ajax({
-    //         url: url,
-    //         type: 'PUT',
-    //         data: formData,
-    //         success: function (response) {
-    //             if(response.status){
-    //                 Swal.fire({
-    //                     icon: 'success',
-    //                     title: 'Service updated',
-    //                     text: 'Service updated successfully',
-    //                 }).then((result) => {
-    //                     if (result.isConfirmed) {
-    //                         $('#formEditOgService')[0].reset();
-    //                         $('#modalEditOgService').modal('hide');
-    //                         window.location.reload();
-    //                     }
-    //                 });
-    //             }else{
-    //                 Swal.fire({
-    //                     icon: 'error',
-    //                     title: 'Error',
-    //                     text: 'Something went wrong. Please try again.',
-    //                 });
-    //             }
-    //         },
-    //         error: function (error) {
-    //             Swal.fire({
-    //                 icon: 'error',
-    //                 title: 'Error',
-    //                 text: 'Something went wrong. Please try again.',
-    //             });
-    //         }
-    //     });
-    // });
+    function updatevalidateForm() {
+        var isValid = true;
+        // Get the values of specific input fields using jQuery
+        var edit_service_name = $('#edit_service_name').val();
+        var edit_service_nick = $('#edit_service_nick').val();
 
+
+    
+        // Check if the specific input fields are empty
+        if (!edit_service_name) {
+            // Optionally, you can add additional logic to highlight the invalid fields
+            $('#edit_service_name').addClass('is-invalid');
+            isValid =  false;
+        } else {
+            // Remove any previous validation classes
+            $('#edit_service_name').removeClass('is-invalid');
+        }
+
+
+        if (!edit_service_nick) {
+            // Optionally, you can add additional logic to highlight the invalid fields
+            $('#edit_service_nick').addClass('is-invalid');
+            isValid =  false;
+        } else {
+            // Remove any previous validation classes
+            $('#edit_service_nick').removeClass('is-invalid');
+        }
+
+
+    
+        // Get the editOgServiceBody div using jQuery
+        var editOgServiceBodyDiv = $('#editOgServiceBody');
+    
+        // Get all input elements within the div
+        var inputElements = editOgServiceBodyDiv.find('input');
+    
+       
+        // Loop through each input element and perform your check
+        inputElements.each(function () {
+            if (!$(this).val()) {
+                isValid = false;
+                $(this).addClass('is-invalid');
+            } else {
+                // Remove any previous validation classes
+                $(this).removeClass('is-invalid');
+            }
+        });
+    
+        return isValid;
+    }
+
+    
+
+    
 });
 
 
 
 
-// const updateButtonVisibility = () => {
-//     // Iterate over each .newParam element
-//     $('#connectionParams .newParam').each(function(index, element) {
-//         let btnRemove = $(element).find('.btnRemoveParameter');
-//         let btnAdd = $(element).find('.btnAddParameter');
-//
-//         // Show btnRemove and hide btnAdd for all elements except the last one
-//         if (index !== $('#connectionParams .newParam').length - 1) {
-//             btnRemove.show();
-//             btnAdd.hide();
-//         } else {
-//             // Show btnAdd and hide btnRemove for the last element
-//             btnRemove.hide();
-//             btnAdd.show();
-//         }
-//     });
-//
-//     // Show or hide btnAddParameter in the authType row based on the existence of .newParam children
-//     if ($('#connectionParams .newParam').length > 0) {
-//         $('.authType .btnAddParameter').hide();
-//     } else {
-//         $('.authType .btnAddParameter').show();
-//     }
-// };
