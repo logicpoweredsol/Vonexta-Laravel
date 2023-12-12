@@ -49,6 +49,17 @@ $sub_menu_sub = null!==request()->segment(4) && !is_numeric(request()->segment(4
               </p>
             </a>
           </li>
+
+          <li class="nav-item">
+            <a href="{{ route('accounts') }}" class="nav-link {{ $main_menu }} @if($main_menu=='accounts') {{ "active" }} @endif">
+              <i class="nav-icon fa-solid fa-user"></i>
+        
+              <p>
+                Super Admin 
+              </p>
+            </a>
+          </li>
+
         </ul>
       </nav>
       <!-- /.sidebar-menu -->

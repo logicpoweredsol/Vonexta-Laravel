@@ -46,7 +46,7 @@ class UserOrganizationController extends Controller
         $user->email_verified_at = date("Y-m-d H:i:s");
         $user->save();
 
-        $last_user = User::orderBy('id','desc')->first();
+        $user = User::orderBy('id','desc')->first();
 
 
          // dd($request->role);
@@ -63,7 +63,7 @@ class UserOrganizationController extends Controller
             $UserHaveService = new UserHaveService();
             $UserHaveService->organization_services_id =  $request->Services[$i];
             $UserHaveService->service_id =  get_serive_id($request->Services[$i]);
-            $UserHaveService->user_id = $last_user->id;
+            $UserHaveService->user_id = $user->id;
             $UserHaveService->organization_id = $request->org_id;
             $UserHaveService->save();
 

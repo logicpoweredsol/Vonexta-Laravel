@@ -12,6 +12,7 @@ use App\Http\Controllers\UserOrganizationController;
 use App\Http\Controllers\OrganizationServicesController;
 use \App\Http\Controllers\ServiceController;
 use \App\Http\Controllers\PermissionController;
+use \App\Http\Controllers\SuperAdminController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -100,12 +101,19 @@ Route::prefix('organizations')->middleware(['role:superadmin','auth'])->group(fu
 
         Route::post('/check-user-email',[UserOrganizationController::class, 'check_user_email'])->name('organizations.user.check-user-email');
     });
+});
 
 
-
-
+Route::prefix('accounts')->middleware(['role:superadmin','auth'])->group(function(){
+    Route::get('/',[SuperAdminController::class, 'index'])->name('accounts');
+    Route::get('/add',[SuperAdminController::class, 'add'])->name('accounts.new');
+    Route::post('/store',[SuperAdminController::class, 'store'])->name('accounts.store');
+    Route::get('/edit/{user}',[SuperAdminController::class, 'edit'])->name('accounts.edit');
+    Route::post('/update',[SuperAdminController::class, 'update'])->name('organization.update');
+    Route::post("/delete",[SuperAdminController::class, 'delete'])->name('organizations.delete');
 
 });
+
 
 //Route::prefix('services')->middleware(['auth','role:superadmin'])->group(function(){
 //    Route::get('/',[ServiceController::class,'index'])->name('services');
