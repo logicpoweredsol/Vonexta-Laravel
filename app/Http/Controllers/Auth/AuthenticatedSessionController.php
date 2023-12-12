@@ -25,11 +25,31 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
-        $request->authenticate();
+        $request->validate([
+            $this->username() => 'required|string',
+            'password' => 'required|string',
+        ]);
 
-        $request->session()->regenerate();
+        $credentials = $request->only($this->username(), 'password');
 
-        return redirect()->intended(RouteServiceProvider::HOME);
+        if (Auth::attempt($credentials)) {
+            // Check the status of the user
+            $user = Auth::user();
+
+            if ($user->active == 1) {
+                $request->session()->regenerate();
+                return redirect()->intended(RouteServiceProvider::HOME);
+            } else {
+                Auth::logout();
+                return back()->withErrors([
+                    $this->username() => 'Your account is disabled. Please contact the administrator.',
+                ]);
+            }
+        }
+
+        return back()->withErrors([
+            $this->username() => 'These credentials do not match our records.',
+        ]);
     }
 
     /**
@@ -44,5 +64,13 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerateToken();
 
         return redirect('/');
+    }
+
+    /**
+     * Get the login username to be used by the controller.
+     */
+    public function username(): string
+    {
+        return 'email';
     }
 }
