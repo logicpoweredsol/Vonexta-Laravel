@@ -20,9 +20,9 @@ class SuperadminUserSeeder extends Seeder
 
         $superadmin = User::create([
             "name" => "Vonexta Admin",
-            "email" => "superadmin@vonexta.com",
+            "email" => "superadmin@gmail.com",
             "phone" => "3144327451",
-            "password" => Hash::make('test'),
+            "password" => Hash::make('admin@123'),
             "email_verified_at" => date('Y-m-d H:i:s'),
             "created_at" => date('Y-m-d H:i:s'),
             "updated_at" => date('Y-m-d H:i:s'),

@@ -14,26 +14,31 @@ class ServicesTableSeeder extends Seeder
      */
     public function run(): void
     {
-        //
         // Clear existing records
         DB::table('services')->delete();
 
-        // Seed service records
-        DB::table('services')->insert([
+        $services = [
             [
-                'name' => 'Dialler',
-                'description' => 'Dialler Services',
+                'name' => 'Dialer',
+                'description' => 'Dialer Services',
                 'connection_parameters' => json_encode([
-                    'type' => 'mysql',
-                    'host' => '66.45.254.2',
-                    'database' => 'asterisk',
-                    'user' => 'cron',
-                    'pass' => '1234',
-                    'port' => '3306',
-                    'api_user' => 'apiuser',
-                    'api_pass' => 'apiuser',
+                    'type' => 'dialer',
+                    'server_url' => '',
+                    'api_user' => '',
+                    'api_pass' => '',
                 ]),
-            ]
-        ]);
+            ],
+            [
+                'name' => 'Automation',
+                'description' => 'Automation Services',
+                'connection_parameters' => json_encode([
+                    'api_key' => '',
+                ]),
+            ],
+        ];
+
+        foreach ($services as $service) {
+            DB::table('services')->insert($service);
+        }
     }
 }
