@@ -1,6 +1,9 @@
 @extends('layouts.guest')
 <!-- Session Status -->
 <x-auth-session-status class="mb-4" :status="session('status')" />
+
+
+
 @section('content')
 <div class="card">
     <div class="card-body login-card-body">
@@ -16,6 +19,16 @@
             </div>
           </div>
         </div>
+        @if($errors->has('account_disabled'))
+            <div class="row">
+              <div class="col-sm-12 col-md-12 col-lg-12">
+                <ul class="text-sm text-red-600 dark:text-red-400 space-y-1 mt-2">
+                  <li>{{ $errors->first('account_disabled') }}</li>
+                </ul>
+              </div>
+          </div>
+        @endif
+
           <div class="row">
               <div class="col-sm-12 col-md-12 col-lg-12">
                   <x-input-error :messages="$errors->get('email')" class="mt-2" />

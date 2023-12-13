@@ -29,20 +29,17 @@ Route::get('/', function () {
 });
 
 
-Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified', 'checkUserStatus'])->name('dashboard');
 
 
 
 
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth','checkUserStatus'])->group(function () {
     Route::get('reset-password', [ProfileController::class, 'reset_password'])->name('reset-password');
-
 
     // //Extra Route :
     // Route::post('get-permissions-attribute', [PermissionController::class, 'get_permissions'])->name('permissions');
-    
-
     // Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     // Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     // Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -74,7 +71,7 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 
-Route::prefix('organizations')->middleware(['role:superadmin','auth'])->group(function(){
+Route::prefix('organizations')->middleware(['role:superadmin','auth', 'checkUserStatus'])->group(function(){
     Route::get('/', [OrganizationController::class, 'index'])->name('organizations');
     Route::get('/add', [OrganizationController::class, 'add'])->name('organizations.new');
     Route::post('/add', [OrganizationController::class, 'save'])->name('organizations.save');
@@ -104,7 +101,7 @@ Route::prefix('organizations')->middleware(['role:superadmin','auth'])->group(fu
 });
 
 
-Route::prefix('accounts')->middleware(['role:superadmin','auth'])->group(function(){
+Route::prefix('accounts')->middleware(['role:superadmin','auth', 'checkUserStatus'])->group(function(){
     Route::get('/',[SuperAdminController::class, 'index'])->name('accounts');
     Route::get('/add',[SuperAdminController::class, 'add'])->name('accounts.new');
     Route::post('/store',[SuperAdminController::class, 'store'])->name('accounts.store');
