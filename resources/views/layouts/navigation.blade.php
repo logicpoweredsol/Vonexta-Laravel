@@ -46,7 +46,8 @@ $sub_menu_sub = null!==request()->segment(4) && !is_numeric(request()->segment(4
                   
 
             @foreach($services as $service)
-                @if($service->name == 'Dialer')
+                @if (count($service->user_have_service) > 0)
+                    @if($service->name == 'Dialer')
                     <li class="nav-header">{{strtoupper($service->name)}}</li>
 
                     @foreach ($service->user_have_service as $user_have)
@@ -191,26 +192,31 @@ $sub_menu_sub = null!==request()->segment(4) && !is_numeric(request()->segment(4
                     </li>
 
                     @endforeach
-                    
+                
                 @endif
+                @endif
+              
 
                 @if($service->name == 'Automation')
-                 <li class="nav-header">{{strtoupper($service->name)}}</li>
+                    @if (count($service->user_have_service) > 0)
+                        <li class="nav-header">{{strtoupper($service->name)}}</li>
 
-                 @foreach ($service->user_have_service as $user_have)
-                    
-                 <li class="nav-item @if($sub_menu == strtolower($user_have->user_have_service->service_nick_name)) {{ 'menu-open' }} @endif">
-                     <a href="#" class="nav-link @if($sub_menu==strtolower($user_have->user_have_service->service_nick_name)) {{ 'active' }} @endif">
-                     <i class="nav-icon fas fa-solid fa-robot"></i>
-                     <p>
-                     {{$user_have->user_have_service->service_nick_name}}
-                         <i class="right fas fa-angle-left"></i>
-                     </p>
-                     </a>
-                     
-                 </li>
-
-                 @endforeach
+                        @foreach ($service->user_have_service as $user_have)
+                        
+                        <li class="nav-item @if($sub_menu == strtolower($user_have->user_have_service->service_nick_name)) {{ 'menu-open' }} @endif">
+                            <a href="#" class="nav-link @if($sub_menu==strtolower($user_have->user_have_service->service_nick_name)) {{ 'active' }} @endif">
+                            <i class="nav-icon fas fa-solid fa-robot"></i>
+                            <p>
+                            {{$user_have->user_have_service->service_nick_name}}
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                            </a>
+                            
+                        </li>
+    
+                        @endforeach
+                    @endif
+                 
 
 
 

@@ -31,7 +31,7 @@ class UserOrganizationController extends Controller
             "email" => "required|email|unique:App\Models\User,email",
             "password" => "required|string|min:8",
             "role" => "required",
-            "Services" => "required|array"
+            // "Services" => "required|array"
         ]);
 
         if($validator->fails()){
@@ -59,15 +59,18 @@ class UserOrganizationController extends Controller
             $user->givePermissionTo($all_Permission);
          }
         
-         foreach($request->Services as  $i=>$ser){
-            $UserHaveService = new UserHaveService();
-            $UserHaveService->organization_services_id =  $request->Services[$i];
-            $UserHaveService->service_id =  get_serive_id($request->Services[$i]);
-            $UserHaveService->user_id = $user->id;
-            $UserHaveService->organization_id = $request->org_id;
-            $UserHaveService->save();
-
+         if(isset($request->Services)){
+            foreach($request->Services as  $i=>$ser){
+                $UserHaveService = new UserHaveService();
+                $UserHaveService->organization_services_id =  $request->Services[$i];
+                $UserHaveService->service_id =  get_serive_id($request->Services[$i]);
+                $UserHaveService->user_id = $user->id;
+                $UserHaveService->organization_id = $request->org_id;
+                $UserHaveService->save();
+    
+             }
          }
+        
 
         //  //add this user into the same organization as of the logged in user...
          $organization = Organization::where('id',$request->org_id)->first();
@@ -158,17 +161,18 @@ class UserOrganizationController extends Controller
          }
 
 
+        if(isset($request->Services)){
+            foreach($request->Services as  $i=>$ser){
+                $UserHaveService = new UserHaveService();
+                $UserHaveService->organization_services_id =  $request->Services[$i];
+                $UserHaveService->user_id = $request->user_id;
+                $UserHaveService->organization_id = $request->org_id;
+                $UserHaveService->service_id =  get_serive_id($request->Services[$i]);
+                $UserHaveService->save();
 
-        foreach($request->Services as  $i=>$ser){
-            $UserHaveService = new UserHaveService();
-            $UserHaveService->organization_services_id =  $request->Services[$i];
-            $UserHaveService->user_id = $request->user_id;
-            $UserHaveService->organization_id = $request->org_id;
-            $UserHaveService->service_id =  get_serive_id($request->Services[$i]);
-            $UserHaveService->save();
 
-
-         }
+            }
+        }
 
         $user->save();
         return redirect()->back()->with('success', 'User Update successfully');
