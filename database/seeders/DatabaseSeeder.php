@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             $this->call(RolesAndPermissionsSeeder::class);
             $this->call(ServicesTableSeeder::class);
             $this->call(SuperadminUserSeeder::class);
+            $this->call(OrganizationsTableSeeder::class);
 
         // \App\Models\User::factory()->create([
         //     'name' => 'Test User',

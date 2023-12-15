@@ -44,6 +44,12 @@ class UserOrganizationController extends Controller
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
         $user->email_verified_at = date("Y-m-d H:i:s");
+        $user->created_by = Auth()->user()->id;
+        if($request->role == 'admin'){
+            $user->is_owner = $this->is_first_user($request->org_id);
+        }
+       
+        
         $user->save();
 
         $user = User::orderBy('id','desc')->first();
@@ -61,13 +67,14 @@ class UserOrganizationController extends Controller
         
          if(isset($request->Services)){
             foreach($request->Services as  $i=>$ser){
+
                 $UserHaveService = new UserHaveService();
                 $UserHaveService->organization_services_id =  $request->Services[$i];
-                $UserHaveService->service_id =  get_serive_id($request->Services[$i]);
                 $UserHaveService->user_id = $user->id;
                 $UserHaveService->organization_id = $request->org_id;
+                $UserHaveService->service_type =  get_serive_type_id($request->Services[$i]);
                 $UserHaveService->save();
-    
+
              }
          }
         
@@ -138,12 +145,21 @@ class UserOrganizationController extends Controller
         }
 
 
+        $previous_user_have_service = UserHaveService::where('organization_id' ,$request->org_id)->where('user_id' ,$request->user_id)->pluck("organization_services_id")->toArray();
 
-        $user_have_service = UserHaveService::where('organization_id' ,$request->org_id)->where('user_id' ,$request->user_id)->get();
-        foreach($user_have_service as $user_have){
-            $user_have->delete();
+        $close_service = array_filter($previous_user_have_service, function($x) use ($request) {
+            return !in_array($x, $request->Services);
+        });
+
+
+        if(!empty($close_service)){
+            foreach($close_service as $closeService){
+                $user_have_service = UserHaveService::where('organization_id' ,$request->org_id)->where('user_id' ,$request->user_id)->where('organization_services_id',$closeService)->first();
+                $user_have_service->delete();
+            }
         }
 
+    
 
         $user = User::find($request->user_id);
         $user->name = $request->name;
@@ -156,21 +172,28 @@ class UserOrganizationController extends Controller
         $user->active = $request->active;
         $user->syncRoles([$request->role]);
 
-        if($request->role != 'admin'){
+        if($request->role == 'user'){
             $user->revokePermissionTo($user->getAllPermissions());
+         }else{
+            $user->revokePermissionTo($user->getAllPermissions());
+            $all_Permission =  Permission::pluck("name")->toArray();
+            $user->givePermissionTo($all_Permission);
          }
+         
 
 
         if(isset($request->Services)){
             foreach($request->Services as  $i=>$ser){
-                $UserHaveService = new UserHaveService();
+                $UserHaveService = UserHaveService::where('organization_id' ,$request->org_id)->where('user_id' ,$request->user_id)->where('organization_services_id',$request->Services[$i])->first();
+                
+                if( $UserHaveService == '' && $UserHaveService == null ){
+                    $UserHaveService = new UserHaveService();
+                }
                 $UserHaveService->organization_services_id =  $request->Services[$i];
                 $UserHaveService->user_id = $request->user_id;
                 $UserHaveService->organization_id = $request->org_id;
-                $UserHaveService->service_id =  get_serive_id($request->Services[$i]);
+                $UserHaveService->service_type =  get_serive_type_id($request->Services[$i]);
                 $UserHaveService->save();
-
-
             }
         }
 
@@ -199,8 +222,6 @@ class UserOrganizationController extends Controller
             $user_have->delete();
         }
 
-        
-      
         $user->delete();    
         return response()->json(["status" => true, "message" => "User deleted successfully."], 200);
     }
@@ -230,6 +251,20 @@ class UserOrganizationController extends Controller
         }
 
         return $status;
+    }
+
+
+
+    function is_first_user($OrgID) {
+
+        $status = false;
+        $UserOrganization = UserOrganization::where('organization_id',$OrgID)->first();
+
+        if($UserOrganization == '' || $UserOrganization == null){
+            $status = true;
+        }
+        return $status;
+        
     }
 
     

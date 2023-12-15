@@ -20,7 +20,7 @@ function get_user_nav($user_id) {
 
 
 
-function get_serive_id($org_ser_id) {
+function get_serive_type_id($org_ser_id) {
     $Organization = OrganizationServices::where('id',$org_ser_id)->first();
     return  $Organization->service_id;
 }

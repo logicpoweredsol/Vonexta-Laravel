@@ -61,50 +61,11 @@ $(document).ready(function () {
     });
 
 
-    $(document).on('click', '.btnEditService', function (){
-        let myServiceId = $(this).attr('data-id');
-        $.ajax({
-            url: `${baseUrl}/organizations/services/edit/${myServiceId}`,
-            type: 'POST',
-            data: {
-                _token: csrfToken
-            },
-            success: function (response) {
-                $('.connParamsRow').remove();
-                $('#ogService_id').val(response.ogService.id);
-                $('#edit_service_name').val(response.ogService.service_name);
-                $('#edit_service_nick').val(response.ogService.service_nick_name);
-                let conParamsHTML = "";
-                var conParams = JSON.parse(response.connection_parameters);
-                var ogServiceConParams = JSON.parse(response.ogService.connection_parameters);
-                $.each(conParams, function (key, value){
-                    if(key!=='type'){
-                        conParamsHTML += `
-                            <div class="form-group row connParamsRow">
-                                <label for="${key}" class="col-sm-12 col-md-4 col-lg-4 col-form-label">${key}</label>
-                                <div class="col-sm-12 col-md-8 col-lg-8">
-                                    <input type="text" class="form-control" id="${key}" name="param_keys[${key}]" value="${ogServiceConParams[key] != null ? ogServiceConParams[key] : value}" placeholder="Parameter Value">
-                                </div>
-                            </div>
-                        `;
-                    }
-                });
-                $('#editOgServiceBody').html(conParamsHTML);
-                $('#modalEditOgService').modal('show');
-            },
-            error: function (xhr, status, error) {
-                Swal.fire({
-                    title: "Error",
-                    text: "Error getting service",
-                    icon: "error",
-                    timer: 2000,
-                    showConfirmButton: false
-                });
-            }
-        });
-    });
+   
 
 
+
+    //Add Service  Model 
     $(document).on('click', '#btnAddService', function () {
         let Service = $('#services').val();
         if (Service === "") {
@@ -141,13 +102,13 @@ $(document).ready(function () {
                 }
 
 
-                let Service = $('#services').val();
+                let services_type = $('#services_type').val();
                 $.ajax({
                     url:  `${baseUrl}/organizations/services/get_service_type`,
                     method: 'POST',
                     headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
                     data: {
-                        'service_id': Service,
+                        'services_type': services_type,
                     },
                     success: function (response) {
                     var service_id = response['id'];
@@ -168,10 +129,10 @@ $(document).ready(function () {
                     })
                     $('#connectionParams').html(conParamsHTML);
 
-                    $("#serive_name").val(serviceName);
-                    $("#serive_Nickname").val(serviceNiceName);
-                    $('#org_serice_id').val(service_id);
-                    $("#org_id").val($("#orgId").val());
+                    $("#add_serive_name").val(serviceName);
+                    $("#add_serive_Nickname").val(serviceNiceName);
+                    $('#add_service_type').val(service_id);
+                    // $("#add_org_id").val($("#orgId").val());
                     
                     $('#modalConnectionParameters').modal('show');
 
@@ -182,119 +143,8 @@ $(document).ready(function () {
         });
     });
 
-    
 
-    
-
-
-
-    // $(document).on('click', '#btnAddService', function (){
-    //     let newService = $('#services').val();
-    //     if(newService==""){
-    //         Swal.fire({
-    //             title: "Organization Services",
-    //             text: "Please select service to add.",
-    //             icon: "warning",
-    //             // timer: 2000,
-    //             showConfirmButton: true,
-    //         });
-    //         return false;
-    //     }
-    //     Swal.fire({
-    //         title: "Please enter name for your service",
-    //         input: "text",
-    //         inputAttributes: {
-    //             autocapitalize: "off"
-    //         },
-    //         showCancelButton: true,
-    //         confirmButtonText: "Add Service",
-    //         showLoaderOnConfirm: true,
-    //         preConfirm: async (serviceName) => {
-    //             try {
-    //                 const formData = new FormData();
-    //                 formData.append('service_id', newService);
-    //                 formData.append('service_name', serviceName);
-    //                 formData.append('_token', csrfToken);
-    //                 formData.append('organization_id', $('#orgId').val());
-    //                 const url = `${baseUrl}/organizations/services/add`;
-    //                 const response = await fetch(url, {
-    //                     method: 'POST',
-    //                     body: formData,
-    //                 });
-    //                 if (!response.ok) {
-    //                     return Swal.showValidationMessage(`Something went wrong, please try again.`);
-    //                 }
-    //                 return response.json();
-    //             } catch (error) {
-    //                 Swal.showValidationMessage(`Request failed: ${error}`);
-    //             }
-    //         },
-    //         allowOutsideClick: () => !Swal.isLoading()
-    //     }).then((result) => {
-    //         if (result.isConfirmed) {
-    //             if (result.value && result.value.data && result.value.data.id) {
-    //                 let osId = result.value.data.id;
-    //                 let conParams = result.value.data.connection_parameters;
-    //                 let conParamsHTML = "";
-    //                 conParams = JSON.parse(conParams);
-    //                 $.each(conParams, function (key, value){
-    //                     if(key!=='type'){
-    //                         conParamsHTML += `
-    //                         <div class="form-group row connParamsRow">
-    //                             <label for="${key}" class="col-sm-12 col-md-4 col-lg-4 col-form-label">${key}</label>
-    //                             <div class="col-sm-12 col-md-8 col-lg-8">
-    //                                 <input type="text" class="form-control" id="${key}" name="param_keys[${key}]" value="${value}" placeholder="Parameter Value">
-    //                             </div>
-    //                         </div>
-    //                     `;
-    //                     }
-    //                 });
-    //                 $('#connectionParams').append(conParamsHTML);
-    //                 $('#os_id').val(osId);
-    //                 $('#modalConnectionParameters').modal('show');
-    //                 return false;
-    //             }else{
-    //                 throw new Error("Something went wrong.");
-    //             }
-    //         }
-    //     }).catch((error) => {
-    //         // Handle fetch error
-    //         Swal.fire({
-    //             icon: 'error',
-    //             title: 'Error',
-    //             text: 'Something went wrong. Please try again.',
-    //         });
-    //     });;
-    // });
-    // $(document).on('click', '.btnAddParameter', function (){
-    //    let newParamHtml = `<div class="form-group row newParam">
-    //         <div class="col-sm-5 col-md-5 col-lg-5">
-    //             <input type="text" class="form-control" name="param_keys[]" placeholder="Enter key">
-    //         </div>
-    //         <div class="col-sm-5 col-md-5 col-lg-5">
-    //             <input type="text" class="form-control" name="param_values[]" placeholder="Enter value">
-    //         </div>
-    //         <div class="col-sm-2 col-md-2 col-lg-2">
-    //             <button type="button" class="btn btn-primary btn-md btnAddParameter"><i class="fas fa-plus"></i></button>
-    //             <button type="button" class="btn btn-danger btn-md btnRemoveParameter" style="display: none;"><i class="fas fa-trash"></i></button>
-    //         </div>
-    //    </div>`;
-    //    $('#connectionParams').append(newParamHtml);
-    //     updateButtonVisibility();
-    // });
-   
-   
-   
-    $(document).on('click', '.btnRemoveParameter', function () {
-        // Remove the current parameter row
-        let thisParam = $(this).closest('.newParam');
-        thisParam.remove();
-        updateButtonVisibility();
-    });
-
-
-
-
+    //Add Save Button
     $(document).on('click', '#btnAddConnectionParameters', function (){
         // Disable the button to prevent multiple clicks
         $("#btnAddConnectionParameters").prop('disabled', true);
@@ -304,10 +154,10 @@ $(document).ready(function () {
             // All fields are filled, proceed with the AJAX request
             let url = `${baseUrl}/organizations/services/add-service`;
             let formData = $('#formConnectionParameters').serialize();
-            var serive_name = $("#serive_name").val();
-            var org_serice_id = $("#org_serice_id").val();
-            var org_id = $("#org_id").val();
-            var serviceNiceName = $("#serive_Nickname").val();
+            var serive_name = $("#add_serive_name").val();
+            var add_service_type = $("#add_service_type").val();
+            var org_id = $("#orgId").val();
+            var serviceNiceName = $("#add_serive_Nickname").val();
             // $("#serive_Nickname").val(serviceNiceName);
             
             $.ajax({
@@ -317,7 +167,7 @@ $(document).ready(function () {
                 data: {
                     'formData': formData,
                     'serive_name': serive_name,
-                    'org_serice_id': org_serice_id,
+                    'add_service_type': add_service_type,
                     'org_id': org_id,
                     'serviceNiceName':serviceNiceName
                 },
@@ -350,18 +200,54 @@ $(document).ready(function () {
             $("#btnAddConnectionParameters").prop('disabled', false);
         }
     });
-    
-    // Function to validate the form fields
-   
-
-    
 
 
-    
+    // Edit Service modal
+    $(document).on('click', '.btnEditService', function (){
+        let myServiceId = $(this).attr('data-id');
+        $.ajax({
+            url: `${baseUrl}/organizations/services/edit/${myServiceId}`,
+            type: 'POST',
+            data: {
+                _token: csrfToken
+            },
+            success: function (response) {
+                $('.connParamsRow').remove();
+                $('#ogService_id').val(response.ogService.id);
+                $('#edit_serive_name').val(response.ogService.service_name);
+                $('#edit_serive_Nickname').val(response.ogService.service_nick_name);
+                let conParamsHTML = "";
+                var conParams = JSON.parse(response.connection_parameters);
+                var ogServiceConParams = JSON.parse(response.ogService.connection_parameters);
+                $.each(conParams, function (key, value){
+                    if(key!=='type'){
+                        conParamsHTML += `
+                            <div class="form-group row connParamsRow">
+                                <label for="${key}" class="col-sm-12 col-md-4 col-lg-4 col-form-label">${key}</label>
+                                <div class="col-sm-12 col-md-8 col-lg-8">
+                                    <input type="text" class="form-control" id="${key}" name="param_keys[${key}]" value="${ogServiceConParams[key] != null ? ogServiceConParams[key] : value}" placeholder="Parameter Value">
+                                </div>
+                            </div>
+                        `;
+                    }
+                });
+                $('#editOgServiceBody').html(conParamsHTML);
+                $('#modalEditOgService').modal('show');
+            },
+            error: function (xhr, status, error) {
+                Swal.fire({
+                    title: "Error",
+                    text: "Error getting service",
+                    icon: "error",
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+            }
+        });
+    });
 
 
-
-
+    // edit Save BUtton
     $(document).on('click', '#btnUpdateOgService', function (){
         // Disable the button to prevent multiple clicks
         $("#btnUpdateOgService").prop('disabled', true);
@@ -373,8 +259,8 @@ $(document).ready(function () {
             let formData = $('#formEditOgService').serialize();
 
             var ogService_id = $('#ogService_id').val();
-            var edit_service_name =  $('#edit_service_name').val();
-            var edit_service_nick =  $('#edit_service_nick').val();
+            var edit_service_name =  $('#edit_serive_name').val();
+            var edit_serive_Nickname =  $('#edit_serive_Nickname').val();
     
             $.ajax({
                 url:  url,
@@ -383,8 +269,8 @@ $(document).ready(function () {
                 data: {
                     'formData': formData,
                     'id':ogService_id,
-                    'srviceName':edit_service_name,
-                    'serviceNiceName':edit_service_nick
+                    'serive_name':edit_service_name,
+                    'serviceNiceName':edit_serive_Nickname
                 },
                 success: function (response) {
                     if(response.status){
@@ -418,6 +304,34 @@ $(document).ready(function () {
 
 
 
+
+    
+
+    
+
+
+
+   
+    // $(document).on('click', '.btnRemoveParameter', function () {
+    //     // Remove the current parameter row
+    //     let thisParam = $(this).closest('.newParam');
+    //     thisParam.remove();
+    //     updateButtonVisibility();
+    // });
+
+
+
+
+   
+    
+    // Function to validate the form fields
+   
+
+
+    
+
+
+
     function validateForm() {
 
         var isValid = true;
@@ -440,29 +354,29 @@ $(document).ready(function () {
     function updatevalidateForm() {
         var isValid = true;
         // Get the values of specific input fields using jQuery
-        var edit_service_name = $('#edit_service_name').val();
-        var edit_service_nick = $('#edit_service_nick').val();
+        var edit_serive_name = $('#edit_serive_name').val();
+        var edit_serive_Nickname = $('#edit_serive_Nickname').val();
 
 
     
         // Check if the specific input fields are empty
-        if (!edit_service_name) {
+        if (!edit_serive_name) {
             // Optionally, you can add additional logic to highlight the invalid fields
-            $('#edit_service_name').addClass('is-invalid');
+            $('#edit_serive_name').addClass('is-invalid');
             isValid =  false;
         } else {
             // Remove any previous validation classes
-            $('#edit_service_name').removeClass('is-invalid');
+            $('#edit_serive_name').removeClass('is-invalid');
         }
 
 
-        if (!edit_service_nick) {
+        if (!edit_serive_Nickname) {
             // Optionally, you can add additional logic to highlight the invalid fields
-            $('#edit_service_nick').addClass('is-invalid');
+            $('#edit_serive_Nickname').addClass('is-invalid');
             isValid =  false;
         } else {
             // Remove any previous validation classes
-            $('#edit_service_nick').removeClass('is-invalid');
+            $('#edit_serive_Nickname').removeClass('is-invalid');
         }
 
 

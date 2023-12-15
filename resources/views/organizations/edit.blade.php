@@ -221,7 +221,7 @@
                                     <div class="form-group">
                                     <!-- <label for="services" class="form-label">Services</label> -->
                                         <div class="input-group">
-                                            <select name="services" class="form-control" id="services">
+                                            <select name="services" class="form-control" id="services_type">
                                                 <option value="" @if(old('services')=='') {{ "selected" }} @endif>Select Service</option>
                                                 @foreach($services as $service)
                                                     <option value="{{ $service->id }}">{{ $service->name }} | {{ $service->description }}</option>
@@ -323,10 +323,10 @@
     <!-- Modal to get connection parameters from the super admin to connect to the service... -->
     <div class="modal fade" id="modalConnectionParameters" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
-            <input type="hidden" name="serive_name" id="serive_name" value="">
-            <input type="hidden" name="org_serice_id" id="org_serice_id" value="">
-            <input type="hidden" name="org_id" id="org_id" value="">
-            <input type="hidden" name="serive_Nickname" id="serive_Nickname" value="">
+            <input type="hidden" id="add_serive_name" value="">
+            <input type="hidden" id="add_service_type" value="">
+            {{-- <input type="hidden" id="add_org_id" value=""> --}}
+            <input type="hidden" id="add_serive_Nickname" value="">
             
             <form id="formConnectionParameters" class="form-horizontal">
                 <div class="modal-content">
@@ -363,17 +363,18 @@
                 </div>
                 <div class="modal-body">
 
-                    <input type="hidden" name="ogService_id" id="ogService_id" value="">
+                    <input type="hidden" id="ogService_id" >
+
                     <div class="form-group row">
                         <label for="edit_service_name" class="col-sm-12 col-md-4 col-lg-4 col-form-label">Service slug</label>
                         <div class="col-sm-12 col-md-8 col-lg-8">
-                            <input type="text" class="form-control" id="edit_service_name" required name="service_name" placeholder="Service slug">
+                            <input type="text" class="form-control" id="edit_serive_name" required placeholder="Service slug">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="edit_service_nick" class="col-sm-12 col-md-4 col-lg-4 col-form-label">Nick name</label>
                         <div class="col-sm-12 col-md-8 col-lg-8">
-                            <input type="text" class="form-control" id="edit_service_nick" required name="service_name" placeholder="nick name">
+                            <input type="text" class="form-control" id="edit_serive_Nickname" required  placeholder="nick name">
                         </div>
                     </div>
 

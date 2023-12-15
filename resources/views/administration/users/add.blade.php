@@ -3,6 +3,7 @@
 
 @endpush
 @section('content')
+
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
@@ -93,7 +94,30 @@
                                 <span class="error"></span>
                             </div>
                         </div>
+
                         <div class="form-group row">
+                            <label for="Services_row" class="col-sm-2 col-form-label">Services</label>
+                            <div class="col-sm-10">
+                                <div class="row" id="Services_row" @error('Services') aria-invalid="true" @enderror>
+                                    @foreach($user_have_service as $Services)
+                             
+                                        <div class="col-sm-6 mb-3">
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input" id="{{ str_replace(" ", "_", $Services->user_have_service->service_nick_name) }}" name="Services[]" data-bootstrap-switch data-off-color="danger" data-on-color="success" checked value="{{ $Services->user_have_service->id }}">
+                                                <label class="form-check-label" for="{{ str_replace(" ", "_", $Services->user_have_service->service_nick_name) }}"> {{ ucwords($Services->user_have_service->service_nick_name)}}</label>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                                <span class="error">
+                                    @error('Services')
+                                        <label id="Services-error" class="error invalid-feedback" for="Services_row" style="display: inline-block;">{{ $message }}</label>
+                                    @enderror
+                                </span>
+                            </div>
+                        </div>
+
+                        {{-- <div class="form-group row">
                             <label for="permissions_row" class="col-sm-2 col-form-label">This user can</label>
                             <div class="col-sm-10">
                                 <div class="row" id="permissions_row" @error('permissions') aria-invalid="true" @enderror>
@@ -112,7 +136,7 @@
                                     @enderror
                                 </span>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                     <!-- /.card-body -->
                 <div class="card-footer">

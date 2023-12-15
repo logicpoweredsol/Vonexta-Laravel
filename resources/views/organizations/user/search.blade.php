@@ -82,14 +82,20 @@
                                 $roles = $user->organization_user->getRoleNames();
                             @endphp
 
-                            <td>{{ucfirst($roles[0])}}</td>
+                            <td>
+                                @if ($user->organization_user->is_owner == 1)
+                                    <span class="text-success"> <strong>Main</strong> </span> - {{ucfirst($roles[0])}}
+                                @else
+                                    {{ucfirst($roles[0])}}
+                                @endif
+                            </td>
 
                             <td>
                                 @if(Auth::user()->can('edit users'))
                                     <a href="{{ url('organizations/user/edit/'.$user->organization_user->id .'/'. $user->organization_id) }}" class="btn btn-sm btn-primary"><i class="fas fa-pen"></i><a>
                                 @endif
                                 
-                                @if(Auth::user()->can('delete users'))
+                                @if(Auth::user()->can('delete users') && $user->organization_user->is_owner != 1)
                                     <a href="#" class="btn btn-sm btn-danger btnDelete" data-id="{{ $user->id }}"><i class="fas fa-trash"></i><a>
                                 @endif
                             </td>

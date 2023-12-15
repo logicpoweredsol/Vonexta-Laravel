@@ -23,7 +23,7 @@ class Service extends Model
 
 
     function user_have_service(){
-        return $this->hasMany('App\Models\UserHaveService' , 'service_id' , 'id');
+        return $this->hasMany('App\Models\UserHaveService' , 'service_type' , 'id');
     }
 
 

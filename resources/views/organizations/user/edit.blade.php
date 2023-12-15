@@ -82,12 +82,10 @@
                             @foreach($edit_data['organizationServices'] as $Services)
                             <div class="col-sm-6 mb-3">
                                 <div class="form-check">
-                                    <input type="checkbox" class="form-check-input" id="{{ str_replace(" ", "_", $Services->pivot->service_nick_name) }}" name="Services[]" data-bootstrap-switch data-off-color="danger" data-on-color="success"  @if (in_array($Services->pivot->id, $edit_data['user_have_service'])) checked @endif value="{{$Services->pivot->id }}">
-                                    <label class="form-check-label" for="{{ str_replace(" ", "_", $Services->pivot->service_nick_name) }}"> {{ ucwords($Services->pivot->service_nick_name)}}</label>
+                                    <input type="checkbox" class="form-check-input" id="{{ str_replace(" ", "_", $Services->pivot->id) }}" name="Services[]" data-bootstrap-switch data-off-color="danger" data-on-color="success"  @if (in_array($Services->pivot->id, $edit_data['user_have_service'])) checked @endif value="{{$Services->pivot->id }}">
+                                    <label class="form-check-label" for="{{ str_replace(" ", "_", $Services->pivot->id) }}"> {{ ucwords($Services->pivot->service_nick_name)}}</label>
                                 </div>
                             </div>
-
-                            
                             @endforeach
                         </div>
                         <span class="error">
@@ -97,6 +95,8 @@
                         </span>
                     </div>
                 </div>
+
+                {{-- <input type="hidden" name="close_service[]" id="close_service"> --}}
 
 
             </div>

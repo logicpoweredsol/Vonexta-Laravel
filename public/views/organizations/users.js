@@ -8,9 +8,9 @@ $(document).ready(function(){
         "autoWidth": false,
         "responsive": true,
     });
+
+
 });
-
-
 
 
 function change_tab(id) {
@@ -24,11 +24,3 @@ function change_tab(id) {
         }
     });
 }
-
-
-
-
-
-
-
-

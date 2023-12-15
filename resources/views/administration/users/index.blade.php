@@ -7,6 +7,21 @@
     <link rel="stylesheet" href="{{ asset('plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }}">
 @endpush
 @section('content')
+
+@if(session()->has('success'))
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            success("{{ session('success') }}");
+        });
+    </script>
+    @elseif (session()->has('error'))
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        failed("{{ session('error') }}");
+    });
+</script>
+@endif
+
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -68,10 +83,8 @@
             <table id="usersDT" class="table table-bordered table-striped table-hover">
                 <thead>
                     <tr>
-                        {{-- <th>#</th> --}}
                         <th>Name</th>
                         <th>Email</th>
-                        <!-- <th>Phone</th> -->
                         <th>Status</th>
                         <th>Actions</th>
                     </tr>
@@ -79,33 +92,23 @@
                 <tbody>
                     @foreach($users as $user)
                         <tr>
-                            {{-- <td>
-                                {{ $loop->index + 1 }}
-                            </td> --}}
+                      
                             <td>
                                 {{ $user->name }}
                             </td>
                             <td>
                                 {{ $user->email }}
                             </td>
-                            <!-- <td>
-                                {{ $user->phone }}
-                            </td> -->
+                   
                             <td>
 
                                 @if($user->active==1)
-                                    {{-- <span class="badge badge-success"> <strong>Active</strong> </span> --}}
                                     <span class="text-success"> <strong>Active</strong> </span>
                                 @else
                                     <span class="text-danger"> <strong>Not Active</strong></span>
-                                    {{-- <span class="badge badge-danger"> <strong>Not Active</strong></span> --}}
                                 @endif
 
-                                {{-- @if($user->active==1)
-                                    <span class="badge badge-success">Active</span>
-                                @else
-                                    <span class="badge badge-danger">Inactive</span>
-                                @endif --}}
+                                
                             </td>
                             <td>
                                 @if(Auth::user()->can('edit users'))
@@ -154,4 +157,5 @@
         const csrfToken = $('meta[name="csrf-token"]').attr('content');
     </script>
     <script src="{{ asset('views/administration/users/index.js') }}"></script>
+    <script src="{{ asset('views/administration/users/common.js') }}"></script>
 @endpush

@@ -98,6 +98,8 @@ Route::prefix('organizations')->middleware(['role:superadmin','auth', 'checkUser
 
         Route::post('/check-user-email',[UserOrganizationController::class, 'check_user_email'])->name('organizations.user.check-user-email');
     });
+
+    
 });
 
 
