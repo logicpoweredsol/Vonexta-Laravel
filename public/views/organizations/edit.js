@@ -1,4 +1,6 @@
 $(document).ready(function () {
+    var service_name_text = "";
+
     var dtConfig = {
         "paging": true,
         "lengthChange": true,
@@ -8,6 +10,7 @@ $(document).ready(function () {
         "autoWidth": false,
         "responsive": true,
     };
+
     let ogServicesDT = $('#servicesTable').DataTable(dtConfig);
 
 
@@ -103,6 +106,7 @@ $(document).ready(function () {
 
 
                 let services_type = $('#services_type').val();
+                    service_name_text =  await  getSelectedOptionText();
                 $.ajax({
                     url:  `${baseUrl}/organizations/services/get_service_type`,
                     method: 'POST',
@@ -145,7 +149,7 @@ $(document).ready(function () {
 
 
     //Add Save Button
-    $(document).on('click', '#btnAddConnectionParameters', function (){
+    $(document).on('click', '#btnAddConnectionParameters',async  function (){
         // Disable the button to prevent multiple clicks
         $("#btnAddConnectionParameters").prop('disabled', true);
     
@@ -159,43 +163,98 @@ $(document).ready(function () {
             var org_id = $("#orgId").val();
             var serviceNiceName = $("#add_serive_Nickname").val();
             // $("#serive_Nickname").val(serviceNiceName);
-            
-            $.ajax({
-                url:  url,
-                method: 'POST',
-                headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
-                data: {
-                    'formData': formData,
-                    'serive_name': serive_name,
-                    'add_service_type': add_service_type,
-                    'org_id': org_id,
-                    'serviceNiceName':serviceNiceName
-                },
-                success: function (response) {
-                    if(response.status){
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Service added',
-                            text: 'Service added successfully',
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                $('#formConnectionParameters')[0].reset();
-                                $('#modalConnectionParameters').modal('hide');
-                                window.location.reload();
-                            }
-                        });
-                    } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: 'Something went wrong. Please try again.',
-                        });
-                    }
-                },
-                error: function (xhr, status, error) {
-                    // Handle error
-                },
-            });
+            service_type_name = false;
+            responce_status = false;
+
+
+            if(service_name_text.includes("Dialer")){
+                service_type_name = true;
+                responce_status  = await ceck_service_detail(formData);
+            }
+
+            if(service_type_name ===  responce_status ){
+                $.ajax({
+                    url:  url,
+                    method: 'POST',
+                    headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+                    data: {
+                        'formData': formData,
+                        'serive_name': serive_name,
+                        'add_service_type': add_service_type,
+                        'org_id': org_id,
+                        'serviceNiceName':serviceNiceName
+                    },
+                    success: function (response) {
+                        if(response.status){
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Service added',
+                                text: 'Service added successfully',
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    $('#formConnectionParameters')[0].reset();
+                                    $('#modalConnectionParameters').modal('hide');
+                                    window.location.reload();
+                                }
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Something went wrong. Please try again.',
+                            });
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        // Handle error
+                    },
+                });
+            }else{
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Something went wrong. Please try again.',
+                });
+                $("#btnAddConnectionParameters").prop('disabled', false);
+            }
+
+            // $.ajax({
+            //     url:  url,
+            //     method: 'POST',
+            //     headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+            //     data: {
+            //         'formData': formData,
+            //         'serive_name': serive_name,
+            //         'add_service_type': add_service_type,
+            //         'org_id': org_id,
+            //         'serviceNiceName':serviceNiceName
+            //     },
+            //     success: function (response) {
+            //         if(response.status){
+            //             Swal.fire({
+            //                 icon: 'success',
+            //                 title: 'Service added',
+            //                 text: 'Service added successfully',
+            //             }).then((result) => {
+            //                 if (result.isConfirmed) {
+            //                     $('#formConnectionParameters')[0].reset();
+            //                     $('#modalConnectionParameters').modal('hide');
+            //                     window.location.reload();
+            //                 }
+            //             });
+            //         } else {
+            //             Swal.fire({
+            //                 icon: 'error',
+            //                 title: 'Error',
+            //                 text: 'Something went wrong. Please try again.',
+            //             });
+            //         }
+            //     },
+            //     error: function (xhr, status, error) {
+            //         // Handle error
+            //     },
+            // });
+
         } else {
             $("#btnAddConnectionParameters").prop('disabled', false);
         }
@@ -213,6 +272,7 @@ $(document).ready(function () {
             },
             success: function (response) {
                 $('.connParamsRow').remove();
+                $("#service_type").val(response.ogService.service.name);
                 $('#ogService_id').val(response.ogService.id);
                 $('#edit_serive_name').val(response.ogService.service_name);
                 $('#edit_serive_Nickname').val(response.ogService.service_nick_name);
@@ -248,7 +308,7 @@ $(document).ready(function () {
 
 
     // edit Save BUtton
-    $(document).on('click', '#btnUpdateOgService', function (){
+    $(document).on('click', '#btnUpdateOgService', async function (){
         // Disable the button to prevent multiple clicks
         $("#btnUpdateOgService").prop('disabled', true);
     
@@ -261,42 +321,65 @@ $(document).ready(function () {
             var ogService_id = $('#ogService_id').val();
             var edit_service_name =  $('#edit_serive_name').val();
             var edit_serive_Nickname =  $('#edit_serive_Nickname').val();
-    
-            $.ajax({
-                url:  url,
-                method: 'POST',
-                headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
-                data: {
-                    'formData': formData,
-                    'id':ogService_id,
-                    'serive_name':edit_service_name,
-                    'serviceNiceName':edit_serive_Nickname
-                },
-                success: function (response) {
-                    if(response.status){
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Service Update',
-                            text: 'Service Update successfully',
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                $('#formEditOgService')[0].reset();
-                                $('#modalEditOgService').modal('hide');
-                                window.location.reload();
-                            }
-                        });
-                    } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: 'Something went wrong. Please try again.',
-                        });
-                    }
-                },
-                error: function (xhr, status, error) {
-                    // Handle error
-                },
-            });
+
+            var service_type = $('#service_type').val();
+
+            service_type_name = false;
+            responce_status = false;
+
+
+            if(service_type.includes("Dialer")){
+                service_type_name = true;
+                responce_status  = await ceck_service_detail(formData);
+            }
+
+
+            if(service_type_name ===  responce_status ){
+                $.ajax({
+                    url:  url,
+                    method: 'POST',
+                    headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+                    data: {
+                        'formData': formData,
+                        'id':ogService_id,
+                        'serive_name':edit_service_name,
+                        'serviceNiceName':edit_serive_Nickname
+                    },
+                    success: function (response) {
+                        if(response.status){
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Service Update',
+                                text: 'Service Update successfully',
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    $('#formEditOgService')[0].reset();
+                                    $('#modalEditOgService').modal('hide');
+                                    window.location.reload();
+                                }
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Something went wrong. Please try again.',
+                            });
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        // Handle error
+                    },
+                });
+            }else{
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Something went wrong. Please try again.',
+                });
+                $("#btnUpdateOgService").prop('disabled', false);
+            }
+           
+
         } else {
             $("#btnUpdateOgService").prop('disabled', false);
         }
@@ -401,6 +484,60 @@ $(document).ready(function () {
     
         return isValid;
     }
+
+
+
+
+    async function ceck_service_detail(formData){
+        var status = false;
+        var params = new URLSearchParams(formData);
+        // Create an empty object to store the key-value pairs
+        var keyValuePairs = {};
+
+        // Iterate over each pair in the URLSearchParams and append it to the object
+        params.forEach((value, key) => {
+        keyValuePairs[key] = value;
+        });    
+
+        var serverUrl = keyValuePairs['param_keys[server_url]'];
+        var apiUser = keyValuePairs['param_keys[api_user]'];
+        var apiPass = keyValuePairs['param_keys[api_pass]'];
+
+        let url = `${baseUrl}/organizations/services/ceck_service_detail`;
+
+        await  $.ajax({
+            url: `${url}`,
+            type: 'POST',
+            data: {
+                'serverUrl':serverUrl,
+                'apiUser':apiUser,
+                'apiPass':apiPass,
+                _token: csrfToken
+            },
+            success: function (response) {
+                if(response == 1){
+                    status = true;
+                }
+
+            },
+            error: function () {
+            }
+        });
+
+        return status;
+    }
+
+
+
+    async function getSelectedOptionText() {
+        var selectElement = document.getElementById("services_type");
+        var selectedIndex = selectElement.selectedIndex;
+      
+        if (selectedIndex !== -1) {
+          var selectedOptionText = selectElement.options[selectedIndex].text;
+            return selectedOptionText;
+        }
+      }
 
     
 

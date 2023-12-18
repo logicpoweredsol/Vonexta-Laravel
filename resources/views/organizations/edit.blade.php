@@ -364,6 +364,7 @@
                 <div class="modal-body">
 
                     <input type="hidden" id="ogService_id" >
+                    <input type="hidden" id="service_type" >
 
                     <div class="form-group row">
                         <label for="edit_service_name" class="col-sm-12 col-md-4 col-lg-4 col-form-label">Service slug</label>

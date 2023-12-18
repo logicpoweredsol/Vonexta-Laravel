@@ -83,8 +83,10 @@ Route::prefix('organizations')->middleware(['role:superadmin','auth', 'checkUser
         Route::post('/edit/{id}',[OrganizationServicesController::class, 'edit'])->name('organization.services.edit');
         Route::POST('/update-service',[OrganizationServicesController::class, 'update'])->name('organizations.services.update-service');
         Route::delete("/delete/{id}",[OrganizationServicesController::class, 'delete'])->name('organizations.services.delete');
-
         Route::post('/get_service_type',[OrganizationServicesController::class, 'get_service_type'])->name('organizations.services.get_service_type');
+
+        Route::post('/ceck_service_detail',[OrganizationServicesController::class, 'ceck_service_detail'])->name('organizations.services.ceck_service_detail');
+
         // Route::post('/add',[OrganizationServicesController::class, 'add'])->name('organizations.services.new');
         // Route::post('/add',[OrganizationServicesController::class, 'add'])->name('organizations.services.new');
         // Route::put('/update_connection_parameters/{id}',[OrganizationServicesController::class, 'updateConnectionParameters'])->name('organizations.services.connection_parameters');

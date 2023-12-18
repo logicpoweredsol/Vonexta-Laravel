@@ -7,7 +7,7 @@ use App\Models\Service;
 use Illuminate\Http\Request;
 use App\Models\OrganizationServices;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Facades\Http;
 class OrganizationServicesController extends Controller
 {
     public function add(Request  $request){    
@@ -122,6 +122,111 @@ class OrganizationServicesController extends Controller
         $slug = strtolower(str_replace(' ', '-', $name));
         return $slug;
     }
+
+
+
+
+    public function ceck_service_detail(Request $request) {
+        // API endpoint
+
+        $status = false;
+        $apiEndpoint = 'https://' . $request->serverUrl . '/APIv2/Users/API.php';
+        // POST data
+        $postData = [
+            'Action' => 'GetAllUsers',
+            'apiUser' => $request->apiUser,
+            'apiPass' => $request->apiPass,
+            'session_user' => $request->apiUser,
+            'responsetype' => 'json',
+        ];
+        $ch = curl_init($apiEndpoint);
+
+        // Set cURL options
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
+
+        // Execute cURL session and get the response
+        $response = curl_exec($ch);
+
+        // Close cURL session
+        curl_close($ch);
+
+        // Decode the JSON response
+        $responseData = json_decode($response, true);
+
+        if( $responseData && isset($responseData['result']) && $responseData['result'] === 'success'){
+            $status = true;
+        }
+
+        return $status;
+    }
+
+
+
+
+
+
+    // public function ceck_service_detail(Request $request){
+
+
+    //     $status = false;
+
+    //     $response = Http::withoutVerifying()->post('https://vn21.vonexta.com/APIv2/Users/API.php', [
+    //         'apiUser' => $request->apiUser,
+    //         'apiPass' => $request->apiPass,
+    //         'Action' => $request->Action,
+    //         'session_user' => $request->session_user,
+    //         'responsetype' => $request->responsetype,
+    //         '_token' => $request->_token
+    //     ]);
+    
+    //     // dd($response); // Uncomment this line for debugging purposes
+    
+    //      $responseData = $response->json();
+
+        
+    //      dd( $responseData);
+    //     // Get the result status directly from the JSON-decoded response
+    //     $resultStatus = $response['result'] ?? null;
+    
+
+
+    //     dd( $resultStatus);
+
+    //     // Check if the result is success
+    //     if ($resultStatus === 'success') {
+    //         $status = true;
+    //     }
+    
+    //     return $status;
+
+    //     // $status = false;       
+    //     // $response = Http::withoutVerifying()->post('https://vn21.vonexta.com/APIv2/Users/API.php', [
+    //     //     'apiUser'=>$request->apiUser,
+    //     //     'apiPass'=>$request->apiPass,
+    //     //     'Action'=>$request->Action,
+    //     //     'session_user'=>$request->session_user,
+    //     //     'responsetype'=>$request->responsetype,
+    //     //     '_token' => $request->_token
+    //     // ]);
+        
+    //     // // Parse the response as JSON
+    //     // $responseData = $response->json();
+        
+
+    //     // dd( $responseData);
+    //     // // Get the result status
+    //     // $resultStatus = $responseData['result'];
+        
+    //     // // Check if the result is success
+    //     // if ($resultStatus == 'success') {
+    //     //     $status = true;
+    //     // }
+
+    //     // return $status;
+
+    // }
 
 
     
