@@ -29,7 +29,7 @@ class UserOrganizationController extends Controller
         $validator = Validator::make($request->all(),[
             "name" => "required|string|max:50",
             "email" => "required|email|unique:App\Models\User,email",
-            "password" => "required|string|min:8",
+            "password" => "required|string",
             "role" => "required",
             // "Services" => "required|array"
         ]);
