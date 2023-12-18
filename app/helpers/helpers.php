@@ -25,3 +25,43 @@ function get_serive_type_id($org_ser_id) {
     return  $Organization->service_id;
 }
 
+
+
+ function ceck_service_detail($organization_service_id) {
+    // API endpoint
+    $OrganizationServices = OrganizationServices::find($organization_service_id);
+    $phpArray = json_decode($OrganizationServices->connection_parameters, true);
+    $status = false;
+    $apiEndpoint = 'https://' . $phpArray['server_url'] . '/APIv2/Users/API.php';
+    // POST data
+    $postData = [
+        'Action' => 'GetAllUsers',
+        'apiUser' =>  $phpArray['api_user'],
+        'apiPass' =>  $phpArray['api_pass'],
+        'session_user' =>  $phpArray['api_user'],
+        'responsetype' => 'json',
+    ];
+    $ch = curl_init($apiEndpoint);
+
+    // Set cURL options
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
+
+    // Execute cURL session and get the response
+    $response = curl_exec($ch);
+
+    // Close cURL session
+    curl_close($ch);
+
+    // Decode the JSON response
+    $responseData = json_decode($response, true);
+
+    if( $responseData && isset($responseData['result']) && $responseData['result'] === 'success'){
+        $status = true;
+    }
+
+    return $status;
+}
+
+

@@ -68,8 +68,8 @@
             <table id="usersDT" class="table table-striped table-hover vonexta-table">
                 <thead>
                     <tr>
-                        <th>#</th>
-                        <th>User ID</th>
+                        <th>User</th>
+                        {{-- <th>Extention</th> --}}
                         <th>Full Name</th>
                         <th>User Group</th>
                         <th>Status</th>
@@ -77,83 +77,47 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- @foreach($users as $user)
-                        <tr>
-                            <td>
-                                {{ $loop->index + 1 }}
-                            </td>
-                            <td>
-                                {{ $user->name }}
-                            </td>
-                            <td>
-                                {{ $user->email }}
-                            </td>
-                            <td>
-                                {{ $user->phone }}
-                            </td>
-                            <td>
-                                @if($user->active==1)
-                                    <span class="badge badge-success">Active</span>
-                                @else
-                                    <span class="badge badge-danger">Inactive</span>
-                                @endif
-                            </td>
-                            <td>
-                                <a href="#" class="btn btn-sm btn-primary" class="btnEdit" data-id="{{ $user->id }}"><i class="fas fa-pen"></i><a>
-                                <a href="#" class="btn btn-sm btn-danger" class="btnDelete" data-id="{{ $user->id }}"><i class="fas fa-trash"></i><a>
-                            </td>
-                        </tr>
-                    @endforeach -->
+                    
+
+                    @foreach ($service_Users['user_id'] as $i=>$service_User)
+                   
                     <tr>
                         <td>
-                            1
+                            {{$service_Users['user'][$i]}}
                         </td>
                         <td>
-                            DemoAgent1
+                            {{$service_Users['full_name'][$i]}}
                         </td>
                         <td>
-                            Demo Agent 1
+                            {{$service_Users['user_group'][$i]}}
                         </td>
                         <td>
-                            AGENTS
+                            @if ($service_Users['active'][$i] == 'Y')
+                            <span class="text-success"> <strong>Active</strong> </span>
+                            @else
+                            <span class="text-danger"> <strong>Not Active</strong></span>
+                            @endif
+                           
                         </td>
+                       
                         <td>
-                            <span class="badge badge-success">Active</span>
-                        </td>
-                        <td>
-                        <a href="#" class="btn btn-sm btn-primary" class="btnEdit" title="Edit User"><i class="fas fa-pen"></i><a>
-                            <a href="#" class="btn btn-sm btn-danger" class="btnDelete" title="Delete User"><i class="fas fa-trash"></i><a>
-                            <a href="#" class="btn btn-sm btn-info" class="btnAgentLogs" title="Agent Logs"><i class="fas fa-clipboard-list"></i><a>
-                            <a href="#" class="btn btn-sm btn-success" class="btnOutboundLogs" title="Outbound Logs"><i class="fas fa-phone-alt"></i><a>
-                            <a href="#" class="btn btn-sm btn-secondary" class="btnInboundLogs" title="Inbound Logs"><i class="fas fa-phone"></i><a>
-                            <a href="#" class="btn btn-sm btn-warning" class="btnLogoutAgent" title="Emergency Logout"><i class="fas fa-sign-out-alt"></i><a>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default">Actions</button>
+                                <button type="button" class="btn btn-default dropdown-toggle dropdown-icon" data-toggle="dropdown">
+                                  <span class="sr-only">Toggle Dropdown</span>
+                                </button>
+                                <div class="dropdown-menu" role="menu">
+                                  <a class="dropdown-item" href="#">Modify</a>
+                                  <a class="dropdown-item" href="#">Logs</a>
+                                  <a class="dropdown-item" href="#">Emergency Logout</a>
+                                  <div class="dropdown-divider"></div>
+                                  <a class="dropdown-item" href="#">Delete</a>
+                                </div>
+                              </div>
                         </td>
                     </tr>
-                    <tr>
-                        <td>
-                            2
-                        </td>
-                        <td>
-                            DemoAgent2
-                        </td>
-                        <td>
-                            Demo Agent 2
-                        </td>
-                        <td>
-                            AGENTS
-                        </td>
-                        <td>
-                            <span class="badge badge-danger">Inactive</span>
-                        </td>
-                        <td>
-                            <a href="#" class="btn btn-sm btn-primary" class="btnEdit" title="Edit User"><i class="fas fa-pen"></i><a>
-                            <a href="#" class="btn btn-sm btn-danger" class="btnDelete" title="Delete User"><i class="fas fa-trash"></i><a>
-                            <a href="#" class="btn btn-sm btn-info" class="btnAgentLogs" title="Agent Logs"><i class="fas fa-clipboard-list"></i><a>
-                            <a href="#" class="btn btn-sm btn-success" class="btnOutboundLogs" title="Outbound Logs"><i class="fas fa-phone-alt"></i><a>
-                            <a href="#" class="btn btn-sm btn-secondary" class="btnInboundLogs" title="Inbound Logs"><i class="fas fa-phone"></i><a>
-                            <a href="#" class="btn btn-sm btn-warning" class="btnLogoutAgent" title="Emergency Logout"><i class="fas fa-sign-out-alt"></i><a>
-                        </td>
-                    </tr>
+                    @endforeach
+                   
                 </tbody>
             </table>
         </div>

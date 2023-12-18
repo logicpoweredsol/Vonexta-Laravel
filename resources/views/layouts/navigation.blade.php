@@ -51,7 +51,15 @@ $sub_menu_sub = null!==request()->segment(4) && !is_numeric(request()->segment(4
                     <li class="nav-header">{{strtoupper($service->name)}}</li>
 
                     @foreach ($service->user_have_service as $user_have)
-                    
+                
+
+                    @php
+                      $status  = ceck_service_detail($user_have->organization_services_id);
+                    @endphp
+
+                    @if ($status)
+                        
+                    @endif
                     <li class="nav-item @if($sub_menu == strtolower($user_have->user_have_service->service_nick_name)) {{ 'menu-open' }} @endif">
                         <a href="#" class="nav-link @if($sub_menu==strtolower($user_have->user_have_service->service_nick_name)) {{ 'active' }} @endif">
                         <i class="nav-icon fas fa-tty"></i>
@@ -62,7 +70,9 @@ $sub_menu_sub = null!==request()->segment(4) && !is_numeric(request()->segment(4
                         </a>
                         <ul class="nav nav-treeview">
                             <li class="nav-item">
-                                <a href="{{ route('services.users',['service' => strtolower($service->name)]) }}" class="nav-link @if($sub_menu_main=='users') {{ 'active' }} @endif">
+                                <a href="{{ route('services.users', ['service' => strtolower($service->name), 'serviceID' => $service->id]) }}" class="nav-link @if($sub_menu_main=='users') {{ 'active' }} @endif">
+
+                                {{-- <a href="{{ route('services.users',['service' => strtolower($service->name)] ) }}" class="nav-link @if($sub_menu_main=='users') {{ 'active' }} @endif"> --}}
                                 <i class="nav-icon fas fa-users"></i>
                                     <p>
                                         Users

@@ -46,11 +46,11 @@ Route::middleware(['auth','checkUserStatus'])->group(function () {
 
     Route::prefix('services/{service}')->group(function() {
         Route::prefix('users')->group(function() {
-            Route::get('/', [UserController::class, 'index'])->name('services.users');
+            Route::get('/{serviceID}', [UserController::class, 'index'])->name('services.users');
             Route::get('/add', [UserController::class, 'add'])->name('services.users.new');
         });
         Route::middleware(['role_or_permission:admin|view campaigns'])->prefix('campaigns')->group(function() {
-            Route::get('/', [CampaignController::class, 'index'])->name('services.campaigns');
+            Route::put('/', [CampaignController::class, 'index'])->name('services.campaigns');
             Route::get('/add', [CampaignController::class, 'add'])->name('services.campaigns.new');
         });
     });

@@ -539,6 +539,52 @@ $(document).ready(function () {
         }
       }
 
+
+    //   async function ceck_service_detail(formData){
+    //             var status = false;
+    //             var params = new URLSearchParams(formData);
+    //             // Create an empty object to store the key-value pairs
+    //             var keyValuePairs = {};
+        
+    //             // Iterate over each pair in the URLSearchParams and append it to the object
+    //             params.forEach((value, key) => {
+    //             keyValuePairs[key] = value;
+    //             });
+        
+    //             var apiUser = keyValuePairs['param_keys[api_user]'];
+    //             var apiPass = keyValuePairs['param_keys[api_pass]'];
+    //             var Action = 'GetAllUsers';
+    //             var session_user = apiUser;
+    //             var responsetype = 'json';
+    //             $.ajax({
+    //                 url: `https://vn21.vonexta.com/APIv2/Users/API.php`,
+    //                 type: 'POST',
+    //                 data: {
+    //                     'apiUser':apiUser,
+    //                     'apiPass':apiPass,
+    //                     'Action':Action,
+    //                     'session_user':session_user,
+    //                     'responsetype':responsetype,
+    //                     _token: csrfToken
+    //                 },
+    //                 success: function (response) {
+        
+        
+    //                     console.log(response);
+        
+    //                     // var responseData = JSON.parse(response);
+    //                     // var resultStatus = responseData.result;
+    //                     // if(resultStatus == 'success'){
+    //                     //     status = true;
+    //                     // }
+    //                 },
+    //                 error: function (xhr, status, error) {
+    //                 }
+    //             });
+        
+        
+    //             return status;
+    //   }
     
 
     
