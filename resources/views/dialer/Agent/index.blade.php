@@ -81,11 +81,9 @@
                     @foreach ($service_Users['user_id'] as $i=>$service_User)
                    
                     <tr>
-                        @foreach ($users as $user)
                         <td>
-                            {{$user['email']}} <br>
+                            {{$users[0]['email']}}
                         </td>
-                        @endforeach
                         <td>
                            {{$service_Users['user'][$i]}}
                         </td>

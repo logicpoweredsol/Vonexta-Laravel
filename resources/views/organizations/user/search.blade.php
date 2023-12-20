@@ -42,7 +42,6 @@
         <table id="usersDT" class="table table-bordered table-striped table-hover">
             <thead>
                 <tr>
-                    {{-- <th>#</th> --}}
                     <th>Name</th>
                     <th>Email</th>
                     <th>Status</th>
@@ -56,9 +55,6 @@
                 @foreach($UserOrganization as $user)
 
                         <tr>
-                            {{-- <td>
-                                {{ $loop->index + 1 }}
-                            </td> --}}
                             <td>
                                 {{ $user->organization_user->name }}
                             </td>

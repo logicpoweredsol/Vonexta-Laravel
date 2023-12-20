@@ -25,7 +25,7 @@ class UserController extends Controller
             abort(403);
         }
         $users = $organization->users;
-        // dd('okoko');
+        // dd($users);
         return view('dialer.Agent.index',compact('users','service','service_Users' ,'serviceID'));
     }
 
@@ -63,9 +63,17 @@ class UserController extends Controller
 
 
     public function edit($service , $serviceID ,$AgentID){
-        $Dailer_agent_user =   $this->get_agent_detail($serviceID ,$AgentID);
-        // dd($Dailer_agent_user);
-        return view('dialer.Agent.edit');
+        $dailer_agent_user = '';
+
+        $dailer_agent_user_response =   $this->get_agent_detail($serviceID ,$AgentID);
+        if($dailer_agent_user_response['result'] == 'success'){
+            $dailer_agent_user = $dailer_agent_user_response['data'];
+
+            // dd($dailer_agent_user);
+        }
+
+
+        return view('dialer.Agent.edit' ,compact('dailer_agent_user'));
     }
 
 
