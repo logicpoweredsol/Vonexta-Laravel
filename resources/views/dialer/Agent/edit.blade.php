@@ -1,0 +1,499 @@
+@extends('layouts.app')
+@push('css')
+<!-- DataTables -->
+<link rel="stylesheet" href="{{ asset('plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
+<link rel="stylesheet" href="{{ asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
+<link rel="stylesheet" href="{{ asset('plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
+<link rel="stylesheet" href="{{ asset('plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }}">
+<!-- Nothing for now -->
+<link rel="stylesheet" href="{{ asset('plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }}">
+@endpush
+@section('content')
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+
+    @if(session()->has('success'))
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+                success("{{ session('success') }}");
+            });
+    </script>
+    @elseif (session()->has('failed'))
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+                failed("{{ session('failed') }}");
+            });
+    </script>
+    @endif
+
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Agents</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="">Home</a></li>
+                        <li class="breadcrumb-item"><a href="">Agents</a></li>
+                        <li class="breadcrumb-item active">Edit Agents</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+
+
+        <div class="card">
+            <div class="card-body">
+
+                <ul class="nav nav-tabs vonexta-nav" id="campaigns-tabs" role="tablist">
+                    
+                    <li class="nav-item vonext-campaign-item">
+                        <a class="nav-link active" id="Organization-home-tab" data-toggle="pill"
+                            href="#Organization-home" role="tab" aria-controls="Organization-home"
+                            aria-selected="true">Details</a>
+                    </li>
+
+                    <li class="nav-item vonext-campaign-item">
+                        <a class="nav-link" id="options-tab" data-toggle="pill"
+                            href="#options" role="tab" aria-controls="campaigns-disposition"
+                            aria-selected="false">Options</a>
+                    </li>
+
+                    <li class="nav-item vonext-campaign-item">
+                        <a class="nav-link" id="Organization-user-tab" data-toggle="pill" href="#Organization-user"
+                         role="tab" aria-controls="campaigns-leadRecycling"
+                            aria-selected="false">Skills</a>
+                    </li>
+
+                    <li class="nav-item vonext-campaign-item">
+                        <a class="nav-link" id="call-logs-tab" data-toggle="pill" href="#call-log"
+                         role="tab" aria-controls="campaigns-leadRecycling"
+                            aria-selected="false">Call Logs</a>
+                    </li>
+
+
+                </ul>
+
+                <div class="tab-content" id="campaigns-tabs Content">
+
+
+                    <div class="tab-pane fade show active " id="Organization-home" role="tabpanel" aria-labelledby="Organization-home-tab">
+                        <form method="POST" action="#" class="form-horizontal">
+                            @csrf
+                            @method("PUT")
+                            <input type="hidden" name="id" id="orgId" value="">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Edit Agent</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-sm-12 col-md-6 col-lg-6">
+                                            <div class="form-group">
+                                                <label for="name" class="form-label">Name</label>
+                                                <input type="text"
+                                                    class="form-control @error('name') is-invalid @enderror" id="name"
+                                                    name="name" value="" placeholder="Agent name">
+                                            </div>
+                                            <span>
+                                                @error('name')
+                                                <div class="text-danger">{{ $message }}</div>
+                                                @enderror
+                                            </span>
+                                        </div>
+                                        <div class="col-sm-12 col-md-6 col-lg-6">
+                                            <div class="form-group">
+                                                <label for="phone" class="form-label">Email</label>
+                                                <input type="text"
+                                                    class="form-control @error('phone') is-invalid @enderror" id="phone"
+                                                    name="phone" value="" placeholder="Email from organization">
+                                            </div>
+                                            <span>
+                                                @error('phone')
+                                                <div class="text-danger">{{ $message }}</div>
+                                                @enderror
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-12 col-md-6 col-lg-6">
+                                            <div class="form-group">
+                                                <label for="address" class="form-label">User</label>
+                                                <input type="text"
+                                                    class="form-control @error('address') is-invalid @enderror"
+                                                    id="address" name="address" value="" placeholder="User">
+                                            </div>
+                                            <span>
+                                                @error('address')
+                                                <div class="text-danger">{{ $message }}</div>
+                                                @enderror
+                                            </span>
+                                        </div>
+                                        <div class="col-sm-12 col-md-6 col-lg-6">
+                                            <div class="form-group">
+                                                <label for="address2" class="form-label">Email 2</label>
+                                                <input type="text" class="form-control" id="address2" name="address2"
+                                                    value="" placeholder="Email from Api">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-12 col-md-6 col-lg-6">
+                                            <div class="form-group">
+                                                <label for="Voice Mail" class="form-label">Voice Mail</label>
+                                                <input type="text"
+                                                    class="form-control @error('city') is-invalid @enderror"
+                                                    id="Voice_Mail" name="Voice_Mail" value=""
+                                                    placeholder="Voice Mail..">
+                                            </div>
+                                            <span>
+                                                @error('city')
+                                                <div class="text-danger">{{ $message }}</div>
+                                                @enderror
+                                            </span>
+                                        </div>
+                                        <div class="col-sm-12 col-md-6 col-lg-6">
+                                            <div class="form-group">
+                                                <label for="Group" class="form-label">Group</label>
+                                                <input type="text"
+                                                    class="form-control @error('zip') is-invalid @enderror" id="zip"
+                                                    name="zip" value="" placeholder="Group ..">
+                                            </div>
+                                            <span>
+                                                @error('zip')
+                                                <div class="text-danger">{{ $message }}</div>
+                                                @enderror
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+
+                                        <div class="col-sm-12 col-md-6 col-lg-6">
+                                            <div class="form-group">
+                                                <label for="active" class="form-label">Active</label>
+                                                <select name="active" class="form-control" id="active" active="">
+                                                    <option value="">Select Option</option>
+                                                    <option value="1">Yes</option>
+                                                    <option value="0">No</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {{--
+                                    <hr> --}}
+
+                                </div>
+                                <!-- /.card-body -->
+                                <div class="card-footer">
+                                    <div class="row">
+                                        <div class="col-sm-12 col-md-2 col-lg-2 mb-3">
+                                            <a class="btn btn-default btn-md btn-block" href="#">Cancel</a>
+                                        </div>
+                                        <div class="col-sm-12 col-md-8 col-lg-8"></div>
+                                        <div class="col-sm-12 col-md-2 col-lg-2 mb-3">
+                                            <button class="btn btn-success btn-md btn-block" type="submit">Save</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /.card-footer-->
+                            </div>
+                            <!-- /.card -->
+                        </form>
+
+                    </div>
+
+                    <div class="tab-pane fade" id="options" role="tabpanel" aria-labelledby="options-tab">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-6 col-lg-6">
+                                <div class="form-group">
+                                    <label for="name" class="form-label">SMS number</label>
+                                    <input type="text"
+                                        class="form-control @error('name') is-invalid @enderror" id="Sms_number"
+                                        name="Sms_number" value="" placeholder="Mobile_number">
+                                </div>
+                                <span>
+                                    @error('name')
+                                    <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-12 col-md-6 col-lg-6">
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="1" name="Services[]" data-bootstrap-switch data-off-color="danger" data-on-color="success" checked value="1">
+                                    <label class="form-check-label" for="1"> Click me </label>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12 col-md-6 col-lg-6">
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="1" name="Services[]" data-bootstrap-switch data-off-color="danger" data-on-color="success" checked value="1">
+                                    <label class="form-check-label" for="1"> Click me </label>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                    <div class="tab-pane fade" id="Organization-user" role="tabpanel" aria-labelledby="Organization-user-tab">
+                         {{-- Campaigns --}}
+                         <div class="card">
+                            <div class="card-header">
+                              <h3 class="card-title"><b>Campaigns</b></h3>
+
+                            </div>
+                            <div class="card-body">
+                       
+                                <table id="Campaigns" class="table table-striped table-hover vonexta-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Level</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>0000</td>
+                                            <td>0000</td>
+                                            <td>
+                                                <a href="#" class="btn btn-sm btn-primary" class="btnEdit" data-id=""><i class="fas fa-pen"></i><a>
+                                                <a href="#" class="btn btn-sm btn-danger" class="btnDelete" data-id=""><i class="fas fa-trash"></i><a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                   
+                                </table>
+                            </div>
+                           
+                        </div>
+
+                        {{-- Inbound --}}
+                        <div class="card">
+                            <div class="card-header">
+                              <h3 class="card-title"><b>Inbound</b></h3>
+
+                            </div>
+                            <div class="card-body">
+                       
+                                <table id="Inbound" class="table table-striped table-hover vonexta-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Level</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>0000</td>
+                                            <td>0000</td>
+                                            <td>
+                                                <a href="" class="btn btn-sm btn-primary" class="btnEdit" data-id=""><i class="fas fa-pen"></i><a>
+                                                <a href="#" class="btn btn-sm btn-danger" class="btnDelete" data-id=""><i class="fas fa-trash"></i><a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                   
+                                </table>
+                            </div>
+                           
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="call-log" role="tabpanel" aria-labelledby="call-logs-tab">
+                        <div class="card">
+                            <div class="card-header">
+                              <h3 class="card-title"><b>Inbound:</b></h3>
+
+                            </div>
+                            <div class="card-body">
+                       
+                                <table id="Campaigns" class="table table-striped table-hover vonexta-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Call Date</th>
+                                            <th>Lead ID</th>
+                                            <th>Phone Number</th>
+                                            <th>Inbound Group</th>
+                                            <th>Call lenght</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>0000</td>
+                                            <td>0000</td>
+                                            <td>0000</td>
+                                            <td>0000</td>
+                                            <td>0000</td>
+                                            <td>0000</td>
+                                        </tr>
+                                    </tbody>
+                                   
+                                </table>
+                            </div>
+                           
+                        </div>
+
+                        {{-- Outbound --}}
+                        <div class="card">
+                            <div class="card-header">
+                              <h3 class="card-title"><b>Outbound:</b></h3>
+
+                            </div>
+                            <div class="card-body">
+                       
+                                <table id="Inbound" class="table table-striped table-hover vonexta-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Call Date</th>
+                                            <th>Lead ID</th>
+                                            <th>Phone Number</th>
+                                            <th>Compaign</th>
+                                            <th>Call length</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>0000</td>
+                                            <td>0000</td>
+                                            <td>0000</td>
+                                            <td>0000</td>
+                                            <td>0000</td>
+                                            <td>0000</td>
+    
+                                        </tr>
+                                    </tbody>
+                                   
+                                </table>
+                            </div>
+                           
+                        </div>
+
+                        {{-- manual calls --}}
+                        <div class="card">
+                            <div class="card-header">
+                              <h3 class="card-title"><b>Manual Calls:</b></h3>
+
+                            </div>
+                            <div class="card-body">
+                       
+                                <table id="Inbound" class="table table-striped table-hover vonexta-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Call Date</th>
+                                            <th>Lead ID</th>
+                                            <th>Phone Number</th>
+                                            <th>Compaign</th>
+                                            <th>Call lenght</th>
+                                            <th>Status</th>
+                                            {{-- <th>Actions</th> --}}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>0000</td>
+                                            <td>0000</td>
+                                            <td>0000</td>
+                                            <td>0000</td>
+                                            <td>0000</td>
+                                            <td>0000</td>
+                                        </tr>
+                                    </tbody>
+                                   
+                                </table>
+                            </div>
+                           
+                        </div>
+
+
+                        {{-- Transfers --}}
+                        <div class="card">
+                            <div class="card-header">
+                              <h3 class="card-title"><b>Transfers:</b></h3>
+
+                            </div>
+                            <div class="card-body">
+                       
+                                <table id="Inbound" class="table table-striped table-hover vonexta-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Transfer Date</th>
+                                            <th>lead ID</th>
+                                            <th>Phone Number</th>
+                                            <th>Transferred to</th>
+                                            {{-- <th>Actions</th> --}}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>0000</td>
+                                            <td>0000</td>
+                                            <td>0000</td>
+                                            <td>0000</td>
+                                        </tr>
+                                    </tbody>
+                                   
+                                </table>
+                            </div>
+                           
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+            <!-- /.card-body -->
+            <div class="card-footer">
+
+            </div>
+            <!-- /.card-footer-->
+        </div>
+
+    </section>
+    <!-- /.content -->
+</div>
+@endSection
+
+@push('scripts')
+
+ <!-- Bootstrap Switch -->
+ <script src="{{ asset('plugins/bootstrap-switch/js/bootstrap-switch.min.js') }}"></script>
+ <!-- jquery-validation -->
+
+<!-- DataTables  & Plugins -->
+<script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
+<script src="{{ asset('plugins/jszip/jszip.min.js') }}"></script>
+<script src="{{ asset('plugins/pdfmake/pdfmake.min.js') }}"></script>
+<script src="{{ asset('plugins/pdfmake/vfs_fonts.js') }}"></script>
+<script src="{{ asset('plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
+<!-- SweetAlert2 -->
+<script src="{{ asset('plugins/sweetalert2/sweetalert2.min.js') }}"></script>
+<script>
+    const csrfToken = $('meta[name="csrf-token"]').attr('content');
+</script>
+
+
+<script src="{{ asset('plugins/bs-stepper/js/bs-stepper.min.js') }}"></script>
+<script src="{{ asset('views/services/dialler/users/edit.js') }}"></script>
+
+@endpush

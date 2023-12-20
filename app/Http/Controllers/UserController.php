@@ -16,16 +16,17 @@ class UserController extends Controller
 
     public function index($service ,$serviceID){
         $service_Users =  $this->get_user($serviceID);
-
-        // dd($service_Users);
         //get users of logged in user's organization...
         $user = Auth::user();
+
+        // dd($user);
         $organization = $user->organizations->first();
         if(!$user->hasRole('admin')){
             abort(403);
         }
         $users = $organization->users;
-        return view('dialer.users.index',compact('users','service','service_Users'));
+        // dd('okoko');
+        return view('dialer.Agent.index',compact('users','service','service_Users' ,'serviceID'));
     }
 
 
@@ -61,7 +62,40 @@ class UserController extends Controller
 
 
 
-    public function add(){
+    public function edit($service , $serviceID ,$AgentID){
+        $Dailer_agent_user =   $this->get_agent_detail($serviceID ,$AgentID);
+        // dd($Dailer_agent_user);
+        return view('dialer.Agent.edit');
+    }
 
+
+
+    function get_agent_detail($serviceID ,$AgentID) {
+        $OrganizationServices = OrganizationServices::find($serviceID);
+        $phpArray = json_decode($OrganizationServices->connection_parameters, true);
+        $apiEndpoint = 'https://' . $phpArray['server_url'] . '/APIv2/Users/API.php';
+        // POST data
+        $postData = [
+            'Action' => 'GetUserInfo',
+            'apiUser' =>  $phpArray['api_user'],
+            'apiPass' =>  $phpArray['api_pass'],
+            'session_user' =>  $phpArray['api_user'],
+            'responsetype' => 'json',
+            'user'=>$AgentID
+        ];
+        $ch = curl_init($apiEndpoint);
+    
+        // Set cURL options
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
+    
+        // Execute cURL session and get the response
+        $response = curl_exec($ch);
+    
+        // Close cURL session
+        curl_close($ch);
+        
+        return json_decode($response, true);
     }
 }

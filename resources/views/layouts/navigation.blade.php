@@ -70,12 +70,12 @@ $sub_menu_sub = null!==request()->segment(4) && !is_numeric(request()->segment(4
                         </a>
                         <ul class="nav nav-treeview">
                             <li class="nav-item">
-                                <a href="{{ route('services.users', ['service' => strtolower($service->name), 'serviceID' => $service->id]) }}" class="nav-link @if($sub_menu_main=='users') {{ 'active' }} @endif">
+                                <a href="{{ route('services.agents', ['service' => strtolower($service->name), 'serviceID' => $service->id]) }}" class="nav-link @if($sub_menu_main=='users') {{ 'active' }} @endif">
 
                                 {{-- <a href="{{ route('services.users',['service' => strtolower($service->name)] ) }}" class="nav-link @if($sub_menu_main=='users') {{ 'active' }} @endif"> --}}
                                 <i class="nav-icon fas fa-users"></i>
                                     <p>
-                                        Users
+                                        Agents
                                     </p>
                                 </a>
                             </li>

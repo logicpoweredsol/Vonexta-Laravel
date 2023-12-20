@@ -45,9 +45,10 @@ Route::middleware(['auth','checkUserStatus'])->group(function () {
     // Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::prefix('services/{service}')->group(function() {
-        Route::prefix('users')->group(function() {
-            Route::get('/{serviceID}', [UserController::class, 'index'])->name('services.users');
-            Route::get('/add', [UserController::class, 'add'])->name('services.users.new');
+        Route::prefix('agents')->group(function() {
+            Route::get('/{serviceID}', [UserController::class, 'index'])->name('services.agents');
+            Route::get('/edit/{serviceID}/{AgentID}', [UserController::class, 'edit'])->name('services.agents.edit');
+
         });
         Route::middleware(['role_or_permission:admin|view campaigns'])->prefix('campaigns')->group(function() {
             Route::put('/', [CampaignController::class, 'index'])->name('services.campaigns');

@@ -1,6 +1,7 @@
 $(document).ready(function(){
+
     // BS-Stepper Init
-    var stepper = new Stepper(stepperEl);
+
     $('#usersDT').DataTable({
         "paging": true,
         "lengthChange": true,
@@ -10,6 +11,18 @@ $(document).ready(function(){
         "autoWidth": false,
         "responsive": true,
     });
+
+
+    // var stepper = new Stepper(stepperEl);
+    // $('#usersDT').DataTable({
+    //     "paging": true,
+    //     "lengthChange": true,
+    //     "searching": true,
+    //     "ordering": true,
+    //     "info": true,
+    //     "autoWidth": false,
+    //     "responsive": true,
+    // });
 
     //Add user...
     $(document).on('click', '#btnAddUser',function(){

@@ -15,12 +15,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Users</h1>
+            <h1>Agents</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
-              <li class="breadcrumb-item active">Users</li>
+              <li class="breadcrumb-item active">Agents</li>
             </ol>
           </div>
         </div>
@@ -33,14 +33,14 @@
       <!-- Default box -->
       <div class="card">
         <div class="card-header">
-          <h3 class="card-title">All Users</h3>
+          <h3 class="card-title">All Agents</h3>
 
           <div class="card-tools">
             <!-- <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
               <i class="fas fa-minus"></i>
             </button> -->
             <a href="javascript:void(0);" class="btn btn-sm btn-primary" id="btnAddUser">
-              <i class="fas fa-plus"></i> Add User
+              <i class="fas fa-plus"></i> Add Agent
             </a>
           </div>
         </div>
@@ -68,8 +68,8 @@
             <table id="usersDT" class="table table-striped table-hover vonexta-table">
                 <thead>
                     <tr>
-                        <th>User</th>
-                        {{-- <th>Extention</th> --}}
+                        <th>Agent</th>
+                        <th>Extention</th>
                         <th>Full Name</th>
                         <th>User Group</th>
                         <th>Status</th>
@@ -78,12 +78,16 @@
                 </thead>
                 <tbody>
                     
-
                     @foreach ($service_Users['user_id'] as $i=>$service_User)
                    
                     <tr>
+                        @foreach ($users as $user)
                         <td>
-                            {{$service_Users['user'][$i]}}
+                            {{$user['email']}} <br>
+                        </td>
+                        @endforeach
+                        <td>
+                           {{$service_Users['user'][$i]}}
                         </td>
                         <td>
                             {{$service_Users['full_name'][$i]}}
@@ -107,7 +111,7 @@
                                   <span class="sr-only">Toggle Dropdown</span>
                                 </button>
                                 <div class="dropdown-menu" role="menu">
-                                  <a class="dropdown-item" href="#">Modify</a>
+                                  <a class="dropdown-item" href="{{ route('services.agents.edit', ['service' => strtolower($service), 'serviceID' => $serviceID,'AgentID' => $service_Users['user'][$i]  ] ) }}">Modify</a>
                                   <a class="dropdown-item" href="#">Logs</a>
                                   <a class="dropdown-item" href="#">Emergency Logout</a>
                                   <div class="dropdown-divider"></div>
@@ -263,7 +267,7 @@
     <script>
         //Any constants to be used by this service/module...
         const service = "{{ $service }}";
-        // {{ route('services.users.new',['service' => $service]) }}
+       
     </script>
     <!-- DataTables  & Plugins -->
     <script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
@@ -280,5 +284,5 @@
     <script src="{{ asset('plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
     <!-- BS-Stepper -->
     <script src="{{ asset('plugins/bs-stepper/js/bs-stepper.min.js') }}"></script>
-    <script src="{{ asset('views/services/dialer/users/index.js') }}"></script>
+    <script src="{{ asset('views/services/dialler/users/index.js') }}"></script>
 @endpush
