@@ -6,6 +6,7 @@ use App\Models\Service;
 use App\Models\OrganizationServices;
 use App\Models\Automation;
 use App\Models\User;
+use App\Models\userAgent;
 
 
 
@@ -62,6 +63,45 @@ function get_serive_type_id($org_ser_id) {
     }
 
     return $status;
+}
+
+
+
+function get_agent_detail($serviceID ,$AgentID) {
+    $OrganizationServices = OrganizationServices::find($serviceID);
+    $phpArray = json_decode($OrganizationServices->connection_parameters, true);
+    $apiEndpoint = 'https://' . $phpArray['server_url'] . '/APIv2/Users/API.php';
+    // POST data
+    $postData = [
+        'Action' => 'GetUserInfo',
+        'apiUser' =>  $phpArray['api_user'],
+        'apiPass' =>  $phpArray['api_pass'],
+        'session_user' =>  $phpArray['api_user'],
+        'responsetype' => 'json',
+        'user'=>$AgentID
+    ];
+    $ch = curl_init($apiEndpoint);
+
+    // Set cURL options
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
+
+    // Execute cURL session and get the response
+    $response = curl_exec($ch);
+
+    // Close cURL session
+    curl_close($ch);
+    
+    return json_decode($response, true);
+}
+
+
+function get_email($agent) {
+    $userAgent = userAgent::with('user_detail')->where('api_user',$agent)->first();
+
+    return  $userAgent->user_detail->email;
+    
 }
 
 

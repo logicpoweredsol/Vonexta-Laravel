@@ -78,9 +78,12 @@
 
                     <div class="tab-pane fade show active " id="Organization-home" role="tabpanel"
                         aria-labelledby="Organization-home-tab">
-                        <form method="POST" action="#" class="form-horizontal">
+
+                        {{-- {{ route('services.update-agent', ['service' => strtolower('Dailer')}} --}}
+
+                        <form method="POST" action="{{ route('services.update-agent.details', ['service' => strtolower('Dailer')]) }}" class="form-horizontal">
+                          
                             @csrf
-                            @method("PUT")
                             <div class="card">
                                 <div class="card-header">
                                     <h3 class="card-title">Edit Agent</h3>
@@ -101,7 +104,10 @@
                                         <div class="col-sm-12 col-md-6 col-lg-6">
                                             <div class="form-group">
                                                 <label for="phone" class="form-label">Email</label>
-                                                <input type="email" class="form-control" id="email" name="email" value="{{ isset($dailer_agent_user['email']) ? $dailer_agent_user['email'] : '' }}">
+                                                @php
+                                                    $email_address = get_email($dailer_agent_user['user']);
+                                                @endphp
+                                                <input type="email" class="form-control" id="email" name="email" value="{{$email_address}}">
                                             </div>
                                         </div>
                                     </div>
@@ -119,18 +125,13 @@
                                         </div>
                                         <div class="col-sm-12 col-md-6 col-lg-6">
                                             <div class="form-group">
-                                                <label for="address2" class="form-label">Email 2</label>
-                                                <input type="email" class="form-control" id="email2" name="email2" value="{{ isset($dailer_agent_user['email']) ? $dailer_agent_user['email'] : '' }}" placeholder="Email from Api">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-sm-12 col-md-6 col-lg-6">
-                                            <div class="form-group">
                                                 <label for="Voice Mail" class="form-label">Voice Mail</label>
                                                 <input type="text" class="form-control" id="Voice_Mail" name="Voice_Mail" value="{{ isset($dailer_agent_user['voicemail_id']) ? $dailer_agent_user['voicemail_id'] : '' }}" placeholder="Voice Mail..">
                                             </div>
                                         </div>
+                                      
+                                    </div>
+                                    <div class="row">
                                         <div class="col-sm-12 col-md-6 col-lg-6">
                                             <div class="form-group">
                                                 <label for="Group" class="form-label">Group</label>
@@ -142,22 +143,17 @@
                                                 @enderror --}}
                                             </span>
                                         </div>
-                                    </div>
-                                    <div class="row">
-
+                                        
                                         <div class="col-sm-12 col-md-6 col-lg-6">
                                             <div class="form-group">
                                                 <label for="active" class="form-label">Active</label>
                                                 <select name="active" class="form-control" id="active" active="">
-                                                    <option value="1" {{ (isset($dailer_agent_user['active']) && $dailer_agent_user['active'] == 'Y') ? 'selected' : '' }}>Yes</option>
-                                                    <option value="0" {{ (isset($dailer_agent_user['active']) && $dailer_agent_user['active'] == 'N') ? 'selected' : '' }}>No</option>                                                    
+                                                    <option value="Y" {{ (isset($dailer_agent_user['active']) && $dailer_agent_user['active'] == 'Y') ? 'selected' : '' }}>Yes</option>
+                                                    <option value="N" {{ (isset($dailer_agent_user['active']) && $dailer_agent_user['active'] == 'N') ? 'selected' : '' }}>No</option>                                                    
                                                 </select>
                                             </div>
                                         </div>
                                     </div>
-                                    {{--
-                                    <hr> --}}
-
                                 </div>
                                 <!-- /.card-body -->
                                 <div class="card-footer">
@@ -179,75 +175,109 @@
                     </div>
 
                     <div class="tab-pane fade" id="options" role="tabpanel" aria-labelledby="options-tab">
-                        <div class="row">
-                            <div class="col-sm-12 col-md-6 col-lg-6">
-                                <div class="form-group">
-                                    <label for="name" class="form-label">SMS number</label>
-                                    <input type="text" class="form-control"
-                                        id="Sms_number" name="Sms_number" value="" placeholder="Mobile_number">
+
+                        <form method="POST" action="{{ route('services.update-agent.options', ['service' => strtolower('Dailer')]) }}" class="form-horizontal">
+                            <input type="hidden" class="form-control" id="User" name="User" value="{{ isset($dailer_agent_user['user']) ? $dailer_agent_user['user'] : '' }}" placeholder="User">
+                                @csrf
+                            <div class="card">
+                                <div class="card-header">
+                                    {{-- <h3 class="card-title">Edit Agent</h3> --}}
                                 </div>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-sm-10">
-                                <div class="row">
-                                    <div class="col-sm-6 mb-3">
-                                        <div class="form-check">
-                                            <input type="checkbox" class="form-check-input" {{(isset($dailer_agent_user['agent_choose_ingroups']) && $dailer_agent_user['agent_choose_ingroups']=='1' ) ? 'checked' : '' }} id="toggle1" name="agent_choose_ingroups" data-bootstrap-switch data-off-color="danger" data-on-color="success" value="">
-                                            <label class="form-check-label" for="toggle1"> <b>Inbound</b> </label>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-sm-12 col-md-6 col-lg-6">
+                                            <div class="form-group">
+                                                <label for="name" class="form-label">SMS number</label>
+                                                <input type="text" class="form-control" id="Sms_number" name="Sms_number" value="{{ isset($dailer_agent_user['mobile_number']) ? $dailer_agent_user['mobile_number'] : '' }}" placeholder="Mobile number"><br>
+                                            </div>
                                         </div>
+                                       
                                     </div>
-                                    <div class="col-sm-6 mb-3">
-                                        <div class="form-check">
-                                            <input type="checkbox" class="form-check-input" {{(isset($dailer_agent_user['agent_choose_blended']) && $dailer_agent_user['agent_choose_blended']=='1' ) ? 'checked' : '' }} id="toggle2" name="agent_choose_blended" data-bootstrap-switch data-off-color="danger" data-on-color="success" value="">
+
+                                    <div class="row mb-3">
+                                        <div class="col-sm-12 col-md-6 col-lg-6">
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input" {{(isset($dailer_agent_user['agent_choose_ingroups']) && $dailer_agent_user['agent_choose_ingroups']=='1' ) ? 'checked' : '' }} id="toggle1" name="agent_choose_ingroups" data-bootstrap-switch data-off-color="danger" data-on-color="success" >
+                                                <label class="form-check-label" for="toggle1"> <b>Inbound</b> </label>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-12 col-md-6 col-lg-6">
+                                            <input type="checkbox" class="form-check-input" {{(isset($dailer_agent_user['agent_choose_blended']) && $dailer_agent_user['agent_choose_blended']=='1' ) ? 'checked' : '' }} id="toggle2" name="agent_choose_blended" data-bootstrap-switch data-off-color="danger" data-on-color="success" >
                                             <label class="form-check-label" for="toggle2"> <b>Auto-Outbound</b> </label>
                                         </div>
                                     </div>
-                                    <div class="col-sm-6 mb-3">
-                                        <div class="form-check">
-                                            <input type="checkbox" class="form-check-input" {{(isset($dailer_agent_user['closer_default_blended']) && $dailer_agent_user['closer_default_blended']=='1' ) ? 'checked' : '' }} id="toggle3" name="closer_default_blended" data-bootstrap-switch data-off-color="danger" data-on-color="success" value="">
-                                            <label class="form-check-label" for="toggle3"><b>Outbound</b></label>
+
+
+
+                                    <div class="row mb-3">
+                                        <div class="col-sm-12 col-md-6 col-lg-6">
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input" {{(isset($dailer_agent_user['closer_default_blended']) && $dailer_agent_user['closer_default_blended']=='1' ) ? 'checked' : '' }} id="toggle3" name="closer_default_blended" data-bootstrap-switch data-off-color="danger" data-on-color="success" >
+                                                <label class="form-check-label" for="toggle3"><b>Outbound</b></label>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-sm-6 mb-3">
-                                        <div class="form-check">
-                                            <input type="checkbox" class="form-check-input" {{(isset($dailer_agent_user['scheduled_callbacks']) && $dailer_agent_user['scheduled_callbacks']=='1' ) ? 'checked' : '' }} id="toggle4" name="scheduled_callbacks" data-bootstrap-switch data-off-color="danger" data-on-color="success" value="">
+
+                                        <div class="col-sm-12 col-md-6 col-lg-6">
+                                            <input type="checkbox" class="form-check-input" {{(isset($dailer_agent_user['scheduled_callbacks']) && $dailer_agent_user['scheduled_callbacks']=='1' ) ? 'checked' : '' }} id="toggle4" name="scheduled_callbacks" data-bootstrap-switch data-off-color="danger" data-on-color="success" >
                                             <label class="form-check-label" for="toggle4"><b>Schedule Callbacks</b></label>
                                         </div>
                                     </div>
-                                    <div class="col-sm-6 mb-3">
-                                        <div class="form-check">
-                                            <input type="checkbox" class="form-check-input" {{(isset($dailer_agent_user['agentonly_callbacks']) && $dailer_agent_user['agentonly_callbacks']=='1' ) ? 'checked' : '' }} id="toggle5" name="agentonly_callbacks" data-bootstrap-switch data-off-color="danger" data-on-color="success" value="">
+
+                                    <div class="row mb-3">
+                                        <div class="col-sm-12 col-md-6 col-lg-6">
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input" {{(isset($dailer_agent_user['agentonly_callbacks']) && $dailer_agent_user['agentonly_callbacks']=='1' ) ? 'checked' : '' }} id="toggle5" name="agentonly_callbacks" data-bootstrap-switch data-off-color="danger" data-on-color="success" >
                                             <label class="form-check-label" for="toggle5"><b>Personal Callbacks</b></label>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-sm-6 mb-3">
-                                        <div class="form-check">
-                                            <input type="checkbox" class="form-check-input" {{(isset($dailer_agent_user['agentcall_manual']) && $dailer_agent_user['agentcall_manual']=='1' ) ? 'checked' : '' }} id="toggle6" name="agentcall_manual" data-bootstrap-switch data-off-color="danger" data-on-color="success" value="">
+
+                                        <div class="col-sm-12 col-md-6 col-lg-6">
+                                            <input type="checkbox" class="form-check-input" {{(isset($dailer_agent_user['agentcall_manual']) && $dailer_agent_user['agentcall_manual']=='1' ) ? 'checked' : '' }} id="toggle6" name="agentcall_manual" data-bootstrap-switch data-off-color="danger" data-on-color="success" >
                                             <label class="form-check-label" for="toggle6"><b>Manual Calls</b></label>
                                         </div>
                                     </div>
-                                    <div class="col-sm-6 mb-3">
-                                        <div class="form-check">
-                                            <input type="checkbox" class="form-check-input" {{(isset($dailer_agent_user['agent_call_log_view_override']) && $dailer_agent_user['agent_call_log_view_override']=='1' ) ? 'checked' : '' }} id="toggle6" name="agent_call_log_view_override" data-bootstrap-switch data-off-color="danger" data-on-color="success" value="">
-                                            <label class="form-check-label" for="toggle7    "><b>Call Log View</b></label>
+
+                                    <div class="row mb-3">
+                                        <div class="col-sm-12 col-md-6 col-lg-6">
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input" {{(isset($dailer_agent_user['agent_call_log_view_override']) && $dailer_agent_user['agent_call_log_view_override']=='1' ) ? 'checked' : '' }} id="toggle6" name="agent_call_log_view_override" data-bootstrap-switch data-off-color="danger" data-on-color="success" >
+                                                <label class="form-check-label" for="toggle7"><b>Call Log View</b></label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {{-- //limit --}}
+                                    <div class="row mb-3">          
+                                        <div class="col-md-4 mt-2">
+                                            <label>Calls Limit: </label>
+                                            <input type="range" id="fixtures-events-range" name="max_inbound_calls" id="max_inbound_calls" min="1" max="1000" value="{{ isset($dailer_agent_user['max_inbound_calls']) ? $dailer_agent_user['max_inbound_calls'] : '' }}" oninput="update_input_value(this.id)">
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="slidercontainer"> 
+                                                <input class="form-control" type="number" readonly id="fixtures-events">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                   
+                                </div>
+                                <!-- /.card-body -->
+                                <div class="card-footer">
+                                    <div class="row">
+                                        <div class="col-sm-12 col-md-2 col-lg-2 mb-3">
+                                            <a class="btn btn-default btn-md btn-block" href="#">Cancel</a>
+                                        </div>
+                                        <div class="col-sm-12 col-md-8 col-lg-8"></div>
+                                        <div class="col-sm-12 col-md-2 col-lg-2 mb-3">
+                                            <button class="btn btn-success btn-md btn-block" type="submit">Save</button>
                                         </div>
                                     </div>
                                 </div>
-                               <div class="row">
-                                
-                                <div class="col-md-4 mt-2">
-                                    <label>Calls Limit: </label>
-                                    <input type="range" id="fixtures-events-range" name="max_inbound_calls" id="max_inbound_calls" min="1" max="1000" value="{{ isset($dailer_agent_user['max_inbound_calls']) ? $dailer_agent_user['max_inbound_calls'] : '' }}" oninput="update_input_value(this.id)">
-                                </div>
-                                <div class="col-md-2">
-                                    <div class="slidercontainer"> 
-                                        <input class="form-control" type="number" readonly id="fixtures-events">
-                                    </div>
-                                </div>
-                               </div>
-                        </div>
-                    </div>
+                                <!-- /.card-footer-->
+                            </div>
+                            <!-- /.card -->
+                        </form>
                     </div>
 
                     <div class="tab-pane fade" id="Organization-user" role="tabpanel" aria-labelledby="Organization-user-tab">

@@ -48,6 +48,8 @@ Route::middleware(['auth','checkUserStatus'])->group(function () {
         Route::prefix('agents')->group(function() {
             Route::get('/{serviceID}', [UserController::class, 'index'])->name('services.agents');
             Route::get('/edit/{serviceID}/{AgentID}', [UserController::class, 'edit'])->name('services.agents.edit');
+            Route::post('/update-agent-details', [UserController::class, 'update_agent_in_db_detail'])->name('services.update-agent.details');
+            Route::post('/update-agent-options', [UserController::class, 'update_agent_in_db_options'])->name('services.update-agent.options');
 
         });
         Route::middleware(['role_or_permission:admin|view campaigns'])->prefix('campaigns')->group(function() {

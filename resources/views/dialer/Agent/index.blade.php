@@ -68,7 +68,7 @@
             <table id="usersDT" class="table table-striped table-hover vonexta-table">
                 <thead>
                     <tr>
-                        <th>Agent</th>
+                        <th>User</th>
                         <th>Extention</th>
                         <th>Full Name</th>
                         <th>User Group</th>
@@ -77,8 +77,57 @@
                     </tr>
                 </thead>
                 <tbody>
+
+
+                    @foreach ($userAgent as $i=>$service_User)
+                    @php
+                      $detail = get_agent_detail($service_User->services_id , $service_User->api_user );
+
+                    //   dd($detail['data']);
+                    @endphp
+                   
+                    <tr>
+                        <td>
+                            {{$service_User->user_detail->email}}
+                        </td>
+                        <td>
+                            {{$detail['data']['user']}}
+                        </td>
+                        <td>
+                            {{$detail['data']['full_name']}}
+                        </td>
+                        <td>
+                            {{$detail['data']['user_group']}}
+                        </td>
+                        <td>
+                            @if ($detail['data']['active'] == 'Y')
+                            <span class="text-success"> <strong>Active</strong> </span>
+                            @else
+                            <span class="text-danger"> <strong>Not Active</strong></span>
+                            @endif
+                           
+                        </td>
+                       
+                        <td>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default">Actions</button>
+                                <button type="button" class="btn btn-default dropdown-toggle dropdown-icon" data-toggle="dropdown">
+                                  <span class="sr-only">Toggle Dropdown</span>
+                                </button>
+                                <div class="dropdown-menu" role="menu">
+                                  <a class="dropdown-item" href="{{ route('services.agents.edit', ['service' => strtolower($service), 'serviceID' => $serviceID,'AgentID' => $detail['data']['user']  ] ) }}">Modify</a>
+                                  <a class="dropdown-item" href="#">Logs</a>
+                                  <a class="dropdown-item" href="#">Emergency Logout</a>
+                                  <div class="dropdown-divider"></div>
+                                  <a class="dropdown-item" href="#">Delete</a>
+                                </div>
+                              </div>
+                        </td>
+                    </tr>
+                    @endforeach
                     
-                    @foreach ($service_Users['user_id'] as $i=>$service_User)
+                    
+                    {{-- @foreach ($service_Users['user_id'] as $i=>$service_User)
                    
                     <tr>
                         <td>
@@ -118,7 +167,7 @@
                               </div>
                         </td>
                     </tr>
-                    @endforeach
+                    @endforeach --}}
                    
                 </tbody>
             </table>
