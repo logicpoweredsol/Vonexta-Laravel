@@ -57,3 +57,7 @@
     color: #fff !important;
     border-color: #0a95ca;
 }
+
+.bootstrap-switch-container{
+    width: 127px !important;
+}
