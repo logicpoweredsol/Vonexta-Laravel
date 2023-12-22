@@ -8,7 +8,6 @@ $(function () {
 
 
 $(document).ready(function(){
-
     $('#Campaigns , #Inbound').DataTable({
         "paging": true,
         "lengthChange": true,

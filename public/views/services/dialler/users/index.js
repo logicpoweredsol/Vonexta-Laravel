@@ -1,7 +1,6 @@
 $(document).ready(function(){
 
-    // BS-Stepper Init
-
+    // DataTable Initialization
     $('#usersDT').DataTable({
         "paging": true,
         "lengthChange": true,
@@ -12,42 +11,74 @@ $(document).ready(function(){
         "responsive": true,
     });
 
+    // Wizard Stepper Initialization
+    var stepperEl = document.getElementById('newUserWizard');
+    stepper = new Stepper(stepperEl);
 
-    // var stepper = new Stepper(stepperEl);
-    // $('#usersDT').DataTable({
-    //     "paging": true,
-    //     "lengthChange": true,
-    //     "searching": true,
-    //     "ordering": true,
-    //     "info": true,
-    //     "autoWidth": false,
-    //     "responsive": true,
-    // });
-
-    //Add user...
-    $(document).on('click', '#btnAddUser',function(){
+    // Add User Modal
+    $(document).on('click', '#btnAddUser', function(){
         $('#modalNewUser').modal('show');
     });
-    $(document).on('submit', '#btnPreviousStep', function(e){
 
-    });
-    //Wizard Steps...
+    // Wizard Steps Navigation
     $(document).on('click', '#btnNextStep', function(){
         stepper.next();
         $(this).hide();
         $('#btnPreviousStep').show();
-        $('#btnSubmit').show();
+        $('#btnNextStep').show();
+        // $('#btnSubmit').show();
     });
+   
+
     $(document).on('click', '#btnPreviousStep', function(){
         stepper.previous();
         $(this).hide();
+        $('#btnPreviousStep').show();
         $('#btnNextStep').show();
-        $('#btnSubmit').hide();
+        // $('#btnSubmit').show();
     });
+
 });
-var stepperEl = document.getElementById('newUserWizard');
-stepperEl.addEventListener('show.bs-stepper', function (event) {
+
+// Event listener for bs-stepper show event
+document.getElementById('newUserWizard').addEventListener('show.bs-stepper', function (event) {
     // You can call preventDefault to stop the rendering of your step
-    // event.preventDefault()
+    // event.preventDefault();
     console.warn(event.detail.indexStep);
-})
+});
+
+$(document).ready(function(){
+    $('#compaignns , #Inbound').DataTable({
+        "paging": true,
+        "lengthChange": true,
+        "searching": true,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false,
+        "responsive": true,
+    });
+
+});
+
+function updateValues(id, services_id) {
+ // alert('ok');
+    var extension = $("#" + id).val();
+    $.ajax({
+        url: `${baseUrl}/services.agents.detail`,
+        method: 'GET',
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        data: {
+            'extension': extension,
+            'services_id': services_id
+        },
+        success: function(response) {
+            console.log(response);
+        },
+        error: function(xhr, status, error) {
+            console.error("Error occurred:", error);
+        }
+    });
+}
+

@@ -16,6 +16,8 @@ class UserController extends Controller
     //
 
     public function index($service ,$serviceID){
+
+        $user_agent_detail = [];
         $service_Users =  $this->get_user($serviceID);
         //get users of logged in user's organization...
         $user = Auth::user();
@@ -42,6 +44,7 @@ class UserController extends Controller
        
 
         $userAgent = userAgent::with('user_detail')->get();
+
         return view('dialer.Agent.index',compact('users','service','service_Users' ,'serviceID' ,'userAgent'));
     }
 
@@ -271,6 +274,13 @@ class UserController extends Controller
 
        
     }
+
+    function get_extension_details(Request $request) {
+
+        // dd($request->all());
+        return $this->get_agent_detail($request->services_id , $request->extension);
+    }
+
 
 
    

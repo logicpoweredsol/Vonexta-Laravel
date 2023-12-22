@@ -93,7 +93,8 @@ function get_agent_detail($serviceID ,$AgentID) {
     // Close cURL session
     curl_close($ch);
     
-    return json_decode($response, true);
+    $responcc = json_decode($response, true);
+    return $responcc['data'];
 }
 
 

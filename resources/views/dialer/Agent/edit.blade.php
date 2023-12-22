@@ -528,20 +528,6 @@
 <script src="{{ asset('views/services/dialler/users/edit.js') }}"></script>
 
 @endpush
-
-
-{{-- <div class="slidercontainer">
-    <label>Number of fixtures/events
-        <button type="button" class="tooltipbtn btn btn-secondary" data-bs-toggle="tooltip"
-            data-bs-placement="top" title="" id="fixtures-events-tooltip">
-            <span><i class="fa-solid fa-info"></i></span>
-        </button>
-    </label>
-    <input class="form-control" type="number" id="fixtures-events"
-        onkeyup="update_range_value(this.id)" onchange="update_filed(this.id)">
-    <input type="range" id="fixtures-events-range" min="1" max="1000" value="1"
-        oninput="update_input_value(this.id)">
-</div> --}}
 <script>
 function update_input_value(id){
     var range = $("#"+id).val();
