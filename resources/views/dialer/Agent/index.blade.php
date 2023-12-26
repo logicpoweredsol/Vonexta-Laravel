@@ -42,7 +42,7 @@
             <a href="javascript:void(0);" class="btn btn-sm btn-primary mr-2" id="btnAddUser">
               <i class="fas fa-plus"></i> Add Agent
             </a>
-            <a href="#" class="btn btn-sm btn-primary" id="addBulk-user">
+            <a href="javascript:void(0);" class="btn btn-sm btn-primary" id="Modal2">
                 <i class="fas fa-plus"></i> Add Bulk Users
               </a>
           </div>
@@ -82,6 +82,7 @@
                 <tbody>
                     @php
                         $services_id = $userAgent[0]->services_id;
+                        $agent_user = [];
                     @endphp
                     @foreach ($userAgent as $i=>$service_User)
 
@@ -91,6 +92,15 @@
 
 
                     @if (count($detail) > 100 )
+
+                    @php
+          
+
+                        $agent_user[$detail['user']] = $detail['full_name'];
+
+                        
+
+                    @endphp
                     <tr>
                         <td>
                             {{$service_User->user_detail->email}}
@@ -298,6 +308,20 @@
                                         </select>
                                     </div>
                                 </div>
+                                <br><br>
+                                <div class="form-group row">
+                                    <label for="active" class="col-sm-2 col-form-label">Copy settings from other user: ?</label>
+                                    <div class="col-sm-10 col-md-6">
+                                        <select class="form-control" required name="active" id="active">
+                                            @foreach ($agent_user as $i=>$agent_us)
+                                            <option value="{{$agent_user[$i]}}">{{$agent_us}}</option>
+                                            @endforeach
+                                           
+                                         
+                                        </select>
+                                    </div>
+                                </div>
+                                
                             </div>
                             <div id="accountdetails" class="content" role="tabpanel" aria-labelledby="accountdetails-trigger">
                                 <div class="row">
@@ -448,6 +472,61 @@
         </div>
     </div>
     <!-- /.Modals -->
+
+
+    {{-- modal2 --}}
+    <div class="modal fade" id="NewModal">
+        <div class="bs-stepper" id="newUserWizard">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Add bulk users:</h4>
+                        
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="col-md-6 mb-3">
+                            <label for=""> Copy settings from other user: ?</label>
+                            <select class="form-control" name="" id="">
+                                <option value="">user1</option>
+                               
+                            </select>
+                        </div>
+                        
+                        <table id="bulk-table" class="table table-striped table-hover vonexta-table">
+                            <thead>
+                                <tr>
+                                    <th>Email</th>
+                                    <th>Extension</th>
+                                    <th>Full Name</th>
+                                    <th>Password</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="add_row">
+                                <tr  id="1">
+                                    <td><input type="email" class="form-control" name="email[]" id="email"></td>
+                                    <td><input type="text" class="form-control" name="extension[]" id="extension"></td>
+                                    <td><input type="text" class="form-control" name="full_name[]" id="full_name"></td>
+                                    <td><input type="password" class="form-control" name="password[]" id="password"></td>
+                                    <td><input type="text" class="form-control" name="status[]" id="status"></td>
+                                    <td><button onclick="add_row();" class="btn btn-success btn-sm">+</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                      
+                        
+                    </div>
+                </div>
+            </div> 
+        </div>
+    </div>
+  
 @endSection
 
 @push('scripts')

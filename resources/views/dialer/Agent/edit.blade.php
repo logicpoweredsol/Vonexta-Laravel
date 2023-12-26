@@ -104,10 +104,10 @@
                                         <div class="col-sm-12 col-md-6 col-lg-6">
                                             <div class="form-group">
                                                 <label for="phone" class="form-label">Email</label>
-                                                @php
+                                                {{-- @php
                                                     $email_address = get_email($dailer_agent_user['user']);
-                                                @endphp
-                                                <input type="email" class="form-control" id="email" name="email" value="{{$email_address}}">
+                                                @endphp --}}
+                                                <input type="email" class="form-control" id="email" name="email" value="{{ isset($dailer_agent_user['email']) ? $dailer_agent_user['email'] : '' }}">
                                             </div>
                                         </div>
                                     </div>
@@ -350,21 +350,32 @@
                     </div>
 
                     <div class="tab-pane fade" id="call-log" role="tabpanel" aria-labelledby="call-logs-tab">
-                        <div class="card">
+                        <div class="card" id="Inbound">
                             <div class="card-header">
                                 <h3 class="card-title"><b>Inbound:</b></h3>
                             </div>
                             <div class="card-body">
+                                <div class="d-flex justify-content-end">
+                                    <div class="col-md-3 mb-3">
+                                        <select  class="form-control" name="" id="">
+                                            <option value="" selected disabled>Select Logs</option>
+                                            <option value="">Inbound</option>
+                                            <option value="">Outbound</option>
+                                            <option value="">manual calls</option>
+                                            <option value="">Transfers</option>
+                                        </select>
+                                    </div>
+                                </div>
 
                                 <table id="Campaigns" class="table table-striped table-hover vonexta-table">
                                     <thead>
                                         <tr>
-                                            <th>Call Date</th>
-                                            <th>Lead ID</th>
+                                            <th>Call Time</th>
                                             <th>Phone Number</th>
-                                            <th>Inbound Group</th>
-                                            <th>Call length</th>
-                                            <th>Status</th>
+                                            <th>Contact List</th>
+                                            <th>Type</th>
+                                            <th>Source</th>
+                                            <th>Disposition</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -384,7 +395,7 @@
                         </div>
 
                         {{-- Outbound --}}
-                        <div class="card">
+                        {{-- <div class="card" id="OutboundTable">
                             <div class="card-header">
                                 <h3 class="card-title"><b>Outbound:</b></h3>
 
@@ -417,10 +428,12 @@
                                 </table>
                             </div>
 
-                        </div>
+                        </div> --}}
 
                         {{-- manual calls --}}
-                        <div class="card">
+
+
+                        {{-- <div class="card">
                             <div class="card-header">
                                 <h3 class="card-title"><b>Manual Calls:</b></h3>
 
@@ -436,7 +449,6 @@
                                             <th>Compaign</th>
                                             <th>Call lenght</th>
                                             <th>Status</th>
-                                            {{-- <th>Actions</th> --}}
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -453,11 +465,11 @@
                                 </table>
                             </div>
 
-                        </div>
+                        </div> --}}
 
 
                         {{-- Transfers --}}
-                        <div class="card">
+                        {{-- <div class="card">
                             <div class="card-header">
                                 <h3 class="card-title"><b>Transfers:</b></h3>
 
@@ -471,7 +483,6 @@
                                             <th>lead ID</th>
                                             <th>Phone Number</th>
                                             <th>Transferred to</th>
-                                            {{-- <th>Actions</th> --}}
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -486,7 +497,7 @@
                                 </table>
                             </div>
 
-                        </div>
+                        </div> --}}
 
                     </div>
                 </div>

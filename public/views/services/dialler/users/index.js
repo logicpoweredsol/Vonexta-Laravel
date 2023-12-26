@@ -1,7 +1,7 @@
 $(document).ready(function(){
 
     // DataTable Initialization
-    $('#usersDT').DataTable({
+    $('#usersDT,#bulk-table').DataTable({
         "paging": true,
         "lengthChange": true,
         "searching": true,
@@ -10,6 +10,7 @@ $(document).ready(function(){
         "autoWidth": false,
         "responsive": true,
     });
+    
 
     // Wizard Stepper Initialization
     var stepperEl = document.getElementById('newUserWizard');
@@ -19,6 +20,10 @@ $(document).ready(function(){
     $(document).on('click', '#btnAddUser', function(){
         $('#modalNewUser').modal('show');
     });
+    
+    $(document).on('click','#Modal2',function(){
+        $('#NewModal').modal('show');
+    })
 
     // Wizard Steps Navigation
     $(document).on('click', '#btnNextStep', function(){
@@ -80,5 +85,30 @@ function updateValues(id, services_id) {
             console.error("Error occurred:", error);
         }
     });
+}
+
+
+function add_row(){
+    var row_number = $(".add_row tr").length;
+    row_number = row_number+1;
+    html =  `<tr  id=${row_number}>
+                <td><input type="email" class="form-control" name="email[]" id="email"></td>
+                <td><input type="text" class="form-control" name="extension[]" id="extension"></td>
+                <td><input type="text" class="form-control" name="full_name[]" id="full_name"></td>
+                <td><input type="password" class="form-control" name="password[]" id="password"></td>
+                <td><input type="text" class="form-control" name="status[]" id="status"></td>
+                <td>
+                <button onclick="add_row();" class="btn btn-success btn-sm">+</button>
+                <button onclick="remove_row(${row_number});" class="btn btn-danger btn-sm">-</button>
+                </td>
+            </tr>`
+
+    $(".add_row").append(html);
+}
+
+
+function remove_row(row_number){
+    $("#" +row_number).remove();
+
 }
 
