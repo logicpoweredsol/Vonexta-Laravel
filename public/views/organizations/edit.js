@@ -213,7 +213,7 @@ $(document).ready(function () {
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
-                    text: 'Something went wrong. Please try again.',
+                    text: 'Please check API credentials',
                 });
                 $("#btnAddConnectionParameters").prop('disabled', false);
             }
