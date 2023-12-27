@@ -9,9 +9,11 @@ class DashboardController extends Controller
     //
 
     public function index(){
-        if(auth()->user()->hasRole('superadmin')){
-            return view('dashboard.superadmin');
-        }
+
+        // if(auth()->user()->hasRole('superadmin')){
+        //     return view('dashboard.superadmin');
+        // }
+        
         return view('dashboard.index');
     }
 }

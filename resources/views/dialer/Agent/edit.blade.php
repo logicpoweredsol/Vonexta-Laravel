@@ -281,8 +281,16 @@
                     </div>
 
                     <div class="tab-pane fade" id="Organization-user" role="tabpanel" aria-labelledby="Organization-user-tab">
+                        <div class="d-flex justify-content-end">
+                            <div class="col-md-3 mb-3">
+                                <select  class="form-control" id="skills_log" onchange="Change_tab(this.id);">
+                                    <option selected value="compaigns">compaigns</option>
+                                    <option value="inbounds">Inbound</option>
+                                </select>
+                            </div>
+                        </div>
                         {{-- Campaigns --}}
-                        <div class="card">
+                        <div class="card compaigns">
                             <div class="card-header">
                                 <h3 class="card-title"><b>Campaigns</b></h3>
                             </div>
@@ -315,7 +323,7 @@
                         </div>
 
                         {{-- Inbound --}}
-                        <div class="card">
+                        <div class="card inbounds d-none">
                             <div class="card-header">
                                 <h3 class="card-title"><b>Inbound</b></h3>
 
@@ -350,23 +358,25 @@
                     </div>
 
                     <div class="tab-pane fade" id="call-log" role="tabpanel" aria-labelledby="call-logs-tab">
-                        <div class="card" id="Inbound">
+                       
+                        <div class="d-flex justify-content-end">
+                            <div class="col-md-3 mb-3">
+                                <select  class="form-control" id="table_log" onchange="change_tab(this.id);">
+                                    <option selected value="inbound-log">Inbound</option>
+                                    <option value="outbound-log">Outbound</option>
+                                    <option value="manual-log">manual calls</option>
+                                    <option value="transfer-log">Transfers</option>
+                                </select>
+                            </div>
+                        </div>
+
+
+                        <div class="card inbound-log">
                             <div class="card-header">
                                 <h3 class="card-title"><b>Inbound:</b></h3>
                             </div>
                             <div class="card-body">
-                                <div class="d-flex justify-content-end">
-                                    <div class="col-md-3 mb-3">
-                                        <select  class="form-control" name="" id="">
-                                            <option value="" selected disabled>Select Logs</option>
-                                            <option value="">Inbound</option>
-                                            <option value="">Outbound</option>
-                                            <option value="">manual calls</option>
-                                            <option value="">Transfers</option>
-                                        </select>
-                                    </div>
-                                </div>
-
+                              
                                 <table id="Campaigns" class="table table-striped table-hover vonexta-table">
                                     <thead>
                                         <tr>
@@ -395,7 +405,7 @@
                         </div>
 
                         {{-- Outbound --}}
-                        {{-- <div class="card" id="OutboundTable">
+                        <div class="card outbound-log d-none">
                             <div class="card-header">
                                 <h3 class="card-title"><b>Outbound:</b></h3>
 
@@ -428,12 +438,11 @@
                                 </table>
                             </div>
 
-                        </div> --}}
+                        </div>
 
                         {{-- manual calls --}}
 
-
-                        {{-- <div class="card">
+                        <div class="card manual-log d-none">
                             <div class="card-header">
                                 <h3 class="card-title"><b>Manual Calls:</b></h3>
 
@@ -465,11 +474,11 @@
                                 </table>
                             </div>
 
-                        </div> --}}
+                        </div>
 
 
                         {{-- Transfers --}}
-                        {{-- <div class="card">
+                        <div class="card transfer-log d-none">
                             <div class="card-header">
                                 <h3 class="card-title"><b>Transfers:</b></h3>
 
@@ -497,7 +506,8 @@
                                 </table>
                             </div>
 
-                        </div> --}}
+                        </div>
+                        
 
                     </div>
                 </div>
@@ -537,6 +547,7 @@
 
 <script src="{{ asset('plugins/bs-stepper/js/bs-stepper.min.js') }}"></script>
 <script src="{{ asset('views/services/dialler/users/edit.js') }}"></script>
+<script src="{{ asset('views/services/dialler/users/index.js') }}"></script>
 
 @endpush
 <script>
