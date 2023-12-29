@@ -48,6 +48,65 @@ class UserController extends Controller
         return view('dialer.Agent.index',compact('users','service','service_Users' ,'serviceID' ,'userAgent'));
     }
 
+    function check_extension(Request $request){
+        $reponse = $this->get_extension_ddetail($request->services_id,$request->extension);
+        $data = [];
+        if($reponse['result'] == 'success'){
+            $userAgent = userAgent::where('api_user',$request->extension)->first();
+            if($userAgent){
+                $data['status'] = 'failed';// already in use
+                $data['message'] = 'Extension is already in use.';// already in use
+            } else{
+                // extension is free
+                $data['status'] = 'success';// already in use
+                $data['message'] = 'Extension is free to use.';
+            }
+        } else { // extension is invalid
+            $data['status'] = 'failed';// already in use
+            $data['message'] = "Invalid value in extension. Doesn't exist";
+        }
+
+        return $data;
+    }
+
+    function add_agents(Request $request){
+        dd($request);
+    }
+
+
+
+    function get_extension_ddetail($serviceID ,$AgentID) {
+        $OrganizationServices = OrganizationServices::where('service_id',$serviceID)->first();
+        $phpArray = json_decode($OrganizationServices->connection_parameters, true);
+        $apiEndpoint = 'https://' . $phpArray['server_url'] . '/APIv2/Users/API.php';
+        // POST data
+        $postData = [
+            'Action' => 'GetUserInfo',
+            'apiUser' =>  $phpArray['api_user'],
+            'apiPass' =>  $phpArray['api_pass'],
+            'session_user' =>  $phpArray['api_user'],
+            'responsetype' => 'json',
+            'user'=>$AgentID
+        ];
+        $ch = curl_init($apiEndpoint);
+    
+        // Set cURL options
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
+    
+        // Execute cURL session and get the response
+        $response = curl_exec($ch);
+    
+        // Close cURL session
+        curl_close($ch);
+        
+        $responcc = json_decode($response, true);
+        return $responcc;
+    }
+
+    
+
 
     function get_user($organization_service_id) {
         $OrganizationServices = OrganizationServices::find($organization_service_id);

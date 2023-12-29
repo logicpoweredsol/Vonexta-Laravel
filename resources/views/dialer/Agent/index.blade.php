@@ -209,6 +209,7 @@
   <!-- /.content-wrapper -->
     <!-- Modals... -->
     <div class="modal fade" id="modalNewUser">
+
         <div class="bs-stepper" id="newUserWizard">
             <div class="modal-dialog modal-xl">
                 <div class="modal-content">
@@ -219,239 +220,244 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <div class="bs-stepper-header" role="tablist">
-                            <!-- your steps here -->
-                            <div class="step" data-target="#gettingstarted">
-                                <button type="button" class="step-trigger" role="tab" aria-controls="gettingstarted" id="gettingstarted-trigger">
-                                    <span class="bs-stepper-circle">1</span>
-                                    <span class="bs-stepper-label">Users</span>
-                                </button>
+                        <form id="" action="{{route('add-agents')}}" method="post" class="form-horizontal" >
+                            @csrf
+                            <div class="bs-stepper-header" role="tablist">
+                                <!-- your steps here -->
+                                <div class="step" data-target="#gettingstarted">
+                                    <button type="button" class="step-trigger" role="tab" aria-controls="gettingstarted" id="gettingstarted-trigger">
+                                        <span class="bs-stepper-circle">1</span>
+                                        <span class="bs-stepper-label">Users</span>
+                                    </button>
+                                </div>
+                                <div class="line"></div>
+                                <div class="step" data-target="#accountdetails">
+                                    <button type="button" class="step-trigger" role="tab" aria-controls="accountdetails" id="accountdetails-trigger">
+                                        <span class="bs-stepper-circle">2</span>
+                                        <span class="bs-stepper-label">Options</span>
+                                    </button>
+                                </div>
+                                <div class="line"></div>
+                                <div class="step" data-target="#skills">
+                                    <button type="button" class="step-trigger" role="tab" aria-controls="skills" id="skills-trigger">
+                                        <span class="bs-stepper-circle">3</span>
+                                        <span class="bs-stepper-label">Skills</span>
+                                    </button>
+                                </div>
+                                <div class="line"></div>
+                                <div class="step" data-target="#Success">
+                                    <button type="button" class="step-trigger" role="tab" aria-controls="Success" id="Success-trigger">
+                                        <span class="bs-stepper-circle">4</span>
+                                        <span class="bs-stepper-label">Success</span>
+                                    </button>
+                                </div>
                             </div>
-                            <div class="line"></div>
-                            <div class="step" data-target="#accountdetails">
-                                <button type="button" class="step-trigger" role="tab" aria-controls="accountdetails" id="accountdetails-trigger">
-                                    <span class="bs-stepper-circle">2</span>
-                                    <span class="bs-stepper-label">Options</span>
-                                </button>
-                            </div>
-                            <div class="line"></div>
-                            <div class="step" data-target="#skills">
-                                <button type="button" class="step-trigger" role="tab" aria-controls="skills" id="skills-trigger">
-                                    <span class="bs-stepper-circle">3</span>
-                                    <span class="bs-stepper-label">Skills</span>
-                                </button>
-                            </div>
-                            <div class="line"></div>
-                            <div class="step" data-target="#Success">
-                                <button type="button" class="step-trigger" role="tab" aria-controls="Success" id="Success-trigger">
-                                    <span class="bs-stepper-circle">4</span>
-                                    <span class="bs-stepper-label">Success</span>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="bs-stepper-content">
-                            <!-- your steps content here -->
-                            <div id="gettingstarted" class="content" role="tabpanel" aria-labelledby="gettingstarted-trigger">
-                               
-
-                                <div class="form-group row">
-                                    <label for="user_group" class="col-sm-2 col-form-label">Total Users</label>
-                                    <div class="col-md-7">
-                                        <select class="form-control" name="" id="">
-                                            <option value="" selected disabled >Select Organization User</option>
-                                            @foreach ($users as $user)
-                                            <option value="{{$user->id}}">{{$user->name}}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <button class="btn btn-primary btn-sm ">+</button>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="user_group" class="col-sm-2 col-form-label">Extention</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" class="form-control" onchange="updateValues(this.id,{{$services_id}});" required name="user" id="user">
-                                    </div>
-                                </div>
-                            
-                                <div class="form-group row">
-                                    <label for="user_group" class="col-sm-2 col-form-label">Group</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" class="form-control" required name="user_group" id="user_group">
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="full_name" class="col-sm-2 col-form-label">Name</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" class="form-control" required name="full_name" id="full_name">
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="pass" class="col-sm-2 col-form-label">Password</label>
-                                    <div class="col-sm-10">
-                                        <input type="password" class="form-control" required name="pass" id="pass">
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="confirm_pass" class="col-sm-2 col-form-label">Retype Password</label>
-                                    <div class="col-sm-10">
-                                        <input type="password" class="form-control" required name="confirm_pass" id="confirm_pass">
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="active" class="col-sm-2 col-form-label">Status</label>
-                                    <div class="col-sm-10">
-                                        <select class="form-control" required name="active" id="active">
-                                            <option value="1">Yes</option>
-                                            <option value="0">No</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <br><br>
-                                <div class="form-group row">
-                                    <label for="active" class="col-sm-2 col-form-label">Copy settings from other user: ?</label>
-                                    <div class="col-sm-10 col-md-6">
-                                        <select class="form-control" required name="active" id="active">
-                                            @foreach ($agent_user as $i=>$agent_us)
-                                            <option value="{{$agent_user[$i]}}">{{$agent_us}}</option>
-                                            @endforeach
-                                           
-                                         
-                                        </select>
-                                    </div>
-                                </div>
+                            <div class="bs-stepper-content">
+                                <!-- your steps content here -->
+                                <div id="gettingstarted" class="content" role="tabpanel" aria-labelledby="gettingstarted-trigger">
                                 
-                            </div>
-                            <div id="accountdetails" class="content" role="tabpanel" aria-labelledby="accountdetails-trigger">
-                                <div class="row">
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-sm-12 col-md-6 col-lg-6">
-                                                <div class="form-group">
-                                                    <label for="name" class="form-label">SMS number</label>
-                                                    <input type="text" class="form-control" id="Sms_number" name="Sms_number" value="{{ isset($dailer_agent_user['mobile_number']) ? $dailer_agent_user['mobile_number'] : '' }}" placeholder="Mobile number"><br>
-                                                </div>
-                                            </div>
-                                           
+
+                                    <div class="form-group row">
+                                        <label for="user_group" class="col-sm-2 col-form-label">Total Users</label>
+                                        <div class="col-md-7">
+                                            <select class="form-control" name="" id="">
+                                                <option value="" selected disabled >Select Organization User</option>
+                                                @foreach ($users as $user)
+                                                <option value="{{$user->id}}">{{$user->name}}</option>
+                                                @endforeach
+                                            </select>
                                         </div>
-    
-                                        <div class="row mb-3">
-                                            <div class="col-sm-12 col-md-6 col-lg-6">
-                                                <div class="form-check">
-                                                    <input type="checkbox" class="form-check-input" {{(isset($dailer_agent_user['agent_choose_ingroups']) && $dailer_agent_user['agent_choose_ingroups']=='1' ) ? 'checked' : '' }} id="toggle1" name="agent_choose_ingroups" data-bootstrap-switch data-off-color="danger" data-on-color="success" >
-                                                    <label class="form-check-label" for="toggle1"> <b>Inbound</b> </label>
-                                                </div>
-                                            </div>
-    
-                                            <div class="col-sm-12 col-md-6 col-lg-6">
-                                                <input type="checkbox" class="form-check-input" {{(isset($dailer_agent_user['agent_choose_blended']) && $dailer_agent_user['agent_choose_blended']=='1' ) ? 'checked' : '' }} id="toggle2" name="agent_choose_blended" data-bootstrap-switch data-off-color="danger" data-on-color="success" >
-                                                <label class="form-check-label" for="toggle2"> <b>Auto-Outbound</b> </label>
-                                            </div>
+                                        <div class="col-md-3">
+                                            <button class="btn btn-primary btn-sm ">+</button>
                                         </div>
-    
-    
-    
-                                        <div class="row mb-3">
-                                            <div class="col-sm-12 col-md-6 col-lg-6">
-                                                <div class="form-check">
-                                                    <input type="checkbox" class="form-check-input" {{(isset($dailer_agent_user['closer_default_blended']) && $dailer_agent_user['closer_default_blended']=='1' ) ? 'checked' : '' }} id="toggle3" name="closer_default_blended" data-bootstrap-switch data-off-color="danger" data-on-color="success" >
-                                                    <label class="form-check-label" for="toggle3"><b>Outbound</b></label>
-                                                </div>
-                                            </div>
-    
-                                            <div class="col-sm-12 col-md-6 col-lg-6">
-                                                <input type="checkbox" class="form-check-input" {{(isset($dailer_agent_user['scheduled_callbacks']) && $dailer_agent_user['scheduled_callbacks']=='1' ) ? 'checked' : '' }} id="toggle4" name="scheduled_callbacks" data-bootstrap-switch data-off-color="danger" data-on-color="success" >
-                                                <label class="form-check-label" for="toggle4"><b>Schedule Callbacks</b></label>
-                                            </div>
-                                        </div>
-    
-                                        <div class="row mb-3">
-                                            <div class="col-sm-12 col-md-6 col-lg-6">
-                                                <div class="form-check">
-                                                    <input type="checkbox" class="form-check-input" {{(isset($dailer_agent_user['agentonly_callbacks']) && $dailer_agent_user['agentonly_callbacks']=='1' ) ? 'checked' : '' }} id="toggle5" name="agentonly_callbacks" data-bootstrap-switch data-off-color="danger" data-on-color="success" >
-                                                <label class="form-check-label" for="toggle5"><b>Personal Callbacks</b></label>
-                                                </div>
-                                            </div>
-    
-                                            <div class="col-sm-12 col-md-6 col-lg-6">
-                                                <input type="checkbox" class="form-check-input" {{(isset($dailer_agent_user['agentcall_manual']) && $dailer_agent_user['agentcall_manual']=='1' ) ? 'checked' : '' }} id="toggle6" name="agentcall_manual" data-bootstrap-switch data-off-color="danger" data-on-color="success" >
-                                                <label class="form-check-label" for="toggle6"><b>Manual Calls</b></label>
-                                            </div>
-                                        </div>
-    
-                                        <div class="row mb-3">
-                                            <div class="col-sm-12 col-md-6 col-lg-6">
-                                                <div class="form-check">
-                                                    <input type="checkbox" class="form-check-input" {{(isset($dailer_agent_user['agent_call_log_view_override']) && $dailer_agent_user['agent_call_log_view_override']=='1' ) ? 'checked' : '' }} id="toggle6" name="agent_call_log_view_override" data-bootstrap-switch data-off-color="danger" data-on-color="success" >
-                                                    <label class="form-check-label" for="toggle7"><b>Call Log View</b></label>
-                                                </div>
-                                            </div>
-                                        </div>
-    
-                                        {{-- //limit --}}
-                                        <div class="row mb-3">          
-                                            <div class="col-md-4 mt-2">
-                                                <label>Calls Limit: </label>
-                                                <input type="range" id="fixtures-events-range" name="max_inbound_calls" id="max_inbound_calls" min="1" max="1000" value="{{ isset($dailer_agent_user['max_inbound_calls']) ? $dailer_agent_user['max_inbound_calls'] : '' }}" oninput="update_input_value(this.id)">
-                                            </div>
-                                            <div class="col-md-2">
-                                                <div class="slidercontainer"> 
-                                                    <input class="form-control" type="number" readonly id="fixtures-events">
-                                                </div>
-                                            </div>
-                                        </div>  
                                     </div>
-                                </div>
-                            </div>
-                            <div id="skills" class="content" role="tabpanel" aria-labelledby="skills-trigger">
-                                <div class="card">
-                                    <div class="card-header">  
-                                        <div class="btn-group">
-                                            <button type="button" class="btn btn-default">Compaigns</button>
-                                            <button type="button" class="btn btn-default dropdown-toggle dropdown-icon" data-toggle="dropdown">
-                                              <span class="sr-only">Toggle Dropdown</span>
-                                            </button>
-                                            <div class="dropdown-menu" role="menu">
-                                              <a class="dropdown-item" href="#">allowed campaigns</a>
-                                              <a class="dropdown-item" href="#">inbound groups</a>
-                                            </div>
+                                    <div class="form-group row">
+                                        <label for="user_group" class="col-sm-2 col-form-label">Extention</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" onchange="check_extension(this.id,{{$services_id}});" required name="user" id="user">
+                                            <span style = "color:red" id="extension-error"></span>
+                                            <span style = "color:green" id="extension-success"></span>
                                         </div>
+                                    </div>
+                                
+                                    <div class="form-group row">
+                                        <label for="user_group" class="col-sm-2 col-form-label">Group</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" required name="user_group" id="user_group">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="full_name" class="col-sm-2 col-form-label">Name</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" required name="full_name" id="full_name">
+                                        </div>
+                                    </div>
+                                    <!-- <div class="form-group row">
+                                        <label for="pass" class="col-sm-2 col-form-label">Password</label>
+                                        <div class="col-sm-10">
+                                            <input type="password" class="form-control" required name="pass" id="pass">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="confirm_pass" class="col-sm-2 col-form-label">Retype Password</label>
+                                        <div class="col-sm-10">
+                                            <input type="password" class="form-control" required name="confirm_pass" id="confirm_pass">
+                                        </div>
+                                    </div> -->
+                                    <div class="form-group row">
+                                        <label for="active" class="col-sm-2 col-form-label">Status</label>
+                                        <div class="col-sm-10">
+                                            <select class="form-control" required name="active" id="active">
+                                                <option value="1">Yes</option>
+                                                <option value="0">No</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <br><br>
+                                    <div class="form-group row">
+                                        <label for="active" class="col-sm-2 col-form-label">Copy settings from other user: ?</label>
+                                        <div class="col-sm-10 col-md-6">
+                                            <select class="form-control" required name="active" id="active">
+                                                @foreach ($agent_user as $i=>$agent_us)
+                                                <option value="{{$agent_user[$i]}}">{{$agent_us}}</option>
+                                                @endforeach
+                                            
+                                            
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                <div id="accountdetails" class="content" role="tabpanel" aria-labelledby="accountdetails-trigger">
+                                    <div class="row">
                                         <div class="card-body">
-
-                                            <table id="compaignns" class="table table-striped table-hover vonexta-table">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Name</th>
-                                                        <th>Level</th>
-                                                        <th>Actions</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td>0000</td>
-                                                        <td>0000</td>
-                                                        <td>
-                                                            <a href="#" class="btn btn-sm btn-primary" class="btnEdit" data-id=""><i
-                                                                    class="fas fa-pen"></i><a>
-                                                                    <a href="#" class="btn btn-sm btn-danger" class="btnDelete"
-                                                                        data-id=""><i class="fas fa-trash"></i><a>
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-            
-                                            </table>
+                                            <div class="row">
+                                                <div class="col-sm-12 col-md-6 col-lg-6">
+                                                    <div class="form-group">
+                                                        <label for="name" class="form-label">SMS number</label>
+                                                        <input type="text" class="form-control" id="Sms_number" name="Sms_number" value="{{ isset($dailer_agent_user['mobile_number']) ? $dailer_agent_user['mobile_number'] : '' }}" placeholder="Mobile number"><br>
+                                                    </div>
+                                                </div>
+                                            
+                                            </div>
+        
+                                            <div class="row mb-3">
+                                                <div class="col-sm-12 col-md-6 col-lg-6">
+                                                    <div class="form-check">
+                                                        <input type="checkbox" class="form-check-input" {{(isset($dailer_agent_user['agent_choose_ingroups']) && $dailer_agent_user['agent_choose_ingroups']=='1' ) ? 'checked' : '' }} id="toggle1" name="agent_choose_ingroups" data-bootstrap-switch data-off-color="danger" data-on-color="success" >
+                                                        <label class="form-check-label" for="toggle1"> <b>Select Inbound Upon Login</b> </label>
+                                                    </div>
+                                                </div>
+        
+                                                <div class="col-sm-12 col-md-6 col-lg-6">
+                                                    <input type="checkbox" class="form-check-input" {{(isset($dailer_agent_user['agent_choose_blended']) && $dailer_agent_user['agent_choose_blended']=='1' ) ? 'checked' : '' }} id="toggle2" name="agent_choose_blended" data-bootstrap-switch data-off-color="danger" data-on-color="success" >
+                                                    <label class="form-check-label" for="toggle2"> <b>Select Auto-Outbound Upon Login</b> </label>
+                                                </div>
+                                            </div>
+        
+        
+        
+                                            <div class="row mb-3">
+                                                <div class="col-sm-12 col-md-6 col-lg-6">
+                                                    <div class="form-check">
+                                                        <input type="checkbox" class="form-check-input" {{(isset($dailer_agent_user['closer_default_blended']) && $dailer_agent_user['closer_default_blended']=='1' ) ? 'checked' : '' }} id="toggle3" name="closer_default_blended" data-bootstrap-switch data-off-color="danger" data-on-color="success" >
+                                                        <label class="form-check-label" for="toggle3"><b>Allow Outbound</b></label>
+                                                    </div>
+                                                </div>
+        
+                                                <div class="col-sm-12 col-md-6 col-lg-6">
+                                                    <input type="checkbox" class="form-check-input" {{(isset($dailer_agent_user['scheduled_callbacks']) && $dailer_agent_user['scheduled_callbacks']=='1' ) ? 'checked' : '' }} id="toggle4" name="scheduled_callbacks" data-bootstrap-switch data-off-color="danger" data-on-color="success" >
+                                                    <label class="form-check-label" for="toggle4"><b>Allow Schedule Callbacks</b></label>
+                                                </div>
+                                            </div>
+        
+                                            <div class="row mb-3">
+                                                <div class="col-sm-12 col-md-6 col-lg-6">
+                                                    <div class="form-check">
+                                                        <input type="checkbox" class="form-check-input" {{(isset($dailer_agent_user['agentonly_callbacks']) && $dailer_agent_user['agentonly_callbacks']=='1' ) ? 'checked' : '' }} id="toggle5" name="agentonly_callbacks" data-bootstrap-switch data-off-color="danger" data-on-color="success" >
+                                                    <label class="form-check-label" for="toggle5"><b>Allow Personal Callbacks</b></label>
+                                                    </div>
+                                                </div>
+        
+                                                <div class="col-sm-12 col-md-6 col-lg-6">
+                                                    <input type="checkbox" class="form-check-input" {{(isset($dailer_agent_user['agentcall_manual']) && $dailer_agent_user['agentcall_manual']=='1' ) ? 'checked' : '' }} id="toggle6" name="agentcall_manual" data-bootstrap-switch data-off-color="danger" data-on-color="success" >
+                                                    <label class="form-check-label" for="toggle6"><b>Allow Manual Calls</b></label>
+                                                </div>
+                                            </div>
+        
+                                            <div class="row mb-3">
+                                                <div class="col-sm-12 col-md-6 col-lg-6">
+                                                    <div class="form-check">
+                                                        <input type="checkbox" class="form-check-input" {{(isset($dailer_agent_user['agent_call_log_view_override']) && $dailer_agent_user['agent_call_log_view_override']=='1' ) ? 'checked' : '' }} id="toggle6" name="agent_call_log_view_override" data-bootstrap-switch data-off-color="danger" data-on-color="success" >
+                                                        <label class="form-check-label" for="toggle7"><b>Allow Call Log View</b></label>
+                                                    </div>
+                                                </div>
+                                            </div>
+        
+                                            {{-- //limit --}}
+                                            <div class="row mb-3">          
+                                                <div class="col-md-4 mt-2">
+                                                    <label>Inbound Calls Limit: </label>
+                                                    <input type="range" id="fixtures-events-range" name="max_inbound_calls" id="max_inbound_calls" min="1" max="1000" value="{{ isset($dailer_agent_user['max_inbound_calls']) ? $dailer_agent_user['max_inbound_calls'] : '' }}" oninput="update_input_value(this.id)">
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <div class="slidercontainer"> 
+                                                        <input class="form-control" type="number" readonly id="fixtures-events">
+                                                    </div>
+                                                </div>
+                                            </div>  
                                         </div>
                                     </div>
+                                </div>
+                                <div id="skills" class="content" role="tabpanel" aria-labelledby="skills-trigger">
+                                    <div class="card">
+                                        <div class="card-header">  
+                                            <div class="btn-group">
+                                                <button type="button" class="btn btn-default">Compaigns</button>
+                                                <button type="button" class="btn btn-default dropdown-toggle dropdown-icon" data-toggle="dropdown">
+                                                <span class="sr-only">Toggle Dropdown</span>
+                                                </button>
+                                                <div class="dropdown-menu" role="menu">
+                                                <a class="dropdown-item" href="#">allowed campaigns</a>
+                                                <a class="dropdown-item" href="#">inbound groups</a>
+                                                </div>
+                                            </div>
+                                            <div class="card-body">
 
+                                                <table id="compaignns" class="table table-striped table-hover vonexta-table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Name</th>
+                                                            <th>Level</th>
+                                                            <th>Actions</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>0000</td>
+                                                            <td>0000</td>
+                                                            <td>
+                                                                <a href="#" class="btn btn-sm btn-primary" class="btnEdit" data-id=""><i
+                                                                        class="fas fa-pen"></i><a>
+                                                                        <a href="#" class="btn btn-sm btn-danger" class="btnDelete"
+                                                                            data-id=""><i class="fas fa-trash"></i><a>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                
+                                                </table>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div id="Success" class="content" role="tabpanel" aria-labelledby="Success-trigger">
+                                    <div class="">
+                                        <h3 style="color: red">Success message to be written here..</h3>
+                                    </div> 
                                 </div>
                             </div>
-                            <div id="Success" class="content" role="tabpanel" aria-labelledby="Success-trigger">
-                                <div class="">
-                                    <h3 style="color: red">Success message to be written here..</h3>
-                                </div> 
-                            </div>
-                        </div>
+                        </form>
                     </div>
                     <div class="vonexta-modal-footer">
                         <div class="row">
@@ -470,7 +476,7 @@
             </div>
             <!-- /.modal-dialog -->
         </div>
-    </div>
+     </div>
     <!-- /.Modals -->
 
 

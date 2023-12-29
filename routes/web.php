@@ -52,16 +52,19 @@ Route::middleware(['auth','checkUserStatus'])->group(function () {
             Route::post('/update-agent-options', [UserController::class, 'update_agent_in_db_options'])->name('services.update-agent.options');
            
             Route::get('/detail/{serviceID}/{extension}', [UserController::class, 'edit'])->name('services.agents.detail');
-
         });
-
-       
 
         Route::middleware(['role_or_permission:admin|view campaigns'])->prefix('campaigns')->group(function() {
             Route::put('/', [CampaignController::class, 'index'])->name('services.campaigns');
             Route::get('/add', [CampaignController::class, 'add'])->name('services.campaigns.new');
         });
     });
+
+
+    Route::POST('/check-extension', [UserController::class, 'check_extension'])->name('check-extension');
+    Route::POST('/add-agents', [UserController::class, 'add_agents'])->name('add-agents');
+
+
 
     Route::prefix('administration')->group(function() {
         Route::middleware(['role_or_permission:admin|view users'])->group(function() {

@@ -65,21 +65,30 @@ $(document).ready(function(){
 
 });
 
-function updateValues(id, services_id) {
- // alert('ok');
+function check_extension(id, services_id) {
+    
+    $('#extension-error').html('')
+    $('#extension-success').html('')
     var extension = $("#" + id).val();
+
     $.ajax({
-        url: `${baseUrl}/services.agents.detail`,
-        method: 'GET',
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
+        url:  `${baseUrl}/check-extension`,
+        method: 'POST',
+        headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
         data: {
             'extension': extension,
-            'services_id': services_id
+            'services_id':services_id
         },
         success: function(response) {
             console.log(response);
+            if(response.status == 'success'){
+                $('#extension-error').html('')
+                $('#extension-success').html(response.message)
+            } 
+            if(response.status == 'failed'){
+                $('#extension-error').html(response.message)
+                $('#extension-success').html('')
+            } 
         },
         error: function(xhr, status, error) {
             console.error("Error occurred:", error);
