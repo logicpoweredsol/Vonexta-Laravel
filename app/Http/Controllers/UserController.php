@@ -15,98 +15,37 @@ class UserController extends Controller
 {
     //
 
-    public function index($service ,$serviceID){
 
-        $user_agent_detail = [];
-        $service_Users =  $this->get_user($serviceID);
-        //get users of logged in user's organization...
+    // Start Randing the Data Function
+    public function index($service ,$organization_servicesID){
+
         $user = Auth::user();
-
-        // dd($service_Users);
         $organization = $user->organizations->first();
-        if(!$user->hasRole('admin')){
-            abort(403);
-        }
+        $user_agent_detail = [];
+        $service_Users =  $this->get_user($organization_servicesID);
+
         $users = $organization->users;
 
-
         $userAgent_inDB = userAgent::count();
+
         if($userAgent_inDB !=  count($service_Users['user_id'])){
             foreach($service_Users['user_id'] as $i=>$api_agent){
                 $user = $service_Users['user'][$i];
                 $user_id = $service_Users['user_id'][$i];
-                $serviceID =$serviceID;
+                $organization_servicesID = $organization_servicesID;
                 $orgID = $organization->id;
                 $orgUserID = $users[0]->id;
-                $this->store_agent_into_db($user ,$user_id,$serviceID, $orgID, $orgUserID);
+                $this->store_agent_into_db($user ,$user_id,$organization_servicesID, $orgID, $orgUserID);
             }
         }
-       
+        if($userAgent_inDB !=  count($service_Users['user_id'])){
+           
+        }
 
         $userAgent = userAgent::with('user_detail')->get();
 
-        return view('dialer.Agent.index',compact('users','service','service_Users' ,'serviceID' ,'userAgent'));
+        return view('dialer.Agent.index',compact('service','users','organization_servicesID' ,'userAgent'));
     }
-
-    function check_extension(Request $request){
-        $reponse = $this->get_extension_ddetail($request->services_id,$request->extension);
-        $data = [];
-        if($reponse['result'] == 'success'){
-            $userAgent = userAgent::where('api_user',$request->extension)->first();
-            if($userAgent){
-                $data['status'] = 'failed';// already in use
-                $data['message'] = 'Extension is already in use.';// already in use
-            } else{
-                // extension is free
-                $data['status'] = 'success';// already in use
-                $data['message'] = 'Extension is free to use.';
-            }
-        } else { // extension is invalid
-            $data['status'] = 'failed';// already in use
-            $data['message'] = "Invalid value in extension. Doesn't exist";
-        }
-
-        return $data;
-    }
-
-    function add_agents(Request $request){
-        dd($request);
-    }
-
-
-
-    function get_extension_ddetail($serviceID ,$AgentID) {
-        $OrganizationServices = OrganizationServices::where('service_id',$serviceID)->first();
-        $phpArray = json_decode($OrganizationServices->connection_parameters, true);
-        $apiEndpoint = 'https://' . $phpArray['server_url'] . '/APIv2/Users/API.php';
-        // POST data
-        $postData = [
-            'Action' => 'GetUserInfo',
-            'apiUser' =>  $phpArray['api_user'],
-            'apiPass' =>  $phpArray['api_pass'],
-            'session_user' =>  $phpArray['api_user'],
-            'responsetype' => 'json',
-            'user'=>$AgentID
-        ];
-        $ch = curl_init($apiEndpoint);
-    
-        // Set cURL options
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
-    
-        // Execute cURL session and get the response
-        $response = curl_exec($ch);
-    
-        // Close cURL session
-        curl_close($ch);
-        
-        $responcc = json_decode($response, true);
-        return $responcc;
-    }
-
-    
-
 
     function get_user($organization_service_id) {
         $OrganizationServices = OrganizationServices::find($organization_service_id);
@@ -126,7 +65,6 @@ class UserController extends Controller
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
-    
         // Execute cURL session and get the response
         $response = curl_exec($ch);
     
@@ -136,38 +74,47 @@ class UserController extends Controller
         return json_decode($response, true);
     }
 
-    function store_agent_into_db($user ,$user_id,$serviceID, $orgID, $orgUserID){
+    function store_agent_into_db($user ,$user_id,$organization_servicesID, $orgID, $orgUserID){
         $add_userAgent = userAgent::where('api_user',$user)->first();
 
         if($add_userAgent == '' || $add_userAgent == null){
             $add_userAgent = new userAgent();
         }
+
         $add_userAgent->orgid = $orgID;
         $add_userAgent->org_user_id = $orgUserID;
-        $add_userAgent->services_id = $serviceID;
+        $add_userAgent->services_id = $organization_servicesID;
         $add_userAgent->api_user_id =$user_id;
         $add_userAgent->api_user = $user;
+        $add_userAgent->password = base64_encode($this->generateRandomString());
         $add_userAgent->save();
     }
 
-    public function edit($service , $serviceID ,$AgentID){
-        $dailer_agent_user = '';
+    function generateRandomString() {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $randomString = '';
+        for ($i = 0; $i < 10; $i++) {
+            $randomString .= $characters[rand(0, strlen($characters) - 1)];
+        }
+        return $randomString;
+    }
+     // End Randing the Data Function
 
-        $dailer_agent_user_response =   $this->get_agent_detail($serviceID ,$AgentID);
+     // Start Edit User
+     public function edit($service , $organization_services_id ,$AgentID){
+
+        $dailer_agent_user = '';
+        $dailer_agent_user_response =   $this->get_agent_detail($organization_services_id ,$AgentID);
         if($dailer_agent_user_response['result'] == 'success'){
             $dailer_agent_user = $dailer_agent_user_response['data'];
-
-            // dd($dailer_agent_user);
         }
 
 
         return view('dialer.Agent.edit' ,compact('dailer_agent_user'));
     }
 
-
-
-    function get_agent_detail($serviceID ,$AgentID) {
-        $OrganizationServices = OrganizationServices::find($serviceID);
+    public function get_agent_detail($organization_services_id ,$AgentID) {
+        $OrganizationServices = OrganizationServices::find($organization_services_id);
         $phpArray = json_decode($OrganizationServices->connection_parameters, true);
         $apiEndpoint = 'https://' . $phpArray['server_url'] . '/APIv2/Users/API.php';
         // POST data
@@ -194,73 +141,74 @@ class UserController extends Controller
         
         return json_decode($response, true);
     }
+     // End  Edit User
     
 
-    function update_agent_in_db_detail(Request $request){
-       $responce =  $this->update_agent_in_api_detail($request->name, $request->email , $request->User ,$request->Voice_Mail , $request->group , $request->active);
+    //   Update Function Deaatil Tabk of Agent 
+    public function update_agent_in_db_detail(Request $request){
 
-       if($responce['result'] == 'success'){
-        return redirect()->back()->with('success', 'Agent Updated successfully');
-       }else{
-        return redirect()->back()->with('error', 'Some thing Went Wrong ');
-       }
-       
-      
-    }
+        // dd($request->all());
 
-    function update_agent_in_api_detail($name, $email , $User ,$Voice_Mail , $group , $active) {
-        $userAgent = userAgent::where('api_user',$User)->first();
-        $OrganizationServices = OrganizationServices::find($userAgent->services_id);
-        $phpArray = json_decode($OrganizationServices->connection_parameters, true);
+        $userAgent = userAgent::where('api_user',$request->User)->first();
 
-       $Agent_detail= $this->get_agent_detail($userAgent->services_id,$User);
-       $options_value = $Agent_detail['data'];
+         $OrganizationServices = OrganizationServices::find($userAgent->services_id);
+         $phpArray = json_decode($OrganizationServices->connection_parameters, true);
+ 
+        $Agent_detail= $this->get_agent_detail($userAgent->services_id,$request->User);
 
-        $apiEndpoint = 'https://' . $phpArray['server_url'] . '/APIv2/Users/API.php';
-        // POST data
-        $postData = [
-            
-            'Action' => 'EditUser',
-            'apiUser' =>  $phpArray['api_user'],
-            'apiPass' =>  $phpArray['api_pass'],
-            'session_user' =>  $phpArray['api_user'],
-            'responsetype' => 'json',
-            'user' => $User,
-
-            'full_name'=> $name,
-            'user_group'=> $group,
-            'active' => $active,
-            'voicemail_id'=> $Voice_Mail,
-            'email'=> $email,
-
-            'mobile_number' =>  $options_value['mobile_number'],
-            'agent_choose_ingroups'=> $options_value['agent_choose_ingroups'],
-            'agent_choose_blended'=> $options_value['agent_choose_blended'],
-            'closer_default_blended'=> $options_value['closer_default_blended'],
-            'scheduled_callbacks'=> $options_value['scheduled_callbacks'],
-            'agentonly_callbacks'=> $options_value['agentonly_callbacks'],
-            'agentcall_manual'=> $options_value['agentcall_manual'],
-            'agent_call_log_view_override'=> $options_value['agent_call_log_view_override'],
-            'max_inbound_calls'=> $options_value['max_inbound_calls'],
-
-        ];
-        $ch = curl_init($apiEndpoint);
-    
-        // Set cURL options
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
-    
-        // Execute cURL session and get the response
-        $response = curl_exec($ch);
-    
-        // Close cURL session
-        curl_close($ch);
+        $options_value = $Agent_detail['data'];
         
-        return json_decode($response, true);
+         $apiEndpoint = 'https://' . $phpArray['server_url'] . '/APIv2/Users/API.php';
+         // POST data
+         $postData = [
+             
+             'Action' => 'EditUser',
+             'apiUser' =>  $phpArray['api_user'],
+             'apiPass' =>  $phpArray['api_pass'],
+             'session_user' =>  $phpArray['api_user'],
+             'responsetype' => 'json',
+             'user' => $request->User,
+ 
+             'full_name'=> $request->name,
+             'user_group'=>  $request->group,
+             'active' => $request->active,
+             'voicemail_id'=> $request->Voice_Mail,
+             'email'=> $request->email,
+ 
+             'mobile_number' =>  $options_value['mobile_number'],
+             'agent_choose_ingroups'=> $options_value['agent_choose_ingroups'],
+             'agent_choose_blended'=> $options_value['agent_choose_blended'],
+             'closer_default_blended'=> $options_value['closer_default_blended'],
+             'scheduled_callbacks'=> $options_value['scheduled_callbacks'],
+             'agentonly_callbacks'=> $options_value['agentonly_callbacks'],
+             'agentcall_manual'=> $options_value['agentcall_manual'],
+             'agent_call_log_view_override'=> $options_value['agent_call_log_view_override'],
+             'max_inbound_calls'=> $options_value['max_inbound_calls'],
+ 
+         ];
+         $ch = curl_init($apiEndpoint);
+     
+         // Set cURL options
+         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+         curl_setopt($ch, CURLOPT_POST, true);
+         curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
+     
+         // Execute cURL session and get the response
+         $response = curl_exec($ch);
+     
+         // Close cURL session
+         curl_close($ch);
+         
+         $responce =  json_decode($response, true);
+
+        if($responce['result'] == 'success'){
+            return redirect()->back()->with('success', 'Agent Updated successfully');
+        }else{
+            return redirect()->back()->with('error', 'Some thing Went Wrong ');
+        }
     }
 
-
+     //   Update Function Option Tabk of Agent 
     function update_agent_in_db_options(Request $request) {
 
         // dd($request->all());
@@ -330,19 +278,34 @@ class UserController extends Controller
 
 
 
-
-       
-    }
-
-    function get_extension_details(Request $request) {
-
-        // dd($request->all());
-        return $this->get_agent_detail($request->services_id , $request->extension);
     }
 
 
 
-   
+    function check_extension(Request $request){
+        $reponse = $this->get_agent_detail($request->services_id,$request->extension);
+        $data = [];
+        if($reponse['result'] == 'success'){
+            $userAgent = userAgent::where('api_user',$request->extension)->first();
+            if($userAgent){
+                $data['status'] = 'failed';// already in use
+                $data['message'] = 'Extension is already in use.';// already in use
+            } else{
+                // extension is free
+                $data['status'] = 'success';// already in use
+                $data['message'] = 'Extension is free to use.';
+            }
+        } else { // extension is invalid
+            $data['status'] = 'failed';// already in use
+            $data['message'] = "Invalid value in extension. Doesn't exist";
+        }
 
+        return $data;
+    }
+
+
+    function add_agents(Request $request){
+        dd($request);
+    }
 
 }

@@ -94,15 +94,17 @@ function get_agent_detail($serviceID ,$AgentID) {
     curl_close($ch);
     
     $responcc = json_decode($response, true);
-    return $responcc['data'];
+
+    return $responcc;
+   
+   
 }
+
 
 
 function get_email($agent) {
     $userAgent = userAgent::with('user_detail')->where('api_user',$agent)->first();
-
     return  $userAgent->user_detail->email;
-    
 }
 
 

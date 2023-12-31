@@ -70,10 +70,7 @@
 
                 <div class="tab-content" id="campaigns-tabs Content">
 
-
                     <div class="tab-pane fade show active " id="Organization-home" role="tabpanel" aria-labelledby="Organization-home-tab">
-
-                        {{-- {{ route('services.update-agent', ['service' => strtolower('Dailer')}} --}}
 
                         <form method="POST" action="{{ route('services.update-agent.details', ['service' => strtolower('Dailer')]) }}" class="form-horizontal">
 
@@ -98,10 +95,10 @@
                                         <div class="col-sm-12 col-md-6 col-lg-6">
                                             <div class="form-group">
                                                 <label for="phone" class="form-label">Email</label>
-                                                {{-- @php
+                                                @php
                                                     $email_address = get_email($dailer_agent_user['user']);
-                                                @endphp --}}
-                                                <input type="email" class="form-control" id="email" name="email" value="{{ isset($dailer_agent_user['email']) ? $dailer_agent_user['email'] : '' }}">
+                                                @endphp
+                                                <input type="email" class="form-control" id="email" name="email" readonly  value="{{$email_address}}">
                                             </div>
                                         </div>
                                     </div>

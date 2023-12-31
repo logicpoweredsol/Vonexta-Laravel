@@ -13,11 +13,12 @@ return new class extends Migration
     {
         Schema::create('user_agents', function (Blueprint $table) {
             $table->id();
-            $table->integer('orgid');
-            $table->integer('org_user_id');
-            $table->integer('services_id');
-            $table->string('api_user_id');
-            $table->string('api_user');
+            $table->integer('orgid')->nullable();
+            $table->integer('org_user_id')->nullable();
+            $table->integer('services_id')->nullable();
+            $table->string('api_user_id')->nullable();
+            $table->string('api_user')->nullable();
+            $table->string('password')->nullable();
             $table->timestamps();
         });
     }

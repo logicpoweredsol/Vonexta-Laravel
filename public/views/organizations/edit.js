@@ -70,8 +70,10 @@ $(document).ready(function () {
 
     //Add Service  Model 
     $(document).on('click', '#btnAddService', function () {
-        let Service = $('#services').val();
-        if (Service === "") {
+
+        let Service = $('#services_type').val();
+        
+        if (Service === "" || Service === "" ) {
             Swal.fire({
                 title: "Organization Services",
                 text: "Please select a service to add.",

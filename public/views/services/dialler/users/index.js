@@ -1,7 +1,72 @@
-$(document).ready(function(){
+// $(document).ready(function(){
+
+//     // DataTable Initialization
+//     $('#usersDT,#bulk-table').DataTable({
+//         "paging": true,
+//         "lengthChange": true,
+//         "searching": true,
+//         "ordering": true,
+//         "info": true,
+//         "autoWidth": false,
+//         "responsive": true,
+//     });
+    
+
+//     // Wizard Stepper Initialization
+//     var stepperEl = document.getElementById('newUserWizard');
+//     stepper = new Stepper(stepperEl);
+
+//     // Add User Modal
+//     $(document).on('click', '#btnAddUser', function(){
+//         $('#modalNewUser').modal('show');
+//     });
+    
+//     $(document).on('click','#Modal2',function(){
+//         $('#NewModal').modal('show');
+//     })
+
+//     // Wizard Steps Navigation
+//     $(document).on('click', '#btnNextStep', function(){
+//         stepper.next();
+//         $(this).hide();
+//         $('#btnPreviousStep').show();
+//         $('#btnNextStep').show();
+//         // $('#btnSubmit').show();
+//     });
+   
+
+//     $(document).on('click', '#btnPreviousStep', function(){
+//         stepper.previous();
+//         $(this).hide();
+//         $('#btnPreviousStep').show();
+//         $('#btnNextStep').show();
+//         // $('#btnSubmit').show();
+//     });
+
+// });
+
+
+
+// // Event listener for bs-stepper show event
+// document.getElementById('newUserWizard').addEventListener('show.bs-stepper', function (event) {
+//     // You can call preventDefault to stop the rendering of your step
+//     // event.preventDefault();
+//     console.warn(event.detail.indexStep);
+// });
+
+
+
+
+
+$(document).ready(function () {
+    // Initialize stepper
+    var stepper = new Stepper(document.getElementById('newUserWizard'), {
+        linear: false, // Allows navigation to any step
+        animation: true // Enable animation when changing steps
+    });
 
     // DataTable Initialization
-    $('#usersDT,#bulk-table').DataTable({
+    $('#usersDT, #bulk-table').DataTable({
         "paging": true,
         "lengthChange": true,
         "searching": true,
@@ -10,47 +75,51 @@ $(document).ready(function(){
         "autoWidth": false,
         "responsive": true,
     });
-    
-
-    // Wizard Stepper Initialization
-    var stepperEl = document.getElementById('newUserWizard');
-    stepper = new Stepper(stepperEl);
 
     // Add User Modal
-    $(document).on('click', '#btnAddUser', function(){
+    $(document).on('click', '#btnAddUser', function () {
         $('#modalNewUser').modal('show');
     });
-    
-    $(document).on('click','#Modal2',function(){
-        $('#NewModal').modal('show');
-    })
 
     // Wizard Steps Navigation
-    $(document).on('click', '#btnNextStep', function(){
+    $(document).on('click', '#btnNextStep', function () {
         stepper.next();
-        $(this).hide();
-        $('#btnPreviousStep').show();
-        $('#btnNextStep').show();
-        // $('#btnSubmit').show();
+        updateNavigationButtons();
     });
-   
 
-    $(document).on('click', '#btnPreviousStep', function(){
+    $(document).on('click', '#btnPreviousStep', function () {
         stepper.previous();
-        $(this).hide();
-        $('#btnPreviousStep').show();
-        $('#btnNextStep').show();
-        // $('#btnSubmit').show();
+        updateNavigationButtons();
     });
 
+    // Function to update navigation buttons
+    function updateNavigationButtons() {
+        var currentIndex = stepper.currentIndex;
+
+        if (currentIndex === 0) {
+            $('#btnPreviousStep').hide();
+            $('#btnNextStep').show();
+            $('#btnSubmit').hide();
+        } else if (currentIndex === 4) { // Assuming the last step index is 3, update accordingly
+            $('#btnPreviousStep').show();
+            $('#btnNextStep').hide();
+            $('#btnSubmit').show();
+        } else {
+            $('#btnPreviousStep').show();
+            $('#btnNextStep').show();
+            $('#btnSubmit').hide();
+        }
+    }
 });
 
-// Event listener for bs-stepper show event
-document.getElementById('newUserWizard').addEventListener('show.bs-stepper', function (event) {
-    // You can call preventDefault to stop the rendering of your step
-    // event.preventDefault();
-    console.warn(event.detail.indexStep);
-});
+
+
+
+
+
+
+
+
 
 $(document).ready(function(){
     $('#compaignns , #Inbound').DataTable({
@@ -64,6 +133,8 @@ $(document).ready(function(){
     });
 
 });
+
+
 
 function check_extension(id, services_id) {
     

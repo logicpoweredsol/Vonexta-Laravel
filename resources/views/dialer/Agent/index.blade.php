@@ -80,27 +80,21 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @php
+                    {{-- @php
                         $services_id = $userAgent[0]->services_id;
                         $agent_user = [];
-                    @endphp
+                    @endphp --}}
                     @foreach ($userAgent as $i=>$service_User)
-
                     @php
                         $detail = get_agent_detail($service_User->services_id , $service_User->api_user );
                     @endphp
 
-
-                    @if (count($detail) > 100 )
-
+                    @if ($detail['result'] == 'success' )
                     @php
-          
-
+                        $detail = $detail['data'];
                         $agent_user[$detail['user']] = $detail['full_name'];
-
-                        
-
                     @endphp
+
                     <tr>
                         <td>
                             {{$service_User->user_detail->email}}
@@ -128,7 +122,7 @@
                                   <span class="sr-only">Toggle Dropdown</span>
                                 </button>
                                 <div class="dropdown-menu" role="menu">
-                                  <a class="dropdown-item" href="{{ route('services.agents.edit', ['service' => strtolower($service), 'serviceID' => $serviceID,'AgentID' => $detail['user']  ] ) }}">Modify</a>
+                                  <a class="dropdown-item" href="{{ route('services.agents.edit', ['service' => strtolower($service), 'organization_services_id' => $service_User->services_id ,'AgentID' => $detail['user']  ] ) }}">Modify</a>
                                   <a class="dropdown-item" href="#">Logs</a>
                                   <a class="dropdown-item" href="#">Emergency Logout</a>
                                   <div class="dropdown-divider"></div>
@@ -142,57 +136,7 @@
 
                     @endforeach
                 </tbody>
-                {{-- <tbody>
-
-
-                    @foreach ($userAgent as $i=>$service_User)
-                    @php
-                      $detail = get_agent_detail($service_User->services_id , $service_User->api_user );
-
-                    //   dd($detail['data']);
-                    @endphp
-                   
-                    <tr>
-                        <td>
-                            {{$service_User->user_detail->email}}
-                        </td>
-                        <td>
-                            {{$detail['data']['user']}}
-                        </td>
-                        <td>
-                            {{$detail['data']['full_name']}}
-                        </td>
-                        <td>
-                            {{$detail['data']['user_group']}}
-                        </td>
-                        <td>
-                            @if ($detail['data']['active'] == 'Y')
-                            <span class="text-success"> <strong>Active</strong> </span>
-                            @else
-                            <span class="text-danger"> <strong>Not Active</strong></span>
-                            @endif
-                           
-                        </td>
-                       
-                        <td>
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-default">Actions</button>
-                                <button type="button" class="btn btn-default dropdown-toggle dropdown-icon" data-toggle="dropdown">
-                                  <span class="sr-only">Toggle Dropdown</span>
-                                </button>
-                                <div class="dropdown-menu" role="menu">
-                                  <a class="dropdown-item" href="{{ route('services.agents.edit', ['service' => strtolower($service), 'serviceID' => $serviceID,'AgentID' => $detail['data']['user']  ] ) }}">Modify</a>
-                                  <a class="dropdown-item" href="#">Logs</a>
-                                  <a class="dropdown-item" href="#">Emergency Logout</a>
-                                  <div class="dropdown-divider"></div>
-                                  <a class="dropdown-item" href="#">Delete</a>
-                                </div>
-                              </div>
-                        </td>
-                    </tr>
-                    @endforeach
-                
-                </tbody> --}}
+             
             </table>
         </div>
         <!-- /.card-body -->
@@ -209,19 +153,19 @@
   <!-- /.content-wrapper -->
     <!-- Modals... -->
     <div class="modal fade" id="modalNewUser">
-
-        <div class="bs-stepper" id="newUserWizard">
-            <div class="modal-dialog modal-xl">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Add New User</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="" action="{{route('add-agents')}}" method="post" class="form-horizontal" >
-                            @csrf
+        <form id="" action="{{route('add-agents')}}" method="post" class="form-horizontal" >
+            @csrf
+            <div class="bs-stepper" id="newUserWizard">
+                <div class="modal-dialog modal-xl">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Add New User</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <input type="hidden" value="{{$organization_servicesID}}" name="organization_servicesID">
                             <div class="bs-stepper-header" role="tablist">
                                 <!-- your steps here -->
                                 <div class="step" data-target="#gettingstarted">
@@ -252,11 +196,10 @@
                                     </button>
                                 </div>
                             </div>
+
                             <div class="bs-stepper-content">
                                 <!-- your steps content here -->
                                 <div id="gettingstarted" class="content" role="tabpanel" aria-labelledby="gettingstarted-trigger">
-                                
-
                                     <div class="form-group row">
                                         <label for="user_group" class="col-sm-2 col-form-label">Total Users</label>
                                         <div class="col-md-7">
@@ -274,12 +217,11 @@
                                     <div class="form-group row">
                                         <label for="user_group" class="col-sm-2 col-form-label">Extention</label>
                                         <div class="col-sm-10">
-                                            <input type="text" class="form-control" onchange="check_extension(this.id,{{$services_id}});" required name="user" id="user">
+                                            <input type="text" class="form-control" onchange="check_extension(this.id,{{$organization_servicesID}});" required name="user" id="user">
                                             <span style = "color:red" id="extension-error"></span>
                                             <span style = "color:green" id="extension-success"></span>
                                         </div>
                                     </div>
-                                
                                     <div class="form-group row">
                                         <label for="user_group" class="col-sm-2 col-form-label">Group</label>
                                         <div class="col-sm-10">
@@ -292,18 +234,6 @@
                                             <input type="text" class="form-control" required name="full_name" id="full_name">
                                         </div>
                                     </div>
-                                    <!-- <div class="form-group row">
-                                        <label for="pass" class="col-sm-2 col-form-label">Password</label>
-                                        <div class="col-sm-10">
-                                            <input type="password" class="form-control" required name="pass" id="pass">
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label for="confirm_pass" class="col-sm-2 col-form-label">Retype Password</label>
-                                        <div class="col-sm-10">
-                                            <input type="password" class="form-control" required name="confirm_pass" id="confirm_pass">
-                                        </div>
-                                    </div> -->
                                     <div class="form-group row">
                                         <label for="active" class="col-sm-2 col-form-label">Status</label>
                                         <div class="col-sm-10">
@@ -313,11 +243,11 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <br><br>
                                     <div class="form-group row">
                                         <label for="active" class="col-sm-2 col-form-label">Copy settings from other user: ?</label>
                                         <div class="col-sm-10 col-md-6">
-                                            <select class="form-control" required name="active" id="active">
+                                            <select class="form-control" name="active" id="active">
+                                                <option value="" selected disabled>Default No </option>
                                                 @foreach ($agent_user as $i=>$agent_us)
                                                 <option value="{{$agent_user[$i]}}">{{$agent_us}}</option>
                                                 @endforeach
@@ -328,6 +258,7 @@
                                     </div>
                                     
                                 </div>
+
                                 <div id="accountdetails" class="content" role="tabpanel" aria-labelledby="accountdetails-trigger">
                                     <div class="row">
                                         <div class="card-body">
@@ -457,26 +388,28 @@
                                     </div> 
                                 </div>
                             </div>
-                        </form>
-                    </div>
-                    <div class="vonexta-modal-footer">
-                        <div class="row">
-                            <div class="col-sm-12 col-md-4 col-lg-4" style="text-align:left;">
-                                <button class="btn btn-md btn-block btn-secondary" id="btnPreviousStep" style="display:none;">Previous</button>
-                            </div>
-                            <div class="col-sm-12 col-md-4 col-lg-4"></div>
-                            <div class="col-sm-12 col-md-4 col-lg-4" style="text-align:right;">
-                                <button class="btn btn-md btn-block btn-primary" id="btnNextStep">Next</button>
-                                <button class="btn btn-md btn-block btn-success" type="submit" id="btnSubmit" style="display:none;">Submit</button>
+                            
+                        </div>
+                        <div class="vonexta-modal-footer">
+                            <div class="row">
+                                <div class="col-sm-12 col-md-4 col-lg-4" style="text-align:left;">
+                                    <button class="btn btn-md btn-block btn-secondary" id="btnPreviousStep" style="display:none;">Previous</button>
+                                </div>
+                                <div class="col-sm-12 col-md-4 col-lg-4"></div>
+                                <div class="col-sm-12 col-md-4 col-lg-4" style="text-align:right;">
+                                    <button class="btn btn-md btn-block btn-primary" type="button" id="btnNextStep">Next</button>
+                                    {{-- <button class="btn btn-md btn-block btn-primary" id="btnNextStep">Next</button> --}}
+                                    <button class="btn btn-md btn-block btn-success" type="submit" id="btnSubmit" style="display:none;">Submit</button>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    <!-- /.modal-content -->
                 </div>
-                <!-- /.modal-content -->
+                <!-- /.modal-dialog -->
             </div>
-            <!-- /.modal-dialog -->
-        </div>
-     </div>
+        </form>
+    </div>
     <!-- /.Modals -->
 
 
