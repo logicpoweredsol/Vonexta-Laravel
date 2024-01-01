@@ -30,37 +30,44 @@ function get_serive_type_id($org_ser_id) {
 
  function ceck_service_detail($organization_service_id) {
     // API endpoint
-    $OrganizationServices = OrganizationServices::find($organization_service_id);
-    $phpArray = json_decode($OrganizationServices->connection_parameters, true);
+
     $status = false;
-    $apiEndpoint = 'https://' . $phpArray['server_url'] . '/APIv2/Users/API.php';
-    // POST data
-    $postData = [
-        'Action' => 'GetAllUsers',
-        'apiUser' =>  $phpArray['api_user'],
-        'apiPass' =>  $phpArray['api_pass'],
-        'session_user' =>  $phpArray['api_user'],
-        'responsetype' => 'json',
-    ];
-    $ch = curl_init($apiEndpoint);
+    $OrganizationServices = OrganizationServices::find($organization_service_id);
 
-    // Set cURL options
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
+    if( $OrganizationServices  != null &&  $OrganizationServices  !=""){
+        $phpArray = json_decode($OrganizationServices->connection_parameters, true);
+        $apiEndpoint = 'https://' . $phpArray['server_url'] . '/APIv2/Users/API.php';
+        // POST data
+        $postData = [
+            'Action' => 'GetAllUsers',
+            'apiUser' =>  $phpArray['api_user'],
+            'apiPass' =>  $phpArray['api_pass'],
+            'session_user' =>  $phpArray['api_user'],
+            'responsetype' => 'json',
+        ];
+        $ch = curl_init($apiEndpoint);
 
-    // Execute cURL session and get the response
-    $response = curl_exec($ch);
+        // Set cURL options
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
 
-    // Close cURL session
-    curl_close($ch);
+        // Execute cURL session and get the response
+        $response = curl_exec($ch);
 
-    // Decode the JSON response
-    $responseData = json_decode($response, true);
+        // Close cURL session
+        curl_close($ch);
 
-    if( $responseData && isset($responseData['result']) && $responseData['result'] === 'success'){
-        $status = true;
+        // Decode the JSON response
+        $responseData = json_decode($response, true);
+
+        if( $responseData && isset($responseData['result']) && $responseData['result'] === 'success'){
+            $status = true;
+        }
+
     }
+
+
 
     return $status;
 }

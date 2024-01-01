@@ -58,6 +58,7 @@ class OrganizationController extends Controller
 
     public function view(Organization $organization, Request $request){
 
+        
         $services = Service::all();
         $organizationServices = $organization->services()->get();
         $UserOrganization = UserOrganization::with('organization_user')->where('organization_id',$organization->id)->get();

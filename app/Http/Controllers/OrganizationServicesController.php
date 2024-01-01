@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Organization;
 use App\Models\Service;
+use App\Models\UserHaveService;
+use App\Models\UserOrganization;
 use Illuminate\Http\Request;
 use App\Models\OrganizationServices;
 use Illuminate\Support\Facades\Auth;
@@ -34,15 +36,25 @@ class OrganizationServicesController extends Controller
         $add_OrganizationServices->service_name = $this->generateSlug($request->serive_name);
         $add_OrganizationServices->save();
         
+
+
+        $last_organization_service = OrganizationServices::orderBy('id', 'desc')->first();
+
+        $Main_admin = UserOrganization::where('organization_id',$request->org_id)->first();
+        if($Main_admin != '' && $Main_admin != null){
+            $UserHaveService = new UserHaveService();
+            $UserHaveService->organization_services_id =   $last_organization_service->id;
+            $UserHaveService->user_id = $Main_admin->user_id;
+            $UserHaveService->organization_id = $request->org_id;
+            $UserHaveService->service_type =  get_serive_type_id($last_organization_service->id);
+            $UserHaveService->save();
+        }
         $os = $request->serive_name;
         return response()->json([
             "status" => true,
             "msg" => "Service updated",
             "data" => $os
         ],200);
-
-
-        
     }
     
     public function update(Request  $request){   
@@ -124,12 +136,10 @@ class OrganizationServicesController extends Controller
     }
 
 
-
-
     public function ceck_service_detail(Request $request) {
         // API endpoint
 
-        $status = false;
+        $status = true;
         $apiEndpoint = 'https://' . $request->serverUrl . '/APIv2/Users/API.php';
         // POST data
         $postData = [
@@ -154,16 +164,26 @@ class OrganizationServicesController extends Controller
 
         // Decode the JSON response
         $responseData = json_decode($response, true);
-
         if( $responseData && isset($responseData['result']) && $responseData['result'] === 'success'){
-            $status = true;
+            $Make_detail_into_json = [
+                'server_url' => $request->serverUrl,
+                'api_user'   => $request->apiUser,
+                'api_pass'   => $request->apiPass
+            ];
+
+            $connection_parameters = json_encode($Make_detail_into_json);
+
+            $check_in_DB_OrganizationServices = OrganizationServices::where('connection_parameters', $connection_parameters)->first();
+            if( $check_in_DB_OrganizationServices != '' &&  $check_in_DB_OrganizationServices != null){
+                $status = 'Service is Already Used';
+            }
+
+        }else{
+            $status = 'Please check API credentials';
         }
 
         return $status;
     }
-
-
-
 
 
 

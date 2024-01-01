@@ -80,12 +80,30 @@
                     <div class="col-sm-10">
                         <div class="row" id="Services_row" @error('Services') aria-invalid="true" @enderror>
                             @foreach($edit_data['organizationServices'] as $Services)
+
+                    
+                  
+                            
+
+                            @php
+                                $check_valied = true;
+                                if($Services->name == 'Dialer'){
+                                    $check_valied = ceck_service_detail($Services->pivot->id);
+                                }
+                            @endphp
+
+              
+                         @if ($check_valied)
+
                             <div class="col-sm-6 mb-3">
                                 <div class="form-check">
                                     <input type="checkbox" class="form-check-input" id="{{ str_replace(" ", "_", $Services->pivot->id) }}" name="Services[]" data-bootstrap-switch data-off-color="danger" data-on-color="success"  @if (in_array($Services->pivot->id, $edit_data['user_have_service'])) checked @endif value="{{$Services->pivot->id }}">
                                     <label class="form-check-label" for="{{ str_replace(" ", "_", $Services->pivot->id) }}"> {{ ucwords($Services->pivot->service_nick_name)}}</label>
                                 </div>
                             </div>
+
+                            @endif
+
                             @endforeach
                         </div>
                         <span class="error">

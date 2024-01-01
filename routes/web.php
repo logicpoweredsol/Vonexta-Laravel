@@ -50,9 +50,20 @@ Route::middleware(['auth','checkUserStatus'])->group(function () {
             Route::get('/edit/{organization_services_id}/{AgentID}', [UserController::class, 'edit'])->name('services.agents.edit');
             Route::post('/update-agent-details', [UserController::class, 'update_agent_in_db_detail'])->name('services.update-agent.details');
             Route::post('/update-agent-options', [UserController::class, 'update_agent_in_db_options'])->name('services.update-agent.options');
-        
+    
+
+            Route::POST('/check-extension', [UserController::class, 'check_extension'])->name('services.extenxion-detail');
+            Route::POST('/get-extension-detail', [UserController::class, 'extension_detail'])->name('services.get-extenxion-detail');
+
+            Route::post('/save-agent', [UserController::class, 'save_agents'])->name('services.save-agent');
+            Route::post('/bulk-agent', [UserController::class, 'save_bulk_agents'])->name('services.bulk-save-agent');
+
+
+            // Route::post('/save-agent',function(){
+            //     dd("ok");
+            // })->name('save-agent');
             
-            // Route::get('/detail/{serviceID}/{extension}', [UserController::class, 'edit'])->name('services.agents.detail');
+
         });
 
         Route::middleware(['role_or_permission:admin|view campaigns'])->prefix('campaigns')->group(function() {
@@ -62,8 +73,8 @@ Route::middleware(['auth','checkUserStatus'])->group(function () {
     });
 
 
-    Route::POST('/check-extension', [UserController::class, 'check_extension'])->name('check-extension');
-    Route::POST('/add-agents', [UserController::class, 'add_agents'])->name('add-agents');
+   
+    // Route::POST('/add-agents', [UserController::class, 'add_agents'])->name('add-agents');
 
 
 

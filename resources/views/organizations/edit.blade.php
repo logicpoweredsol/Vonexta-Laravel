@@ -251,16 +251,32 @@
                                                 </thead>
                                                 <tbody>
                                                 @foreach($organizationServices as $myService)
-                                                    <tr class="myService">
-                                                        <td>{{ $loop->index+1 }}</td>
-                                                        <td>{{ $myService->name }}</td>
-                                                        <td>{{ $myService->pivot->service_nick_name }}</td>
-                                                        <td>{{ $myService->pivot->service_name }}</td>
-                                                        <td>
-                                                            <a href="javascript:void(0);" class="btn btn-sm btn-primary btnEditService" data-id="{{ $myService->pivot->id  }}"><i class="fas fa-pencil-alt"></i></a>
-                                                            <a href="javascript:void(0);" class="btn btn-sm btn-danger btnRemoveService" data-id="{{ $myService->pivot->id  }}"><i class="fas fa-trash"></i></a>
-                                                        </td>
-                                                    </tr>
+
+
+                                                
+                                         
+                                                @php
+                                                   $check_valied =ceck_service_detail($myService->pivot->id);
+                                                @endphp
+                                                
+
+                                                    @if ($check_valied)
+                                                        
+                                                        <tr class="myService">
+                                                            <td>{{ $loop->index+1 }}</td>
+                                                            <td>{{ $myService->name }}</td>
+                                                            <td>{{ $myService->pivot->service_nick_name }}</td>
+                                                            <td>{{ $myService->pivot->service_name }}</td>
+                                                            <td>
+                                                                <a href="javascript:void(0);" class="btn btn-sm btn-primary btnEditService" data-id="{{ $myService->pivot->id  }}"><i class="fas fa-pencil-alt"></i></a>
+                                                                <a href="javascript:void(0);" class="btn btn-sm btn-danger btnRemoveService" data-id="{{ $myService->pivot->id  }}"><i class="fas fa-trash"></i></a>
+                                                            </td>
+                                                        </tr>
+
+                                                    @endif
+
+
+                                                   
                                                 @endforeach
                                                 </tbody>
                                             </table>

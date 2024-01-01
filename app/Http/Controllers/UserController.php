@@ -28,6 +28,8 @@ class UserController extends Controller
 
         $userAgent_inDB = userAgent::count();
 
+
+        // if($userAgent_inDB  < 0){
         if($userAgent_inDB !=  count($service_Users['user_id'])){
             foreach($service_Users['user_id'] as $i=>$api_agent){
                 $user = $service_Users['user'][$i];
@@ -38,13 +40,22 @@ class UserController extends Controller
                 $this->store_agent_into_db($user ,$user_id,$organization_servicesID, $orgID, $orgUserID);
             }
         }
-        if($userAgent_inDB !=  count($service_Users['user_id'])){
-           
-        }
+
+        // if($userAgent_inDB !=  count($service_Users['user_id'])){
+        //     foreach($service_Users['user_id'] as $i=>$api_agent){
+        //         $user = $service_Users['user'][$i];
+        //         $user_id = $service_Users['user_id'][$i];
+        //         $organization_servicesID = $organization_servicesID;
+        //         $orgID = $organization->id;
+        //         $orgUserID = $users[0]->id;
+        //         $this->store_agent_into_db($user ,$user_id,$organization_servicesID, $orgID, $orgUserID);
+        //     }
+        // }
+
 
         $userAgent = userAgent::with('user_detail')->get();
 
-        return view('dialer.Agent.index',compact('service','users','organization_servicesID' ,'userAgent'));
+        return view('dialer.Agent.index',compact('service','users','organization_servicesID' ,'userAgent' ,'organization'));
     }
 
     function get_user($organization_service_id) {
@@ -79,15 +90,16 @@ class UserController extends Controller
 
         if($add_userAgent == '' || $add_userAgent == null){
             $add_userAgent = new userAgent();
+            $add_userAgent->orgid = $orgID;
+            $add_userAgent->org_user_id = $orgUserID;
+            $add_userAgent->services_id = $organization_servicesID;
+            // $add_userAgent->api_user_id =$user_id;
+            $add_userAgent->api_user = $user;
+            $add_userAgent->password = base64_encode($this->generateRandomString());
+            $add_userAgent->save();
         }
 
-        $add_userAgent->orgid = $orgID;
-        $add_userAgent->org_user_id = $orgUserID;
-        $add_userAgent->services_id = $organization_servicesID;
-        $add_userAgent->api_user_id =$user_id;
-        $add_userAgent->api_user = $user;
-        $add_userAgent->password = base64_encode($this->generateRandomString());
-        $add_userAgent->save();
+       
     }
 
     function generateRandomString() {
@@ -283,29 +295,280 @@ class UserController extends Controller
 
 
     function check_extension(Request $request){
-        $reponse = $this->get_agent_detail($request->services_id,$request->extension);
+
+
+        $reponse = $this->get_agent_detail($request->organization_servicesID,$request->extension);
         $data = [];
+
+
         if($reponse['result'] == 'success'){
-            $userAgent = userAgent::where('api_user',$request->extension)->first();
-            if($userAgent){
-                $data['status'] = 'failed';// already in use
-                $data['message'] = 'Extension is already in use.';// already in use
-            } else{
-                // extension is free
-                $data['status'] = 'success';// already in use
-                $data['message'] = 'Extension is free to use.';
-            }
-        } else { // extension is invalid
+
             $data['status'] = 'failed';// already in use
-            $data['message'] = "Invalid value in extension. Doesn't exist";
+            $data['message'] = 'Extension is already in use.';// already in use
+            // $userAgent = userAgent::where('api_user',$request->extension)->first();
+            // if($userAgent){
+            //     $data['status'] = 'failed';// already in use
+            //     $data['message'] = 'Extension is already in use.';// already in use
+            // } else{
+            //     // extension is free
+            //     $data['status'] = 'success';// already in use
+            //     $data['message'] = 'Extension is free to use.';
+            // }
+        } else { // extension is invalid
+            $data['status'] = 'success';// already in use
+            $data['message'] = "Extension is available";
         }
 
         return $data;
     }
 
 
-    function add_agents(Request $request){
-        dd($request);
+    function extension_detail(Request $request) {
+        $responce = '';
+        $reponse = $this->get_agent_detail($request->organization_servicesID,$request->extension);
+
+        if($reponse['result'] == 'success'){
+            $responce =  $reponse;
+        }
+
+        return $responce;
+
     }
+
+
+    function save_agents(Request $request)
+    {       
+        try {
+            $password = base64_encode($this->generateRandomString());
+
+            $api_password = base64_decode($password);
+
+            $org_user = User::where('id', $request->organization_user)->first();
+            $agent_choose_ingroups = isset($request->agent_choose_ingroups) ? '1' : '0';
+            $agent_choose_blended = isset($request->agent_choose_blended) ? '1' : '0';
+            $closer_default_blended = isset($request->closer_default_blended) ? '1' : '0';
+            $scheduled_callbacks = isset($request->scheduled_callbacks) ? '1' : '0';
+            $agentonly_callbacks = isset($request->agentonly_callbacks) ? '1' : '0';
+            $agentcall_manual = isset($request->agentcall_manual) ? '1' : '0';
+            $agent_call_log_view_override = isset($request->agent_call_log_view_override) ? '1' : '0';
+
+            $active = isset($request->active) && $request->active == 1 ? 'Y' : 'N';
+
+
+
+            $OrganizationServices = OrganizationServices::find($request->organization_servicesID);
+            $phpArray = json_decode($OrganizationServices->connection_parameters, true);
+
+            $apiEndpoint = 'https://' . $phpArray['server_url'] . '/APIv2/Users/API.php';
+            // POST data
+            $postData = [
+                'Action' => 'AddUser',
+                'apiUser' =>  $phpArray['api_user'],
+                'apiPass' =>  $phpArray['api_pass'],
+                'session_user' =>  $phpArray['api_user'],
+                'responsetype' => 'json',
+                'user' => $request->user,
+                'pass' => $api_password,
+                'full_name' => $request->full_name,
+                'user_group' =>  $request->user_group,
+                'active' => $active,
+                'email' => $org_user->email,
+
+                'mobile_number' => $request->Sms_number,
+                'agent_choose_ingroups' => $agent_choose_ingroups,
+                'agent_choose_blended' => $agent_choose_blended,
+                'closer_default_blended' => $closer_default_blended,
+                'scheduled_callbacks' => $scheduled_callbacks,
+                'agentonly_callbacks' => $agentonly_callbacks,
+                'agentcall_manual' => $agentcall_manual,
+                'agent_call_log_view_override' => $agent_call_log_view_override,
+                'max_inbound_calls' => $request->max_inbound_calls,
+            ];
+            $ch = curl_init($apiEndpoint);
+
+            // Set cURL options
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
+            $response = curl_exec($ch);
+            curl_close($ch);
+
+            $api_response = json_decode($response, true);
+
+            // dd($api_response);
+
+            if ($api_response['result'] == 'success') {
+                $add_userAgent = new userAgent();
+                $add_userAgent->orgid = $request->orgID;
+                $add_userAgent->org_user_id = $org_user->id;
+                $add_userAgent->services_id = $request->organization_servicesID;
+                $add_userAgent->api_user = $request->user;
+                $add_userAgent->password = $password;
+                $add_userAgent->save();
+            } else {
+                return redirect()->back()->with('error', 'Something Went Wrong');
+            }
+
+        
+
+        return redirect()->back()->with('success', 'New agent added successfully.');
+        } catch (\Exception $e) {
+            // Handle the exception, log it, or return an error response
+            return redirect()->back()->with('error', 'An error occurred: ' . $e->getMessage());
+        }
+    }
+
+
+
+    function save_bulk_agents(Request $request){
+        foreach($request->email as  $i=>$new_user){
+
+            $org_user = user::where('email',$request->email[$i])->first();
+
+
+           
+
+            $password = base64_encode($this->generateRandomString());
+            $api_password = base64_decode($password);
+
+            $active = isset($request->active) && $request->active == 1 ? 'Y' : 'N';
+
+
+            
+            $OrganizationServices = OrganizationServices::find($request->organization_servicesID);
+            $phpArray = json_decode($OrganizationServices->connection_parameters, true);
+
+            
+            $Agent_detail= $this->get_agent_detail($request->organization_servicesID ,$request->other_user);
+
+            $options_value = $Agent_detail['data'];
+
+            $apiEndpoint = 'https://' . $phpArray['server_url'] . '/APIv2/Users/API.php';
+            // POST data
+            $postData = [
+                'Action' => 'AddUser',
+                'apiUser' =>  $phpArray['api_user'],
+                'apiPass' =>  $phpArray['api_pass'],
+                'session_user' =>  $phpArray['api_user'],
+                'responsetype' => 'json',
+
+                'user' => $request->extension[$i],
+
+                'pass' => $api_password,
+                'full_name' => $request->full_name[$i],
+                'user_group' =>$options_value['user_group'],
+                'active' => $active,
+                'email' => $org_user->email,
+
+                'mobile_number' =>  $options_value['mobile_number'],
+                'agent_choose_ingroups'=> $options_value['agent_choose_ingroups'],
+                'agent_choose_blended'=> $options_value['agent_choose_blended'],
+                'closer_default_blended'=> $options_value['closer_default_blended'],
+                'scheduled_callbacks'=> $options_value['scheduled_callbacks'],
+                'agentonly_callbacks'=> $options_value['agentonly_callbacks'],
+                'agentcall_manual'=> $options_value['agentcall_manual'],
+                'agent_call_log_view_override'=> $options_value['agent_call_log_view_override'],
+                'max_inbound_calls'=> $options_value['max_inbound_calls'],
+
+            ];
+            $ch = curl_init($apiEndpoint);
+
+            // Set cURL options
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
+            $response = curl_exec($ch);
+            curl_close($ch);
+
+            $api_response = json_decode($response, true);
+
+            if ($api_response['result'] == 'success') {
+                $add_userAgent = new userAgent();
+                $add_userAgent->orgid = $request->orgID;
+                $add_userAgent->org_user_id = $org_user->id;
+                $add_userAgent->services_id = $request->organization_servicesID;
+                $add_userAgent->api_user = $request->extension[$i];
+                $add_userAgent->password = $password;
+                $add_userAgent->save();
+            } else {
+                return redirect()->back()->with('error', 'Something Went Wrong');
+            }
+
+        }
+      
+
+
+    return redirect()->back()->with('success', 'New agent added successfully.');
+    }
+
+
+    // function save_agents(Request $request){
+    //     $password =  base64_encode($this->generateRandomString());
+
+    //     $org_user = User::where('id',$reponse->organization_user)->first();
+    //     $agent_choose_ingroups = isset($request->agent_choose_ingroups) ? '1' : '0';
+    //     $agent_choose_blended = isset($request->agent_choose_blended) ? '1' : '0';
+    //     $closer_default_blended = isset($request->closer_default_blended) ? '1' : '0';
+    //     $scheduled_callbacks = isset($request->scheduled_callbacks) ? '1' : '0';
+    //     $agentonly_callbacks = isset($request->agentonly_callbacks) ? '1' : '0';
+    //     $agentcall_manual = isset($request->agentcall_manual) ? '1' : '0';
+    //     $agent_call_log_view_override = isset($request->agent_call_log_view_override) ? '1' : '0';
+
+    //     $OrganizationServices = OrganizationServices::find($request->organization_servicesID);
+    //     $phpArray = json_decode($OrganizationServices->connection_parameters, true);
+
+
+    //        $apiEndpoint = 'https://' . $phpArray['server_url'] . '/APIv2/Users/API.php';
+    //        // POST data
+    //        $postData = [
+    //            'Action' => 'AddUser',
+    //            'apiUser' =>  $phpArray['api_user'],
+    //            'apiPass' =>  $phpArray['api_pass'],
+    //            'session_user' =>  $phpArray['api_user'],
+    //            'responsetype' => 'json',
+    //            'user' => $request->user,
+    //            'pass'=> $password,
+
+
+    //            'full_name'=> $request->full_name,
+    //            'user_group'=>  $request->user_group,
+    //            'active' => $request->active,
+    //            'email'=> $org_user->id,
+
+    //            'mobile_number' => $request->Sms_number,
+    //            'agent_choose_ingroups'=> $agent_choose_ingroups,
+    //            'agent_choose_blended'=> $agent_choose_blended,
+    //            'closer_default_blended'=> $closer_default_blended,
+    //            'scheduled_callbacks'=> $scheduled_callbacks,
+    //            'agentonly_callbacks'=> $agentonly_callbacks,
+    //            'agentcall_manual'=> $agentcall_manual,
+    //            'agent_call_log_view_override'=> $agent_call_log_view_override,
+    //            'max_inbound_calls'=> $request->max_inbound_calls,
+    //        ];
+    //        $ch = curl_init($apiEndpoint);
+       
+    //        // Set cURL options
+    //        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    //        curl_setopt($ch, CURLOPT_POST, true);
+    //        curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
+    //        $response = curl_exec($ch);
+    //        curl_close($ch);
+           
+    //        $api_responce =  json_decode($response, true);
+   
+    //        if($api_responce['result'] == 'success'){
+    //             $add_userAgent = new userAgent();
+    //             $add_userAgent->orgid = $request->orgID;
+    //             $add_userAgent->org_user_id = $reponse->organization_user;
+    //             $add_userAgent->services_id = $request->organization_servicesID;
+
+    //             $add_userAgent->api_user = $reponse->user;
+    //             $add_userAgent->password = $password;
+    //             $add_userAgent->save();
+    //           }else{
+    //            return redirect()->back()->with('error', 'Some thing Went Wrong ');
+    //           }
+
+    // }
 
 }

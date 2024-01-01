@@ -168,11 +168,13 @@ $(document).ready(function () {
             service_type_name = false;
             responce_status = false;
 
-
             if(service_name_text.includes("Dialer")){
                 service_type_name = true;
                 responce_status  = await ceck_service_detail(formData);
             }
+
+
+
 
             if(service_type_name ===  responce_status ){
                 $.ajax({
@@ -215,7 +217,7 @@ $(document).ready(function () {
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
-                    text: 'Please check API credentials',
+                    text: responce_status,
                 });
                 $("#btnAddConnectionParameters").prop('disabled', false);
             }
@@ -519,6 +521,8 @@ $(document).ready(function () {
             success: function (response) {
                 if(response == 1){
                     status = true;
+                }else{
+                    status = response;
                 }
 
             },
