@@ -7,6 +7,8 @@ $sub_menu_sub = null!==request()->segment(4) && !is_numeric(request()->segment(4
 @endphp
 
 
+@if (auth()->user()->hasRole('superadmin') || auth()->user()->hasRole('admin') )
+
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="{{ route('dashboard') }}" class="brand-link" style='height: 55px;'>
@@ -52,6 +54,12 @@ $sub_menu_sub = null!==request()->segment(4) && !is_numeric(request()->segment(4
 
                     @foreach ($service->user_have_service as $user_have)
             
+                    @php
+                      $server_check = ceck_service_detail($user_have->user_have_service->id);
+                    @endphp
+
+                    @if ( $server_check)
+                
                     <li class="nav-item @if($sub_menu == strtolower($user_have->user_have_service->service_nick_name)) {{ 'menu-open' }} @endif">
                         <a href="#" class="nav-link @if($sub_menu==strtolower($user_have->user_have_service->service_nick_name)) {{ 'active' }} @endif">
                         <i class="nav-icon fas fa-tty"></i>
@@ -63,8 +71,6 @@ $sub_menu_sub = null!==request()->segment(4) && !is_numeric(request()->segment(4
                         <ul class="nav nav-treeview">
                             <li class="nav-item">
                                 <a href="{{ route('services.agents', ['service' => strtolower($service->name), 'organization_services_id' => $user_have->user_have_service->id]) }}" class="nav-link @if($sub_menu_main=='users') {{ 'active' }} @endif">
-
-                                {{-- <a href="{{ route('services.users',['service' => strtolower($service->name)] ) }}" class="nav-link @if($sub_menu_main=='users') {{ 'active' }} @endif"> --}}
                                 <i class="nav-icon fas fa-users"></i>
                                     <p>
                                         Agents
@@ -193,6 +199,8 @@ $sub_menu_sub = null!==request()->segment(4) && !is_numeric(request()->segment(4
                         </ul>
                     </li>
 
+                    @endif
+
                     @endforeach
                 
                 @endif
@@ -257,4 +265,7 @@ $sub_menu_sub = null!==request()->segment(4) && !is_numeric(request()->segment(4
       <!-- /.sidebar-menu -->
     </div>
     <!-- /.sidebar -->
-  </aside>
+</aside>
+
+
+@endif

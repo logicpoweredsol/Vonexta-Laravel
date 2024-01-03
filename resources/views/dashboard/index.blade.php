@@ -9,7 +9,14 @@
 </style>
 
 <!-- Content Wrapper. Contains page content -->
-<div class="content-wrapper">
+
+  @if (auth()->user()->hasRole('user'))
+    <div class="content-wrapper" style="margin-left: 0rem">
+  @else
+    <div class="content-wrapper">
+  @endif
+
+
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <div class="container-fluid">
@@ -65,14 +72,15 @@
                             $detail = get_agent_detail($userAgent->services_id , $userAgent->api_user );
                           @endphp
 
-                          @if ($detail['result'] == 'success' )
+                          @if($detail)
+                            @if ($detail['result'] == 'success' )
                             @php
                                 $detail = $detail['data'];
                             @endphp
-
                             <a class="dropdown-item" href="#"> {{$detail['full_name']}}</a>
-
                             @endif
+                          @endif
+                        
                           @endforeach
                         </div>
                       </div>
@@ -141,7 +149,7 @@
 
 
             <div class="row justify-content-md-center mt-5" >
-              @if (auth()->user()->hasRole('superadmin'))
+              @if (auth()->user()->hasRole('superadmin') || auth()->user()->hasRole('admin') )
               <div class="col-md-5">
                 <div class="contentbox-wrap">
                   <div class="inner d-flex">

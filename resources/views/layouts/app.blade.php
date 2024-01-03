@@ -22,12 +22,23 @@
         <!-- Site wrapper -->
         <div class="wrapper">
             <!-- Navbar -->
-            <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+            @if (auth()->user()->hasRole('user'))
+                <nav class="main-header navbar navbar-expand navbar-white navbar-light" style="margin-left: 0rem">
+            @else
+                <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+            @endif
+
+          
+           
                 <!-- Left navbar links -->
                 <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
-                </li>
+
+                    @if (auth()->user()->hasRole('superadmin') || auth()->user()->hasRole('admin') )
+                        <li class="nav-item">
+                            <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+                        </li>
+                    @endif
+
                 <li class="nav-item d-none d-sm-inline-block">
                     <a href="../../index3.html" class="nav-link">Home</a>
                 </li>
