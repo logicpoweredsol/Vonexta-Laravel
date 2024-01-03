@@ -9,32 +9,23 @@
 @endpush
 @section('content')
 
-
-<!-- Add this script block to your HTML/Blade file -->
-<script>
-    @if(Session::has('success'))
-        toastr.success('{{ Session::get('success') }}', 'Success', {
-            closeButton: true,
-            timeOut: 5000, // 5 seconds
-            extendedTimeOut: 2000, // 2 seconds for close button
-            progressBar: true,
-            positionClass: 'toast-top-right',
-            // Add a callback for the "Add More Agent" button
-            onHidden: function () {
-                var addMoreAgent = confirm("Do you want to add more agents?");
-                if (addMoreAgent) {
-                    // Redirect or perform the action to add more agents
-                    // Example: window.location.href = '/add-more-agent';
-                }
-            }
-        });
-    @endif
-</script>
-
-
-
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
+
+    @if(session()->has('success'))
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                success("{{ session('success') }}");
+            });
+        </script>
+        @elseif (session()->has('failed'))
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                failed("{{ session('failed') }}");
+            });
+        </script> 
+     @endif
+
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <div class="container-fluid">
@@ -67,7 +58,7 @@
 
 
 
-            <a href="javascript:void(0);" type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#modal-default" > <i class="fas fa-plus"></i> Add Agent</a>
+            <a href="javascript:void(0);" type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#add-agent-model" > <i class="fas fa-plus"></i> Add Agent</a>
             
 
             {{-- <a href="javascript:void(0);" class="btn btn-sm btn-primary mr-2" id="btnAddUser">
@@ -82,26 +73,6 @@
             @php
                 $agent_user_detail = [];
             @endphp
-            {{-- @if(null!==session('msg'))
-                <div class="row">
-                    <div class="col-sm-12 col-md-12 col-lg-12">
-                        <div class="alert alert-success alert-dismissible">
-                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                            {{ session('msg'); }}
-                        </div>
-                    <div>
-                </div>
-            @endif
-            @if(null!==session('error'))
-                <div class="row">
-                    <div class="col-sm-12 col-md-12 col-lg-12">
-                        <div class="alert alert-danger alert-dismissible">
-                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                            {{ session('error'); }}
-                        </div>
-                    <div>
-                </div>
-            @endif --}}
             <table id="usersDT" class="table table-striped table-hover vonexta-table">
                 <thead>
                     <tr>
@@ -187,7 +158,7 @@
 
   {{-- Add Agent User --}}
 
-  <div class="modal fade" id="modal-default">
+  <div class="modal fade" id="add-agent-model">
     <div class=" modal-dialog modal-xl">
       <div class="modal-content">
         <div class="modal-header">

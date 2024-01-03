@@ -327,3 +327,71 @@ function bulk_agent_add(){
     
 
 }
+
+
+
+
+function success(message) {
+    Swal.fire({
+        title: 'Success',
+        text: message,
+        icon: 'success',
+        showCloseButton: false,
+        showConfirmButton: false,
+        timer: 10000, // 10 seconds
+        timerProgressBar: true,
+        position: 'center',
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        allowEnterKey: false,
+        footer: `
+            <div>
+                <button class="swal2-confirm swal2-styled" onclick="addMoreAgents()">Add More Agents</button>
+                <button class="swal2-cancel swal2-styled" onclick="closeSwal()">Close</button>
+            </div>
+        `,
+        onOpen: () => {
+            Swal.showLoading();
+        },
+    });
+}
+
+function addMoreAgents() {
+    $("#add-agent-model").modal('show');
+    console.log('Adding more agents...');
+    Swal.close();
+}
+
+function closeSwal() {
+    Swal.close();
+}
+
+
+
+  // Successful Swal.fire example with auto close
+  function showSuccessAlert(message) {
+    Swal.fire({
+      icon: 'success',
+      title: 'Success!',
+      text: message,
+      confirmButtonText: 'OK',
+      timer: 10000, // Auto close after 10 seconds (in milliseconds)
+      timerProgressBar: true // Display a progress bar
+    });
+  }
+
+  // Failed Swal.fire example with auto close
+  function showFailedAlert(message) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Error!',
+      text: message,
+      confirmButtonText: 'OK',
+      timer: 10000, // Auto close after 10 seconds (in milliseconds)
+      timerProgressBar: true // Display a progress bar
+    });
+  }
+
+
+
+

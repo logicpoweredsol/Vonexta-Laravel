@@ -28,113 +28,156 @@
         </div>
 
         <div class="card">
-          <div class="card-body">
+          <div class="card-body mb-5">
            
-            <div class="row justify-content-md-center" >
-              <div class="col-md-5 mt-4">
-                <div class="small-box bg-light">
+            <div class="row justify-content-md-center mt-5" >
+              <div class="col-md-5">
+                <div class="contentbox-wrap">
                   <div class="inner d-flex">
-                    <img style="max-width: 18%; height: 0%" src="{{asset('dist/img/agent-11.png')}}" alt="">
-                    <div>
-                      <h5 class="mt-2" style="color: blue">Agent</h5>
+                    <div class="img-wrapper">
+                      <img src="{{asset('dist/img/agent-11.png')}}" alt="">
+                    </div>
+
+
+              
+
+                    @if (auth()->user()->hasRole('superadmin'))
+                      <div class="contentbox">
+                        <h5>Agent</h5>
+                        <p class="mt-1">communicate with your customers and prospects</p>
+                      </div>
+                    @else
+                        
+                    <div class="contentbox">
+                      <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          Agent
+                        </button>
+
+                        @php
+                          $agent_user_detail = [];
+                        @endphp
+
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                          @foreach ($userAgents as $userAgent)
+
+                          @php
+                            $detail = get_agent_detail($userAgent->services_id , $userAgent->api_user );
+                          @endphp
+
+                          @if ($detail['result'] == 'success' )
+                            @php
+                                $detail = $detail['data'];
+                            @endphp
+
+                            <a class="dropdown-item" href="#"> {{$detail['full_name']}}</a>
+
+                            @endif
+                          @endforeach
+                        </div>
+                      </div>
                       <p class="mt-1">(communicate with your customers and prospects)</p>
                     </div>
+
+                    @endif
+                    
+
+                   
                   </div>
-                  <div class="icon">
-                    <i class="ion ion-bag"></i>
-                  </div>
-                  <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                  <a href="#" class="overlaylink"></a>
                 </div>
               </div>
-              <div class="col-md-5 mt-4">
-                <div class="small-box bg-light">
+              <div class="col-md-5">
+                <div class="contentbox-wrap">
                   <div class="inner d-flex">
-                    <img class="mb-2" style="max-width: 18%; height: 0%" src="{{asset('dist/img/images.png')}}" alt="">
-                    <div>
-                      <h5 class="mt-2 ml-2" style="color: blue">New customer support</h5>
-                      <p class="mt-1 ml-2">(access the support team , documentation , case and solutions)</p>
+                    <div class="img-wrapper">
+                      <img src="{{asset('dist/img/images.png')}}" alt="">
+                    </div>
+                    <div class="contentbox">
+                      <h5>customer support</h5>
+                      <p class="mt-1">Access the support team , documentation , case and solutions</p>
                     </div>
                   </div>
-                  <div class="icon">
-                    <i class="ion ion-bag"></i>
-                  </div>
-                  <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                  <a href="#" class="overlaylink"></a>
                 </div>
               </div>
+              
     
             </div>
-    
-            <div class="row justify-content-md-center">
-              <div class="col-md-5 mt-4">
-                <div class="small-box bg-light">
+
+            <div class="row justify-content-md-center mt-5" >
+              <div class="col-md-5">
+                <div class="contentbox-wrap">
                   <div class="inner d-flex">
-                    <img class="mb-2" style="max-width: 18%; height: 0%" src="{{asset('dist/img/images (1).png')}}" alt="">
-                    <div>
-                    <h5 class="ml-2" style="color: blue">Supervisor</h5>
-                    <p class="ml-2">(manage your agents activities)</p>
+                    <div class="img-wrapper">
+                      <img src="{{asset('dist/img/images (1).png')}}" alt="">
+                    </div>
+                    <div class="contentbox">
+                      <h5>Supervisor</h5>
+                      <p class="mt-1">Manage your agents activities</p>
                     </div>
                   </div>
-                  <div class="icon">
-                    <i class="ion ion-bag"></i>
-                  </div>
-                  <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                  <a href="#" class="overlaylink"></a>
                 </div>
               </div>
-              <div class="col-md-5 mt-4">
-                <div class="small-box bg-light">
+
+              <div class="col-md-5">
+                <div class="contentbox-wrap">
                   <div class="inner d-flex">
-                    <img style="max-width: 18%; height: 0%" src="{{asset('dist/img/images (2).png')}}" alt="">
-                  <div>
-                    <h5 class="ml-2" style="color: blue">Training</h5>
-                    <p class="ml-2">(access university for role-based training and certification for administrators)</p>
+                    <div class="img-wrapper">
+                      <img src="{{asset('dist/img/images (2).png')}}" alt="">
+                    </div>
+                    <div class="contentbox">
+                      <h5>Training</h5>
+                      <p class="mt-1">Access university for role-based training and certification for administrators</p>
+                    </div>
                   </div>
-                  </div>
-                  <div class="icon">
-                    <i class="ion ion-bag"></i>
-                  </div>
-                  <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                  <a href="#" class="overlaylink"></a>
                 </div>
               </div>
-            </div>
-    
-    
-            <div class="row justify-content-md-center">
-              @if (auth()->user()->hasRole('superadmin'))
-              <div class="col-md-5 mt-4">
-                <div class="small-box bg-light">
-                  <div class="inner d-flex">
-                    <img style="max-width: 18%; height: 0%" src="{{asset('dist/img/download.png')}}" alt="">
-                    <div>
-                    <h5 class="ml-2" style="color: blue">Administrator</h5>
-                    <p class="ml-2">(configure your contact center)</p>
-                   </div>
-                  </div>
-                  <div class="icon">
-                    <i class="ion ion-bag"></i>
-                  </div>
-                  <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-                </div>
-              </div>
-              @endif
              
-              <div class="col-md-5 mt-4">
-                <div class="small-box bg-light">
-                  <div class="inner d-flex">
-                    <img style="max-width: 16%; height: 0%" src="{{asset('dist/img/images (3).png')}}" alt="">
-                    <div>
-                    <h5 class="ml-2" style="color: blue">My Settings</h5>
-                    <p class="ml-2">(Change your password and other personal settings)</p>
-                    </div>
-                  </div>
-                  <div class="icon">
-                    <i class="ion ion-bag"></i>
-                  </div>
-                  <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-                </div>
-              </div>
-    
     
             </div>
+
+
+            <div class="row justify-content-md-center mt-5" >
+              @if (auth()->user()->hasRole('superadmin'))
+              <div class="col-md-5">
+                <div class="contentbox-wrap">
+                  <div class="inner d-flex">
+                    <div class="img-wrapper">
+                      <img src="{{asset('dist/img/agent-11.png')}}" alt="">
+                    </div>
+                    <div class="contentbox">
+                      <h5>Administrator</h5>
+                      <p class="mt-1">Configure your contact center</p>
+                    </div>
+                  </div>
+                  <a href="#" class="overlaylink"></a>
+                </div>
+              </div>
+
+              @endif
+
+              <div class="col-md-5">
+                <div class="contentbox-wrap">
+                  <div class="inner d-flex">
+                    <div class="img-wrapper">
+                      <img src="{{asset('dist/img/images (3).png')}}" alt="">
+                    </div>
+                    <div class="contentbox">
+                      <h5>My Settings</h5>
+                      <p class="mt-1">Change your password and other personal settings</p>
+                    </div>
+                  </div>
+                  <a href="#" class="overlaylink"></a>
+                </div>
+              </div>
+
+    
+            </div>
+    
+          
 
           </div>
           <!-- /.card-body -->
