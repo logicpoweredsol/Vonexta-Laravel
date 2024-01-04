@@ -111,3 +111,16 @@
     width: 100%;
     height: 100%;
 }
+
+.contentbox-wrap .dropdown-menu::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+  .contentbox-wrap .dropdown-menu::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+  }
+   
+  .contentbox-wrap .dropdown-menu::-webkit-scrollbar-thumb {
+    background: #0a96ca; 
+  }
+
