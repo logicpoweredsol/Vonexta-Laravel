@@ -11,8 +11,10 @@ $(document).ready(function(){
 
 
     $("[data-bootstrap-switch]").bootstrapSwitch();
+    $('.select2').select2();
 
 });
+
 
 
 
@@ -60,7 +62,11 @@ function add_row() {
         row_number = row_number + 1;
         var html = `<tr id=${row_number}>
                         <td><input type="email" class="form-control" name="email[]" id="email_${row_number}"></td>
-                        <td><input type="text" class="form-control" onkeyup="allow_only_number(this.id);"  onchange="check_extension(this.id,{{$organization_servicesID}});"  name="extension[]" id="extension_${row_number}"></td>
+                        <td><input type="text" class="form-control" onkeyup="allow_only_number(this.id);"  onchange="ceck_previous_extension(this.id);"  name="extension[]" id="extension_${row_number}">
+                            <span style = "color:red" id="extension-error-${row_number}"></span>
+                            <span style = "color:green" id="extension-success-${row_number}"></span>
+
+                        </td>
                         <td><input type="text" class="form-control" name="full_name[]" id="full_name_${row_number}"></td>
                         <td>
                         <select class="form-control" required name="active[]" id="active_${row_number}">
@@ -114,6 +120,29 @@ function Change_tab(id) {
 
 
 
+
+function ceck_previous_extension(id){
+
+   
+    var current_extension_val = $("#"+id).val();
+
+    var previous_extension_array = id.split('_');
+
+    var pre_num = previous_extension_array[1];
+
+
+    $('#extension-error-'+pre_num).html('Extension is already in use.');
+    $('#extension-success-'+pre_num).html('Extension is available');
+
+    var previousz_extension_val = $("#extension_"+(pre_num-1)).val();
+
+    if(current_extension_val == previousz_extension_val ){
+        $('#extension-error-'+pre_num).html('Extension is already in use.');
+    }else{
+        $('#extension-success-'+pre_num).html('Extension is available');
+    }
+
+}
 
 function copy_agent_detail(organization_servicesID){
   var previous_agent =   $('#other_user').val();
@@ -197,7 +226,7 @@ function allow_only_number(id) {
 
 
 
-function check_extension(id, organization_servicesID) {
+function check_extension(id, organization_servicesID ,action) {
     
     $('#extension-error').html('')
     $('#extension-success').html('')
@@ -213,15 +242,27 @@ function check_extension(id, organization_servicesID) {
             'organization_servicesID':organization_servicesID
         },
         success: function(response) {
-            // console.log(response);
-            if(response.status == 'success'){
-                $('#extension-error').html('')
-                $('#extension-success').html(response.message)
-            } 
-            if(response.status == 'failed'){
-                $('#extension-error').html(response.message)
-                $('#extension-success').html('')
-            } 
+
+            if(action == 'add-agnet'){
+                if(response.status == 'success'){
+                    $('#extension-error').html('')
+                    $('#extension-success').html(response.message)
+                } 
+                if(response.status == 'failed'){
+                    $('#extension-error').html(response.message)
+                    $('#extension-success').html('')
+                } 
+            }else if(action == 'add-bulk-agnet'){
+                if(response.status == 'success'){
+                    // $('#extension-success-1').html('')
+                    $('#extension-success-1').html(response.message)
+                } 
+                if(response.status == 'failed'){
+                    $('#extension-error-1').html(response.message)
+                    // $('#extension-success-1').html('')
+                } 
+            }
+          
         },
         error: function(xhr, status, error) {
             console.error("Error occurred:", error);
@@ -331,7 +372,46 @@ function bulk_agent_add(){
 
 
 
-function success(message) {
+
+function addMoreAgents() {
+    $("#add-agent-model").modal('show');
+    console.log('Adding more agents...');
+    Swal.close();
+}
+
+function closeSwal() {
+    Swal.close();
+}
+
+
+
+  // Successful Swal.fire example with auto close
+  function success(message) {
+    Swal.fire({
+      icon: 'success',
+      title: 'Success!',
+      text: message,
+      confirmButtonText: 'OK',
+      timer: 10000, // Auto close after 10 seconds (in milliseconds)
+      timerProgressBar: true // Display a progress bar
+    });
+  }
+
+  // Failed Swal.fire example with auto close
+  function error(message) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Error!',
+      text: message,
+      confirmButtonText: 'OK',
+      timer: 10000, // Auto close after 10 seconds (in milliseconds)
+      timerProgressBar: true // Display a progress bar
+    });
+  }
+
+
+
+  function bluck_success(message) {
     Swal.fire({
         title: 'Success',
         text: message,
@@ -356,41 +436,6 @@ function success(message) {
     });
 }
 
-function addMoreAgents() {
-    $("#add-agent-model").modal('show');
-    console.log('Adding more agents...');
-    Swal.close();
-}
-
-function closeSwal() {
-    Swal.close();
-}
-
-
-
-  // Successful Swal.fire example with auto close
-  function showSuccessAlert(message) {
-    Swal.fire({
-      icon: 'success',
-      title: 'Success!',
-      text: message,
-      confirmButtonText: 'OK',
-      timer: 10000, // Auto close after 10 seconds (in milliseconds)
-      timerProgressBar: true // Display a progress bar
-    });
-  }
-
-  // Failed Swal.fire example with auto close
-  function showFailedAlert(message) {
-    Swal.fire({
-      icon: 'error',
-      title: 'Error!',
-      text: message,
-      confirmButtonText: 'OK',
-      timer: 10000, // Auto close after 10 seconds (in milliseconds)
-      timerProgressBar: true // Display a progress bar
-    });
-  }
 
 
 

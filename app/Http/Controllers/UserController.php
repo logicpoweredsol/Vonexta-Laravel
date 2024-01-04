@@ -37,7 +37,10 @@ class UserController extends Controller
                 $organization_servicesID = $organization_servicesID;
                 $orgID = $organization->id;
                 $orgUserID = $users[0]->id;
-                $this->store_agent_into_db($user ,$user_id,$organization_servicesID, $orgID, $orgUserID);
+                if($service_Users['email'][$i] == '' && $service_Users['email'][$i] == NULL ){
+                    $this->store_agent_into_db($user ,$user_id,$organization_servicesID, $orgID, $orgUserID);
+                }
+
             }
         }
 
@@ -124,6 +127,7 @@ class UserController extends Controller
 
         return view('dialer.Agent.edit' ,compact('dailer_agent_user'));
     }
+
 
     public function get_agent_detail($organization_services_id ,$AgentID) {
         $OrganizationServices = OrganizationServices::find($organization_services_id);
@@ -411,7 +415,7 @@ class UserController extends Controller
 
         
 
-        return redirect()->back()->with('success', 'New agent added successfully.');
+        return redirect()->back()->with('bluck_success', 'New agent added successfully.');
         } catch (\Exception $e) {
             // Handle the exception, log it, or return an error response
             return redirect()->back()->with('error', 'An error occurred: ' . $e->getMessage());
@@ -495,10 +499,8 @@ class UserController extends Controller
             }
 
         }
-      
-
-
-    return redirect()->back()->with('success', 'New agent added successfully.');
+    
+        return redirect()->back()->with('success', 'New agent added successfully.');
     }
 
 

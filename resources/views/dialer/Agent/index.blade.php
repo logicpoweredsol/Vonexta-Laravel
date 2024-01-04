@@ -24,6 +24,13 @@
                 failed("{{ session('failed') }}");
             });
         </script> 
+
+        @elseif(session()->has('bluck_success'))
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    failed("{{ session('bluck_success') }}");
+                });
+            </script> 
      @endif
 
     <!-- Content Header (Page header) -->
@@ -218,7 +225,7 @@
                             <div id="Users-part" class="content" role="tabpanel" aria-labelledby="Users-part-trigger">
                                 
                                 <div class="form-group row">
-                                    <label for="user_group" class="col-sm-2 col-form-label">Total Users  <span class="text-danger">*</span> </label>
+                                    <label for="user_group" class="col-sm-2 col-form-label">Users  <span class="text-danger">*</span> </label>
                                     <div class="col-md-7">
                                         <select class="form-control" name="organization_user" id="organization_user">
                                             <option value="" selected disabled >Select Organization User</option>
@@ -234,7 +241,7 @@
                                 <div class="form-group row">
                                     <label for="user_group" class="col-sm-2 col-form-label">Extention <span class="text-danger">*</span> </label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" onkeyup="allow_only_number(this.id);"  onchange="check_extension(this.id,{{$organization_servicesID}});" required name="user" id="user">
+                                        <input type="text" class="form-control" onkeyup="allow_only_number(this.id);"  onchange="check_extension(this.id,{{$organization_servicesID}} ,'add-agnet');" required name="user" id="user">
                                         <span style = "color:red" id="extension-error"></span>
                                         <span style = "color:green" id="extension-success"></span>
                                     </div>
@@ -464,7 +471,7 @@
                         <table class="table table-striped table-hover">
                             <thead>
                                 <tr>
-                                    <th>Email <span class="text-danger">*</span></th>
+                                    <th>User<span class="text-danger">*</span></th>
                                     <th>Extension <span class="text-danger">*</span> </th>
                                     <th>Full Name <span class="text-danger">*</span></th>
                                     {{-- <th>Password</th> --}}
@@ -474,8 +481,21 @@
                             </thead>
                             <tbody class="add_row">
                                 <tr  id="1">
-                                    <td><input type="email" class="form-control" name="email[]" id="email_1"></td>
-                                    <td><input type="text" class="form-control" onkeyup="allow_only_number(this.id);"  onchange="check_extension(this.id,{{$organization_servicesID}});"  name="extension[]" id="extension_1"></td>
+                                    <td>
+                                        <select class="form-control select2" name="email[]" id="email_1" style="width: 100%;">
+                                        {{-- <select class="form-control" required > --}}
+                                            <option value="" selected disabled >Select Organization User</option>
+                                            @foreach ($users as $user)
+                                                <option value="{{$user->id}}">{{$user->name}}</option>
+                                            @endforeach 
+                                        </select>
+                                    </td>
+                                    <td><input type="text" class="form-control" onkeyup="allow_only_number(this.id);"  onchange="check_extension(this.id,{{$organization_servicesID}} ,'add-bulk-agnet');"  name="extension[]" id="extension_1">
+
+                                        <span style = "color:red" id="extension-error-1"></span>
+                                        <span style = "color:green" id="extension-success-1"></span>
+
+                                    </td>
 
                                     <td><input type="text" class="form-control" name="full_name[]" id="full_name_1"></td>
                                     {{-- <td><input type="password" class="form-control" name="password[]" id="password_1"></td> --}}

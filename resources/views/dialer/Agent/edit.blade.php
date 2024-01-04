@@ -248,7 +248,7 @@
                                 </div>
                                 <div class="col-md-2">
                                     <div class="slidercontainer">
-                                        <input class="form-control" type="number" readonly id="fixtures-events">
+                                        <input class="form-control" type="number" readonly id="fixtures-events" value="{{ isset($dailer_agent_user['max_inbound_calls']) ? $dailer_agent_user['max_inbound_calls'] : '' }}" >
                                     </div>
                                 </div>
                             </div>
