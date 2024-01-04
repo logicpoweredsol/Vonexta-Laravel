@@ -351,7 +351,7 @@ class UserController extends Controller
             $scheduled_callbacks = isset($request->scheduled_callbacks) ? '1' : '0';
             $agentonly_callbacks = isset($request->agentonly_callbacks) ? '1' : '0';
             $agentcall_manual = isset($request->agentcall_manual) ? '1' : '0';
-            $agent_call_log_view_override = isset($request->agent_call_log_view_override) ? '1' : '0';
+            $agent_call_log_view_override = isset($request->agent_call_log_view_override) ? 'Y' : 'N';
 
             $active = isset($request->active) && $request->active == 1 ? 'Y' : 'N';
 
@@ -396,7 +396,7 @@ class UserController extends Controller
 
             $api_response = json_decode($response, true);
 
-            // dd($api_response);
+            // dd();
 
             if ($api_response['result'] == 'success') {
                 $add_userAgent = new userAgent();
@@ -404,7 +404,7 @@ class UserController extends Controller
                 $add_userAgent->org_user_id = $org_user->id;
                 $add_userAgent->services_id = $request->organization_servicesID;
                 $add_userAgent->api_user = $request->user;
-                $add_userAgent->password = $password;
+                $add_userAgent->password = $api_response['pass_hash_encrypted'];
                 $add_userAgent->save();
             } else {
                 return redirect()->back()->with('error', 'Something Went Wrong');
@@ -483,13 +483,15 @@ class UserController extends Controller
 
             $api_response = json_decode($response, true);
 
+            // dd($api_response);
+
             if ($api_response['result'] == 'success') {
                 $add_userAgent = new userAgent();
                 $add_userAgent->orgid = $request->orgID;
                 $add_userAgent->org_user_id = $org_user->id;
                 $add_userAgent->services_id = $request->organization_servicesID;
                 $add_userAgent->api_user = $request->extension[$i];
-                $add_userAgent->password = $password;
+                $add_userAgent->password = $api_response['pass_hash_encrypted'];
                 $add_userAgent->save();
             } else {
                 return redirect()->back()->with('error', 'Something Went Wrong');

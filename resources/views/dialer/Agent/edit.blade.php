@@ -225,7 +225,7 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-12 col-md-6 col-lg-6">
-                                    <input type="checkbox" class="form-check-input" {{(isset($dailer_agent_user['agent_call_log_view_override']) && $dailer_agent_user['agent_call_log_view_override']=='1' ) ? 'checked' : '' }} id="toggle6" name="agent_call_log_view_override" data-bootstrap-switch data-off-color="danger" data-on-color="success">
+                                    <input type="checkbox" class="form-check-input" {{(isset($dailer_agent_user['agent_call_log_view_override']) && $dailer_agent_user['agent_call_log_view_override']=='Y' ) ? 'checked' : '' }} id="toggle6" name="agent_call_log_view_override" data-bootstrap-switch data-off-color="danger" data-on-color="success">
                                     <label class="form-check-label" for="toggle7"><b> Allow Call Log View</b></label>
                                 </div>
 
@@ -276,7 +276,7 @@
             <div class="tab-pane fade" id="Organization-user" role="tabpanel" aria-labelledby="Organization-user-tab">
                 <div class="d-flex justify-content-end">
                     <div class="col-md-3 mb-3">
-                        <select class="form-control" id="skills_log" onchange="Change_tab(this.id);">
+                        <select class="form-control" id="skills_log" style="width:200px"  onchange="Change_tab(this.id);">
                             <option selected value="compaigns">compaigns</option>
                             <option value="inbounds">Inbound</option>
                         </select>
@@ -350,12 +350,13 @@
 
                 <div class="d-flex justify-content-end">
                     <div class="col-md-3 mb-3">
-                        <select class="form-control" id="table_log" onchange="change_tab(this.id);">
+                        <select class="form-control" id="table_log"  style="width: 200px" onchange="change_tab(this.id);">
                             <option selected value="inbound-log">Inbound</option>
                             <option value="outbound-log">Outbound</option>
                             <option value="manual-log">manual calls</option>
                             <option value="transfer-log">Transfers</option>
                         </select>
+                        {{-- <button class="btn btn-danger" onclick="check();"> ++ </button> --}}
                     </div>
                 </div>
 
@@ -527,6 +528,8 @@
 <script src="{{ asset('plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
 <script src="{{ asset('plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
 <script src="{{ asset('plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
+
+
 <!-- SweetAlert2 -->
 <script src="{{ asset('plugins/sweetalert2/sweetalert2.min.js') }}"></script>
 <script>
@@ -566,4 +569,14 @@
         var input_filed = id.replace("-range", "");
         $("#" + input_filed).val(range);
     }
+
 </script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#table_log,#skills_log').select2({
+            // multiple: true
+        });
+    });
+    </script>
+    

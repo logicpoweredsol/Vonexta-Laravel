@@ -501,7 +501,7 @@
                                     <td>
                                         <select class="form-control" required name="active[]" id="active_1">
                                             <option value="1">Active</option>
-                                            <option value="0">No Active</option>
+                                            <option value="0">Not Active</option>
                                         </select>
 
                                         {{-- <input type="text" class="form-control" name="status[]" id="status_1"> --}}

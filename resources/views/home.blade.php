@@ -113,7 +113,7 @@
                           <p class="mt-1">Configure your contact center</p>
                         </div>
                       </div>
-                      <a href="#" class="overlaylink"></a>
+                      <a href="{{url('dashboard')}}" class="overlaylink"></a>
                     </div>
                   </div>
                 @endif
