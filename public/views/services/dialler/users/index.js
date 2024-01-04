@@ -186,7 +186,7 @@ function remove_row(row_number){
 
 }
 
-function change_tab(id) {
+function change_tab2(id) {
 
     var id_array = ['inbound-log', 'outbound-log', 'manual-log','transfer-log'];
     var id = $("#table_log").val();
@@ -200,19 +200,22 @@ function change_tab(id) {
     });
 }
 
-function Change_tab(id) {
 
-    var id_array = ['inbounds', 'compaigns'];
-    var id = $("#skills_log").val();
+function Change_tab(id) {
+    var id_array = ['compaigns', 'inbounds'];
+
+    var id = $("#"+id).val();
 
     id_array.forEach(element => {
-        if (element == id) {
+        if (id.includes(element)) {
             $("." + element).removeClass('d-none');
         } else {
             $("." + element).addClass('d-none');
         }
     });
 }
+
+
 
 
 // aaaa

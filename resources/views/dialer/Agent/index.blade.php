@@ -10,7 +10,14 @@
 @section('content')
 
 <!-- Content Wrapper. Contains page content -->
+@if (auth()->user()->hasRole('user'))
+<div class="content-wrapper" style="margin-left: 0rem">
+@else
 <div class="content-wrapper">
+@endif
+
+
+{{-- <div class="content-wrapper"> --}}
 
     @if(session()->has('success'))
         <script>

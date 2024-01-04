@@ -5,12 +5,22 @@
 <link rel="stylesheet" href="{{ asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
 <link rel="stylesheet" href="{{ asset('plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
 <link rel="stylesheet" href="{{ asset('plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }}">
-<!-- Nothing for now -->
-<link rel="stylesheet" href="{{ asset('plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }}">
+
+ <!-- Select2 -->
+ <link rel="stylesheet" href="{{ asset('plugins/select2/css/select2.min.css') }}">
+
 @endpush
 @section('content')
 <!-- Content Wrapper. Contains page content -->
+
+@if (auth()->user()->hasRole('user'))
+<div class="content-wrapper" style="margin-left: 0rem">
+@else
 <div class="content-wrapper">
+@endif
+
+{{-- 
+<div class="content-wrapper"> --}}
 
     @if(session()->has('success'))
     <script>
@@ -275,12 +285,24 @@
 
             <div class="tab-pane fade" id="Organization-user" role="tabpanel" aria-labelledby="Organization-user-tab">
                 <div class="d-flex justify-content-end">
-                    <div class="col-md-3 mb-3">
-                        <select class="form-control" id="skills_log" style="width:200px"  onchange="Change_tab(this.id);">
+                    
+                    <div class="form-group">
+                        <select class="select2" multiple="multiple" data-placeholder=""  id="skills_log"  onchange="Change_tab(this.id);">
                             <option selected value="compaigns">compaigns</option>
                             <option value="inbounds">Inbound</option>
                         </select>
-                    </div>
+                      </div>
+
+                    {{-- <div class="col-md-3 mb-3">
+
+ 
+                          
+                          <select class="form-control" id="skills_log" style="width:200px"  onchange="Change_tab(this.id);">
+                            <option selected value="compaigns">compaigns</option>
+                            <option value="inbounds">Inbound</option>
+                        </select> 
+                        
+                    </div> --}}
                 </div>
                 {{-- Campaigns --}}
                 <div class="card compaigns">
@@ -350,7 +372,7 @@
 
                 <div class="d-flex justify-content-end">
                     <div class="col-md-3 mb-3">
-                        <select class="form-control" id="table_log"  style="width: 200px" onchange="change_tab(this.id);">
+                        <select class="form-control" id="table_log"  style="width: 200px" onchange="change_tab2(this.id);">
                             <option selected value="inbound-log">Inbound</option>
                             <option value="outbound-log">Outbound</option>
                             <option value="manual-log">manual calls</option>
@@ -511,6 +533,10 @@
 
 @push('scripts')
 
+
+<!-- Select2 -->
+<script src="{{ asset('plugins/select2/js/select2.full.min.js') }}"></script>
+
 <!-- Bootstrap Switch -->
 <script src="{{ asset('plugins/bootstrap-switch/js/bootstrap-switch.min.js') }}"></script>
 <!-- jquery-validation -->
@@ -532,7 +558,7 @@
 
 <!-- SweetAlert2 -->
 <script src="{{ asset('plugins/sweetalert2/sweetalert2.min.js') }}"></script>
-<script>
+{{-- <script>
     const csrfToken = $('meta[name="csrf-token"]').attr('content');
     console.log(123)
     $(document).ready(function() {
@@ -555,12 +581,20 @@
     //   $('#permanent_address').val('');
     // }
 });
-</script>
-
+</script> --}}
 
 <script src="{{ asset('plugins/bs-stepper/js/bs-stepper.min.js') }}"></script>
 <script src="{{ asset('views/services/dialler/users/edit.js') }}"></script>
 <script src="{{ asset('views/services/dialler/users/index.js') }}"></script>
+
+
+<script>
+    $(function () {
+
+      $('.select2').select2()
+    });
+  </script>
+
 
 @endpush
 <script>
@@ -571,12 +605,4 @@
     }
 
 </script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(document).ready(function() {
-        $('#table_log,#skills_log').select2({
-            // multiple: true
-        });
-    });
-    </script>
     
