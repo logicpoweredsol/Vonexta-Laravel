@@ -321,7 +321,7 @@
                     </div>
                     <div class="card-body">
 
-                        <table id="Inbound" class="table table-striped table-hover vonexta-table">
+                        <table id="Enbound" class="table table-striped table-hover vonexta-table">
                             <thead>
                                 <tr>
                                     <th>Name</th>
@@ -366,7 +366,7 @@
                     </div>
                     <div class="card-body">
 
-                        <table id="Campaigns" class="table table-striped table-hover vonexta-table">
+                        <table id="bound" class="table table-striped table-hover vonexta-table">
                             <thead>
                                 <tr>
                                     <th>Call Time</th>
@@ -401,7 +401,7 @@
                     </div>
                     <div class="card-body">
 
-                        <table id="Inbound" class="table table-striped table-hover vonexta-table">
+                        <table id="Outbound" class="table table-striped table-hover vonexta-table">
                             <thead>
                                 <tr>
                                     <th>Call Date</th>
@@ -438,14 +438,14 @@
                     </div>
                     <div class="card-body">
 
-                        <table id="Inbound" class="table table-striped table-hover vonexta-table">
+                        <table id="Manual" class="table table-striped table-hover vonexta-table">
                             <thead>
                                 <tr>
                                     <th>Call Date</th>
                                     <th>Lead ID</th>
                                     <th>Phone Number</th>
                                     <th>Compaign</th>
-                                    <th>Call lenght</th>
+                                    <th>Call length</th>
                                     <th>Status</th>
                                 </tr>
                             </thead>
@@ -474,7 +474,7 @@
                     </div>
                     <div class="card-body">
 
-                        <table id="Inbound" class="table table-striped table-hover vonexta-table">
+                        <table id="Transfers" class="table table-striped table-hover vonexta-table">
                             <thead>
                                 <tr>
                                     <th>Transfer Date</th>

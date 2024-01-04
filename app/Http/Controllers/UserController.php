@@ -37,10 +37,7 @@ class UserController extends Controller
                 $organization_servicesID = $organization_servicesID;
                 $orgID = $organization->id;
                 $orgUserID = $users[0]->id;
-                if($service_Users['email'][$i] == '' && $service_Users['email'][$i] == NULL ){
-                    $this->store_agent_into_db($user ,$user_id,$organization_servicesID, $orgID, $orgUserID);
-                }
-
+                $this->store_agent_into_db($user ,$user_id,$organization_servicesID, $orgID, $orgUserID);
             }
         }
 
