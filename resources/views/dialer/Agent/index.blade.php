@@ -450,7 +450,7 @@
 
                     <form action="{{ route('services.bulk-save-agent', ['service' => strtolower('Dailer')]) }}" method="post" id="bulk_agent_save_form">
                         @csrf
-                    <input type="hidden" name="organization_servicesID" value="{{$organization_servicesID}}">
+                    <input type="hidden" name="organization_servicesID" id="organization_servicesID" value="{{$organization_servicesID}}">
                     <input type="hidden" name="orgID" value="{{$organization->id}}">
 
                     <div class="modal-body">
@@ -483,7 +483,6 @@
                                 <tr  id="1">
                                     <td>
                                         <select class="form-control select2" name="email[]" id="email_1" style="width: 100%;">
-                                        {{-- <select class="form-control" required > --}}
                                             <option value="" selected disabled >Select Organization User</option>
                                             @foreach ($users as $user)
                                                 <option value="{{$user->id}}">{{$user->name}}</option>

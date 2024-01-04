@@ -44,10 +44,6 @@
                     <div class="img-wrapper">
                       <img src="{{asset('dist/img/agent-11.png')}}" alt="">
                     </div>
-
-
-              
-
                     @if (auth()->user()->hasRole('superadmin'))
                       <div class="contentbox">
                         <h5>Agent</h5>

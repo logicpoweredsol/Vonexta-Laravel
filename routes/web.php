@@ -13,6 +13,7 @@ use App\Http\Controllers\OrganizationServicesController;
 use \App\Http\Controllers\ServiceController;
 use \App\Http\Controllers\PermissionController;
 use \App\Http\Controllers\SuperAdminController;
+use \App\Http\Controllers\HomeController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -25,15 +26,17 @@ use \App\Http\Controllers\SuperAdminController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    if(Auth::check()) {
+        return redirect('/home');
+    } else {
+        return view('welcome');
+    }
 });
+
+Route::get('home',[HomeController::class,'index'])->middleware(['auth', 'verified', 'checkUserStatus'])->name('home');
 
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified', 'checkUserStatus'])->name('dashboard');
-
-
-
-
 
 Route::middleware(['auth','checkUserStatus'])->group(function () {
     Route::get('reset-password', [ProfileController::class, 'reset_password'])->name('reset-password');

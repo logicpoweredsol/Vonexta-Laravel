@@ -11,7 +11,7 @@ $(document).ready(function(){
 
 
     $("[data-bootstrap-switch]").bootstrapSwitch();
-    $('.select2').select2();
+    // $('.select2').select2();
 
 });
 
@@ -32,8 +32,10 @@ $(document).on('click','#Modal2',function(){
 
 
 function add_row() {
-    var f = 0;
+    var originalSelect = $('#email_1');
+    var clonedSelect = originalSelect.clone();
 
+    var f = 0;
     var row_number = $(".add_row tr").length;
 
     var email = $("#email_" + row_number).val();
@@ -41,48 +43,142 @@ function add_row() {
     var full_name = $("#full_name_" + row_number).val();
     var active = $("#active_" + row_number).val();
 
-    if (email == '' || email == null) {
+    if (email === '' || email === null) {
         $("#email_" + row_number).css('border', '1px solid red');
-        f = 1;  // Use a single equal sign for assignment
+        f = 1;
     }
-    if (extension == '' || extension == null) {
+    if (extension === '' || extension === null) {
         $("#extension_" + row_number).css('border', '1px solid red');
-        f = 1;  // Use a single equal sign for assignment
+        f = 1;
     }
-    if (full_name == '' || full_name == null) {
+    if (full_name === '' || full_name === null) {
         $("#full_name_" + row_number).css('border', '1px solid red');
-        f = 1;  // Use a single equal sign for assignment
+        f = 1;
     }
-    if (active == '' || active == null) {
+    if (active === '' || active === null) {
         $("#active_" + row_number).css('border', '1px solid red');
-        f = 1;  // Use a single equal sign for assignment
+        f = 1;
     }
 
-    if (f == 0) {
+    if (f === 0) {
         row_number = row_number + 1;
         var html = `<tr id=${row_number}>
-                        <td><input type="email" class="form-control" name="email[]" id="email_${row_number}"></td>
-                        <td><input type="text" class="form-control" onkeyup="allow_only_number(this.id);"  onchange="ceck_previous_extension(this.id);"  name="extension[]" id="extension_${row_number}">
-                            <span style = "color:red" id="extension-error-${row_number}"></span>
-                            <span style = "color:green" id="extension-success-${row_number}"></span>
+                        <td>
+                            <select class="form-control select2" name="email[]" id="email_${row_number}" style="width: 100%;">`;
+                                clonedSelect.find('option').each(function(index, option) {
+                                    var optionValue = $(option).val();
+                                    var optionText = $(option).text();
+                                    if(optionValue == email ){
+                                        html += `<option selected value="${optionValue}">${optionText}</option>`;
+                                    }else{
+                                        html += `<option value="${optionValue}">${optionText}</option>`;
+                                    }
+                                   
+                                });
 
+        html += `</select>
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" onkeyup="allow_only_number(this.id);" onchange="check_previous_extension(this.id);" name="extension[]" id="extension_${row_number}">
+                            <span style="color:red" id="extension-error-${row_number}"></span>
+                            <span style="color:green" id="extension-success-${row_number}"></span>
                         </td>
                         <td><input type="text" class="form-control" name="full_name[]" id="full_name_${row_number}"></td>
                         <td>
-                        <select class="form-control" required name="active[]" id="active_${row_number}">
-                                            <option value="1">Yes</option>
-                                            <option value="0">No</option>
-                                        </select>
+                            <select class="form-control" required name="active[]" id="active_${row_number}">
+                                <option value="1">Active</option>
+                                <option value="0">No Active</option>
+                            </select>
                         </td>
                         <td>
                             <button type="button" onclick="add_row();" class="btn btn-success btn-sm">+</button>
-                            <button type="button"  onclick="remove_row(${row_number});" class="btn btn-danger btn-sm">-</button>
+                            <button type="button" onclick="remove_row(${row_number});" class="btn btn-danger btn-sm">-</button>
                         </td>
                     </tr>`;
 
         $(".add_row").append(html);
+
+        $("#email_" + (row_number-1)).css('border', '1px solid #F9FAFB');
+        $("#extension_" + (row_number-1)).css('border', '1px solid #F9FAFB');
+        $("#full_name_" + (row_number-1)).css('border', '1px solid #F9FAFB');
+        $("#active_" + (row_number-1)).css('border', '1px solid #F9FAFB');
+
     }
 }
+
+
+
+// function add_row() {
+
+
+   
+//     var originalSelect = $('#email_1');
+
+//     var clonedSelect = originalSelect.clone();
+
+//     var f = 0;
+
+//     var row_number = $(".add_row tr").length;
+
+//     var email = $("#email_" + row_number).val();
+//     var extension = $("#extension_" + row_number).val();
+//     var full_name = $("#full_name_" + row_number).val();
+//     var active = $("#active_" + row_number).val();
+
+//     if (email == '' || email == null) {
+//         $("#email_" + row_number).css('border', '1px solid red');
+//         f = 1;  // Use a single equal sign for assignment
+//     }
+//     if (extension == '' || extension == null) {
+//         $("#extension_" + row_number).css('border', '1px solid red');
+//         f = 1;  // Use a single equal sign for assignment
+//     }
+//     if (full_name == '' || full_name == null) {
+//         $("#full_name_" + row_number).css('border', '1px solid red');
+//         f = 1;  // Use a single equal sign for assignment
+//     }
+//     if (active == '' || active == null) {
+//         $("#active_" + row_number).css('border', '1px solid red');
+//         f = 1;  // Use a single equal sign for assignment
+//     }
+
+//     if (f == 0) {
+//         row_number = row_number + 1;
+//         var html = `<tr id=${row_number}>
+//                         <td>
+
+//                         <select class="form-control select2" name="email[]" id="email_${row_number}" style="width: 100%;">`;
+//                           clonedSelect.find('option').each(function(index, option) {
+                       
+//                                 var optionValue = $(option).val();
+//                                 var optionText = $(option).text();
+//             html +=            '<option value="'+optionValue+'">'+optionText+'</option>';
+//                         // console.log("Option " + index + ": Value - " + optionValue + ", Text - " + optionText);
+//                     });
+        
+
+//         html +=                `</td>
+//                         <td><input type="text" class="form-control" onkeyup="allow_only_number(this.id);"  onchange="ceck_previous_extension(this.id);"  name="extension[]" id="extension_${row_number}">
+//                             <span style = "color:red" id="extension-error-${row_number}"></span>
+//                             <span style = "color:green" id="extension-success-${row_number}"></span>
+
+//                         </td>
+//                         <td><input type="text" class="form-control" name="full_name[]" id="full_name_${row_number}"></td>
+//                         <td>
+//                         <select class="form-control" required name="active[]" id="active_${row_number}">
+//                                     <option value="1">Active</option>
+//                                     <option value="0">No Active</option>
+//                                         </select>
+//                         </td>
+//                         <td>
+//                             <button type="button" onclick="add_row();" class="btn btn-success btn-sm">+</button>
+//                             <button type="button"  onclick="remove_row(${row_number});" class="btn btn-danger btn-sm">-</button>
+//                         </td>
+//                     </tr>`;
+
+//         $(".add_row").append(html);
+//     }
+// }
 
 
 function remove_row(row_number){
@@ -121,26 +217,50 @@ function Change_tab(id) {
 
 // aaaa
 
-function ceck_previous_extension(id){
+function check_previous_extension(id){
 
-   
-    var current_extension_val = $("#"+id).val();
+    var organization_servicesID = $('#organization_servicesID').val();
+
+    var extension = $("#" + id).val();
+
 
     var previous_extension_array = id.split('_');
-
     var pre_num = previous_extension_array[1];
 
+    var previous_extension_val = $("#extension_"+(pre_num-1)).val();
 
-    $('#extension-error-'+pre_num).html('Extension is already in use.');
-    $('#extension-success-'+pre_num).html('Extension is available');
 
-    var previousz_extension_val = $("#extension_"+(pre_num-1)).val();
+    $.ajax({
+         url:  `${baseUrl}/services/dialer/agents/check-extension`,  // Updated URL
+        // url:  `${baseUrl}/check-extension`,
+        method: 'POST',
+        headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+        data: {
+            'extension': extension,
+            'organization_servicesID':organization_servicesID
+        },
+        success: function(response) {
 
-    if(current_extension_val == previousz_extension_val ){
-        $('#extension-error-'+pre_num).html('Extension is already in use.');
-    }else{
-        $('#extension-success-'+pre_num).html('Extension is available');
-    }
+            $('#extension-error-'+pre_num).html('');
+            $('#extension-success-'+pre_num).html('');
+
+            if(response.status == 'success'){
+
+                if(previous_extension_val == extension ){
+                    $('#extension-error-'+pre_num).html(response.message)
+                }
+                $('#extension-success-'+pre_num).html(response.message)
+            } 
+            if(response.status == 'failed'){
+                $('#extension-error-'+pre_num).html(response.message)
+            } 
+
+          
+        },
+        error: function(xhr, status, error) {
+            console.error("Error occurred:", error);
+        }
+    });
 
 }
 
@@ -227,9 +347,7 @@ function allow_only_number(id) {
 
 
 function check_extension(id, organization_servicesID ,action) {
-    
-    $('#extension-error').html('')
-    $('#extension-success').html('')
+
     var extension = $("#" + id).val();
 
     $.ajax({
@@ -244,22 +362,25 @@ function check_extension(id, organization_servicesID ,action) {
         success: function(response) {
 
             if(action == 'add-agnet'){
+                $('#extension-error').html('')
+                $('#extension-success').html('')
+
                 if(response.status == 'success'){
-                    $('#extension-error').html('')
                     $('#extension-success').html(response.message)
                 } 
                 if(response.status == 'failed'){
                     $('#extension-error').html(response.message)
-                    $('#extension-success').html('')
                 } 
             }else if(action == 'add-bulk-agnet'){
+
+                $('#extension-error-1').html('')
+                $('#extension-success-1').html('')
+
                 if(response.status == 'success'){
-                    // $('#extension-success-1').html('')
                     $('#extension-success-1').html(response.message)
                 } 
                 if(response.status == 'failed'){
                     $('#extension-error-1').html(response.message)
-                    // $('#extension-success-1').html('')
                 } 
             }
           

@@ -424,7 +424,7 @@ class UserController extends Controller
     function save_bulk_agents(Request $request){
         foreach($request->email as  $i=>$new_user){
 
-            $org_user = user::where('email',$request->email[$i])->first();
+            $org_user = user::where('id',$request->email[$i])->first();
 
 
            
@@ -501,73 +501,5 @@ class UserController extends Controller
     }
 
 
-    // function save_agents(Request $request){
-    //     $password =  base64_encode($this->generateRandomString());
-
-    //     $org_user = User::where('id',$reponse->organization_user)->first();
-    //     $agent_choose_ingroups = isset($request->agent_choose_ingroups) ? '1' : '0';
-    //     $agent_choose_blended = isset($request->agent_choose_blended) ? '1' : '0';
-    //     $closer_default_blended = isset($request->closer_default_blended) ? '1' : '0';
-    //     $scheduled_callbacks = isset($request->scheduled_callbacks) ? '1' : '0';
-    //     $agentonly_callbacks = isset($request->agentonly_callbacks) ? '1' : '0';
-    //     $agentcall_manual = isset($request->agentcall_manual) ? '1' : '0';
-    //     $agent_call_log_view_override = isset($request->agent_call_log_view_override) ? '1' : '0';
-
-    //     $OrganizationServices = OrganizationServices::find($request->organization_servicesID);
-    //     $phpArray = json_decode($OrganizationServices->connection_parameters, true);
-
-
-    //        $apiEndpoint = 'https://' . $phpArray['server_url'] . '/APIv2/Users/API.php';
-    //        // POST data
-    //        $postData = [
-    //            'Action' => 'AddUser',
-    //            'apiUser' =>  $phpArray['api_user'],
-    //            'apiPass' =>  $phpArray['api_pass'],
-    //            'session_user' =>  $phpArray['api_user'],
-    //            'responsetype' => 'json',
-    //            'user' => $request->user,
-    //            'pass'=> $password,
-
-
-    //            'full_name'=> $request->full_name,
-    //            'user_group'=>  $request->user_group,
-    //            'active' => $request->active,
-    //            'email'=> $org_user->id,
-
-    //            'mobile_number' => $request->Sms_number,
-    //            'agent_choose_ingroups'=> $agent_choose_ingroups,
-    //            'agent_choose_blended'=> $agent_choose_blended,
-    //            'closer_default_blended'=> $closer_default_blended,
-    //            'scheduled_callbacks'=> $scheduled_callbacks,
-    //            'agentonly_callbacks'=> $agentonly_callbacks,
-    //            'agentcall_manual'=> $agentcall_manual,
-    //            'agent_call_log_view_override'=> $agent_call_log_view_override,
-    //            'max_inbound_calls'=> $request->max_inbound_calls,
-    //        ];
-    //        $ch = curl_init($apiEndpoint);
-       
-    //        // Set cURL options
-    //        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    //        curl_setopt($ch, CURLOPT_POST, true);
-    //        curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
-    //        $response = curl_exec($ch);
-    //        curl_close($ch);
-           
-    //        $api_responce =  json_decode($response, true);
    
-    //        if($api_responce['result'] == 'success'){
-    //             $add_userAgent = new userAgent();
-    //             $add_userAgent->orgid = $request->orgID;
-    //             $add_userAgent->org_user_id = $reponse->organization_user;
-    //             $add_userAgent->services_id = $request->organization_servicesID;
-
-    //             $add_userAgent->api_user = $reponse->user;
-    //             $add_userAgent->password = $password;
-    //             $add_userAgent->save();
-    //           }else{
-    //            return redirect()->back()->with('error', 'Some thing Went Wrong ');
-    //           }
-
-    // }
-
 }

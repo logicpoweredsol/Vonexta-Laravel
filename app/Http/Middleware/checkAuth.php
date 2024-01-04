@@ -37,7 +37,7 @@ class checkAuth
             $request->session()->put('user', $user);
             dd(env('APP_URL'));
             if(request()->headers->get('referer')== env('APP_URL')){
-                return redirect()->route('dashboard');
+                return redirect()->route('/home');
             }
             dd(request()->headers->get('referer'));
             return back();
