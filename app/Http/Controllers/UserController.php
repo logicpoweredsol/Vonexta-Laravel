@@ -122,7 +122,7 @@ class UserController extends Controller
         }
 
 
-        return view('dialer.Agent.edit' ,compact('dailer_agent_user'));
+        return view('dialer.Agent.edit' ,compact('dailer_agent_user','organization_services_id'));
     }
 
 

@@ -116,7 +116,7 @@
                                         <div class="col-sm-12 col-md-6 col-lg-6">
                                             <div class="form-group">
                                                 <label for="address" class="form-label">Extension</label>
-                                                <input type="text" class="form-control" id="User" name="User" value="{{ isset($dailer_agent_user['user']) ? $dailer_agent_user['user'] : '' }}" placeholder="User">
+                                                <input type="text" class="form-control" id="User" name="User" disabled value="{{ isset($dailer_agent_user['user']) ? $dailer_agent_user['user'] : '' }}" placeholder="User">
                                             </div>
                                             <span>
                                                 {{-- @error('address')
@@ -137,7 +137,18 @@
                                     <div class="col-sm-12 col-md-6 col-lg-6">
                                         <div class="form-group">
                                             <label for="Group" class="form-label">Group</label>
-                                            <input type="text" class="form-control" id="group" name="group" value="{{ isset($dailer_agent_user['user_group']) ? $dailer_agent_user['user_group'] : '' }}" placeholder="Group ..">
+                                            {{-- <input type="text" class="form-control" id="group" name="group" value="{{ isset($dailer_agent_user['user_group']) ? $dailer_agent_user['user_group'] : '' }}" placeholder="Group .."> --}}
+                                            
+                                            @php
+                                                $responses = get_group_user($organization_services_id);
+                                                // dd($responses);
+                                            @endphp
+                                            <select name="active" class="form-control select2" id="active" active="">
+                                                @foreach ($responses as $response)
+                                                <option value="{{$response}}">{{$response}}</option>
+                                                @endforeach
+                                                
+                                            </select>
                                         </div>
                                         <span>
                                             {{-- @error('group')
@@ -149,8 +160,8 @@
 
                                 <div class="col-sm-12 col-md-6 col-lg-6">
                                     <div class="form-group">
-                                        <label for="active" class="form-label">Active</label>
-                                        <select name="active" class="form-control" id="active" active="">
+                                        <label for="active" class="form-label ">Active</label>
+                                        <select name="active" class="form-control data" id="active" active="">
                                             <option value="Y" {{ (isset($dailer_agent_user['active']) && $dailer_agent_user['active'] == 'Y') ? 'selected' : '' }}>Yes</option>
                                             <option value="N" {{ (isset($dailer_agent_user['active']) && $dailer_agent_user['active'] == 'N') ? 'selected' : '' }}>No</option>
                                         </select>
@@ -259,7 +270,7 @@
                                 <div class="col-md-2">
                                     <div class="slidercontainer">
                                         <input class="form-control" type="number" readonly id="fixtures-events" value="{{ isset($dailer_agent_user['max_inbound_calls']) ? $dailer_agent_user['max_inbound_calls'] : '' }}" >
-                                    </div>
+                                    </div>         
                                 </div>
                             </div>
 
@@ -286,12 +297,12 @@
             <div class="tab-pane fade" id="Organization-user" role="tabpanel" aria-labelledby="Organization-user-tab">
                 <div class="d-flex justify-content-end">
                     
-                    <div class="form-group">
+                    {{-- <div class="form-group">
                         <select class="select2" multiple="multiple" data-placeholder=""  id="skills_log"  onchange="Change_tab(this.id);">
                             <option selected value="compaigns">compaigns</option>
                             <option value="inbounds">Inbound</option>
                         </select>
-                      </div>
+                      </div> --}}
 
                     {{-- <div class="col-md-3 mb-3">
 
@@ -336,7 +347,7 @@
                 </div>
 
                 {{-- Inbound --}}
-                <div class="card inbounds d-none">
+                <div class="card inbounds mt-3">
                     <div class="card-header">
                         <h3 class="card-title"><b>Inbound</b></h3>
 
@@ -589,10 +600,10 @@
 
 
 <script>
-    $(function () {
-
-      $('.select2').select2()
-    });
+   $(function () {
+    $('.select2').select2();
+//    
+   });
   </script>
 
 
