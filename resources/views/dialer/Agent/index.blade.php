@@ -5,7 +5,16 @@
     <link rel="stylesheet" href="{{ asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/bs-stepper/css/bs-stepper.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/custom.css') }}">  
+    
+    
+    <!-- Ion Slider -->
+<link rel="stylesheet" href="{{ asset('plugins/ion-rangeslider/css/ion.rangeSlider.min.css') }}">
+<!-- bootstrap slider -->
+<link rel="stylesheet" href="{{ asset('plugins/bootstrap-slider/css/bootstrap-slider.min.css') }}">
+
+
+
 @endpush
 @section('content')
 
@@ -108,7 +117,6 @@
                     @php
                         $detail = $detail['data'];
                         array_push($agent_user_detail, $detail);
-
                     @endphp
 
                     <tr>
@@ -256,7 +264,19 @@
                                 <div class="form-group row">
                                     <label for="user_group" class="col-sm-2 col-form-label">Group <span class="text-danger">*</span></label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" required name="user_group" id="user_group">
+                                        @php
+                                        $responses = get_group_user($organization_servicesID);
+                                        // dd($responses);
+                                        @endphp
+                                        <select name="user_group" class="form-control select2" id="user_group">
+                                            <option value="" selected disabled>Select Group</option>
+                                            @foreach ($responses as $response)
+                                            <option value="{{$response}}" {{ isset($dailer_agent_user['user_group']) && $dailer_agent_user['user_group'] == $response ? 'selected' : '' }}>{{ $response }}</option>
+                                            @endforeach
+                                            
+                                        </select>
+
+                                        {{-- <input type="text" class="form-control" required name="user_group" id="user_group"> --}}
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -358,8 +378,16 @@
                                     </div>
                                 </div>
 
+
+                                <div class="row mb-3">
+                                    <div class="col-md-4 mt-2">
+                                        <label> Inbound Calls Limit: </label>
+                                        <input id="max_inbound_calls" type="text" name="max_inbound_calls" value="">
+                                    </div>
+                                  </div>
+
                                 {{-- //limit --}}
-                                <div class="row mb-3">          
+                                {{-- <div class="row mb-3">          
                                     <div class="col-md-4 mt-2">
                                         <label>Inbound Calls Limit: </label>
                                         <input type="range" id="fixtures-events-range" name="max_inbound_calls" id="max_inbound_calls" min="1" max="1000" value="" oninput="update_input_value(this.id)">
@@ -369,7 +397,7 @@
                                             <input class="form-control" type="number" readonly id="fixtures-events">
                                         </div>
                                     </div>
-                                </div>
+                                </div> --}}
 
 
                                 <div class="row justify-content-between">
@@ -562,17 +590,37 @@
     <script src="{{ asset('plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
     <!-- BS-Stepper -->
 
+        <!-- Ion Slider -->
+    <script src="{{ asset('plugins/ion-rangeslider/js/ion.rangeSlider.min.js') }}"></script>
+    <!-- Bootstrap slider -->
+    <script src="{{ asset('plugins/bootstrap-slider/bootstrap-slider.min.js') }}"></script>
+
+
+
+
     <!-- SweetAlert2 -->
     <script src="{{ asset('plugins/sweetalert2/sweetalert2.min.js') }}"></script>
 
     <script src="{{ asset('plugins/bs-stepper/js/bs-stepper.min.js') }}"></script>
     <script src="{{ asset('views/services/dialler/users/index.js') }}"></script>
 
+
     <script>
-        function update_input_value(id){
-        var range = $("#"+id).val();
-        var input_filed = id.replace("-range", "");
-        $("#"+input_filed).val(range);
-}
+        $(function () {
+          // Initialize the ionRangeSlider
+          $('#max_inbound_calls').ionRangeSlider({
+            min     : 1,
+            max     : 1000,
+            // from    : 0,
+            type    : 'single',
+            step    : 1,
+            postfix : 'Calls Limit',
+            prettify: false,
+            hasGrid : true
+          });
+    
+        });
+    
     </script>
+
 @endpush

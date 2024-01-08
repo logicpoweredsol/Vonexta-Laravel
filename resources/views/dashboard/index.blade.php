@@ -2,11 +2,11 @@
 
 @section('content')
 
-<style>
+{{-- <style>
   .card {
     box-shadow: 15px 0px 35px rgba(0, 0, 0, 0.2); /* Adjusted values for a more visible shadow */
 }
-</style>
+</style> --}}
 
 <!-- Content Wrapper. Contains page content -->
 
@@ -34,7 +34,7 @@
 
         </div>
 
-        <div class="card">
+        {{-- <div class="card">
           <div class="card-body mb-5">
            
             <div class="row justify-content-md-center mt-5" >
@@ -185,7 +185,7 @@
 
           </div>
           <!-- /.card-body -->
-        </div>
+        </div> --}}
 
 
       </div><!-- /.container-fluid -->

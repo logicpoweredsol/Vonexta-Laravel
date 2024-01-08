@@ -47,6 +47,7 @@ function add_row() {
         $("#email_" + row_number).css('border', '1px solid red');
         f = 1;
     }
+
     if (extension === '' || extension === null) {
         $("#extension_" + row_number).css('border', '1px solid red');
         f = 1;
@@ -321,11 +322,23 @@ function copy_agent_detail(organization_servicesID){
                 $('#agentcall_manual').prop('checked', false).trigger("change");
             }
 
-            if(response['data']['agent_call_log_view_override'] == 1){
+            if(response['data']['agent_call_log_view_override'] == 'Y'){
                 $('#agent_call_log_view_override').prop('checked', true).trigger("change");
             }else{
                 $('#agent_call_log_view_override').prop('checked', false).trigger("change");
             }
+
+
+           
+
+            if(response['data']['max_inbound_calls']){
+                $('#max_inbound_calls').data("ionRangeSlider").update({
+                    from: response['data']['max_inbound_calls']
+                  });
+            }
+
+            
+
 
 
 
@@ -410,12 +423,16 @@ function validateAndNext(){
     if (organization_user == '' || organization_user == null) {
         $("#organization_user").css('border', '1px solid red');
         f = 1;
+    }else{
+        $("#organization_user").css('border', '1px solid #EEEEEE');
     }
 
 
     if (user == '' || user == null) {
         $("#user").css('border', '1px solid red');
         f = 1;
+    }else{
+        $("#user").css('border', '1px solid #EEEEEE');
     }
 
 
@@ -423,6 +440,8 @@ function validateAndNext(){
     if (user_group == '' || user_group == null) {
         $("#user_group").css('border', '1px solid red');
         f = 1;
+    }else{
+        $("#user_group").css('border', '1px solid #EEEEEE');
     }
 
 
@@ -430,11 +449,15 @@ function validateAndNext(){
     if (full_name == '' || full_name == null) {
         $("#full_name").css('border', '1px solid red');
         f = 1;
+    }else{
+        $("#full_name").css('border', '1px solid #EEEEEE');
     }
 
     if (active == '' || active == null) {
         $("#active").css('border', '1px solid red');
         f = 1;
+    }else{
+        $("#active").css('border', '1px solid #EEEEEE');
     }
 
 
@@ -562,5 +585,56 @@ function closeSwal() {
 
 
 
+
+
+
+function show_call_log_tb() {
+    var table_log = $("#table_log").val();
+    var tb_th = [];
+
+    var All_tf = {
+        'inbound-log': ['Call Time', 'Phone Number', 'Contact List', 'Type', 'Source', 'Disposition'],
+        'outbound-log': ['Call Date', 'Lead ID', 'Phone Number', 'Campaign', 'Call length', 'Status'],
+        'manual-log': ['Call Date', 'Lead ID', 'Phone Number', 'Campaign', 'Call length', 'Status'],
+        'transfer-log': ['Transfer Date', 'Lead ID', 'Phone Number', 'Transferred to']
+    };
+
+    table_log.forEach(logType => {
+        if (All_tf[logType]) {
+            tb_th = tb_th.concat(All_tf[logType]);
+        }
+    });
+
+    var html = '<div class="card ' + table_log + '">';
+    html += '<div class="card-header">';
+    html += '<h3 class="card-title"><b>' + table_log + ':</b></h3>';
+    html += '</div>';
+    html += '<div class="card-body">';
+    html += '<table class="table table-striped table-hover vonexta-table">';
+    html += '<thead>';
+    html += '<tr>';
+    
+    tb_th.forEach(element => {
+        html += '<th>' + element + '</th>';
+    });
+    
+    html += '</tr>';
+    html += '</thead>';
+    html += '</table>';
+    html += '</div>';
+    html += '</div>';
+
+    $(".call-log-tb").html(html);
+    console.log(tb_th);
+}
+
+
+
+
+
+// var Inbound = ['Call Time' , 'Phone Number' , 'Contact List' ,'Type' , 'Source' , 'Disposition'];
+// var Outbound = ['Call Date' ,'Lead ID' ,'Phone Number','Compaign','Call length','Status'];
+// var Manual = ['Call Date' ,'Lead ID','Phone Number','Compaign','Call length','Status'];
+// var Transfers = ['Transfer Date','lead ID', 'Phone Number', 'Transferred to'];
 
 

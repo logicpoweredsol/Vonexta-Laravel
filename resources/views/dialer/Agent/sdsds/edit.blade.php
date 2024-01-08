@@ -143,7 +143,7 @@
                                                         $responses = get_group_user($organization_services_id);
                                                         // dd($responses);
                                                     @endphp
-                                                    <select name="group" class="form-control " id="group">
+                                                    <select name="group" class="form-control select2" id="group">
                                                         @foreach ($responses as $response)
                                                         <option value="{{$response}}" {{ isset($dailer_agent_user['user_group']) && $dailer_agent_user['user_group'] == $response ? 'selected' : '' }}>{{ $response }}</option>
                                                         @endforeach
@@ -383,7 +383,7 @@
 
                             <div class="d-flex justify-content-end">
                                 <div class="col-md-3 mb-3">
-                                    <select class="form-control select2" id="table_log" multiple  style="width: 200px" onchange="change_tab2(this.id); show_call_log_tb(this.id);">
+                                    <select class="form-control" id="table_log" multiple  style="width: 200px" onchange="change_tab2(this.id); show_call_log_tb(this.id);">
                                     {{-- <select class="form-control" id="table_log"  style="width: 200px" onchange="change_tab2(this.id);"> --}}
                                         <option selected value="inbound-log">Inbound</option>
                                         <option value="outbound-log">Outbound</option>
@@ -394,10 +394,143 @@
                                 </div>
                             </div>
 
-                            <div class="call-log-tb"></div>
+
+                            <div class="card inbound-log">
+                                <div class="card-header">
+                                    <h3 class="card-title"><b>Inbound:</b></h3>
+                                </div>
+                                <div class="card-body">
+
+                                    <table id="bound" class="table table-striped table-hover vonexta-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Call Time</th>
+                                                <th>Phone Number</th>
+                                                <th>Contact List</th>
+                                                <th>Type</th>
+                                                <th>Source</th>
+                                                <th>Disposition</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>0000</td>
+                                                <td>0000</td>
+                                                <td>0000</td>
+                                                <td>0000</td>
+                                                <td>0000</td>
+                                                <td>0000</td>
+                                            </tr>
+                                        </tbody>
+
+                                    </table>
+                                </div>
+
+                            </div>
+
+                            {{-- Outbound --}}
+                            <div class="card outbound-log d-none">
+                                <div class="card-header">
+                                    <h3 class="card-title"><b>Outbound:</b></h3>
+
+                                </div>
+                                <div class="card-body">
+
+                                    <table id="Outbound" class="table table-striped table-hover vonexta-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Call Date</th>
+                                                <th>Lead ID</th>
+                                                <th>Phone Number</th>
+                                                <th>Compaign</th>
+                                                <th>Call length</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>0000</td>
+                                                <td>0000</td>
+                                                <td>0000</td>
+                                                <td>0000</td>
+                                                <td>0000</td>
+                                                <td>0000</td>
+
+                                            </tr>
+                                        </tbody>
+
+                                    </table>
+                                </div>
+
+                            </div>
+
+                            {{-- manual calls --}}
+
+                            <div class="card manual-log d-none">
+                                <div class="card-header">
+                                    <h3 class="card-title"><b>Manual Calls:</b></h3>
+
+                                </div>
+                                <div class="card-body">
+
+                                    <table id="Manual" class="table table-striped table-hover vonexta-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Call Date</th>
+                                                <th>Lead ID</th>
+                                                <th>Phone Number</th>
+                                                <th>Compaign</th>
+                                                <th>Call length</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>0000</td>
+                                                <td>0000</td>
+                                                <td>0000</td>
+                                                <td>0000</td>
+                                                <td>0000</td>
+                                                <td>0000</td>
+                                            </tr>
+                                        </tbody>
+
+                                    </table>
+                                </div>
+
+                            </div>
 
 
-                            
+                            {{-- Transfers --}}
+                            <div class="card transfer-log d-none">
+                                <div class="card-header">
+                                    <h3 class="card-title"><b>Transfers:</b></h3>
+
+                                </div>
+                                <div class="card-body">
+
+                                    <table id="Transfers" class="table table-striped table-hover vonexta-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Transfer Date</th>
+                                                <th>lead ID</th>
+                                                <th>Phone Number</th>
+                                                <th>Transferred to</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>0000</td>
+                                                <td>0000</td>
+                                                <td>0000</td>
+                                                <td>0000</td>
+                                            </tr>
+                                        </tbody>
+
+                                    </table>
+                                </div>
+
+                            </div>
 
 
                         </div>

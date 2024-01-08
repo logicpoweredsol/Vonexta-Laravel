@@ -3,14 +3,15 @@
     border-bottom: 0px solid #dee2e6 !important;
 }
 
-.vonexta-services-add-btn{
+.vonexta-services-add-btn {
     margin-top: 30px;
 }
 
-.newParam{
+.newParam {
     width: 100%;
     display: flex;
 }
+
 .vonexta-modal-footer {
     display: -ms-flexbox;
     /* display: flex; */
@@ -26,18 +27,18 @@
     border-bottom-left-radius: calc(0.3rem - 1px);
 }
 
-.vonexta-nav{
+.vonexta-nav {
     margin-bottom: 1rem !important;
     background-color: #fff;
     border-bottom: 2px solid #0c94c8;
 }
 
-.vonext-campaign-item{
+.vonext-campaign-item {
     /* width: 25%; */
     margin: 0 5px;
 }
 
-.vonext-campaign-item:first-child{
+.vonext-campaign-item:first-child {
     margin-left: 0;
 }
 
@@ -52,59 +53,72 @@
     border-bottom: none;
 }
 
-.vonexta-nav .nav-link.active{
+.vonexta-nav .nav-link.active {
     background: #0a95ca;
     color: #fff !important;
     border-color: #0a95ca;
 }
 
-.bootstrap-switch-container{
+.bootstrap-switch-container {
     width: 127px !important;
 }
 
-.contentbox-wrap{
+.contentbox-wrap {
     position: relative;
 }
-.contentbox-wrap .img-wrapper{
-    width: 18%;
-    padding: 10px;
-    border: 1px solid #ddd;
+
+.contentbox-wrap .img-wrapper {
+    width: 60px;
+    padding: 15px;
+    /* border: 1px solid #ddd; */
     border-radius: 5px;
-    margin-right: 15px;
+    margin-right: 0;
+    border-radius: 50%;
+    height: 60px;
+    background: rgba(10, 150, 200, 0.6);
+    margin: 0 0 15px 0;
 }
-.contentbox-wrap .img-wrapper img{
+
+.contentbox-wrap .img-wrapper img {
     display: block;
     width: 100%;
     height: auto;
+    filter: invert(1);
 }
+
 .contentbox-wrap h5,
-.contentbox-wrap .dropdown button{
-    color: #0a96ca !important;
+.contentbox-wrap .dropdown button {
+    color: #fff !important;
     font-size: 24px;
     font-weight: 500;
-    margin: 10px 0 5px 0;
+    margin: 0 0 15px 0;
 }
+
 .contentbox-wrap .dropdown,
-.contentbox-wrap .dropdown-menu.show{
+.contentbox-wrap .dropdown-menu.show {
     z-index: 999;
 }
-.contentbox-wrap .dropdown-menu{
+
+.contentbox-wrap .dropdown-menu {
     height: 200px;
     overflow: auto;
 }
-.contentbox-wrap .dropdown button{
+
+.contentbox-wrap .dropdown button {
     background: none !important;
     border: none !important;
     box-shadow: none !important;
     outline: none !important;
     padding: 0;
-    margin: 10px 0 0 0 !important;
+    margin: 0 0 15px 0 !important;
 }
-.contentbox-wrap p{
+
+.contentbox-wrap p {
     font-size: 15px;
-    color: #8b8989;
+    color: #b6b6b6;
 }
-.contentbox-wrap .overlaylink{
+
+.contentbox-wrap .overlaylink {
     position: absolute;
     left: 0;
     top: 0;
@@ -114,13 +128,75 @@
 
 .contentbox-wrap .dropdown-menu::-webkit-scrollbar {
     width: 10px;
-  }
-  
-  .contentbox-wrap .dropdown-menu::-webkit-scrollbar-track {
-    background: #f1f1f1; 
-  }
-   
-  .contentbox-wrap .dropdown-menu::-webkit-scrollbar-thumb {
-    background: #0a96ca; 
-  }
+}
 
+.contentbox-wrap .dropdown-menu::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.contentbox-wrap .dropdown-menu::-webkit-scrollbar-thumb {
+    background: #0a96ca;
+}
+
+.homecontent-wrap {
+    min-height: 100vh;
+    background: #343a40;
+}
+
+.homeheader-wrap {
+    padding: 30px 50px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+}
+
+.homeheader-wrap .homelogo a {
+    position: relative;
+    left: -50px;
+}
+
+.homeheader-wrap .dropdown>button {
+    background: none !important;
+    border: none;
+    padding: 0;
+}
+
+.homeheader-wrap .dropdown .dropdown-menu {
+    left: auto !important;
+    right: 0 !important;
+    width: 100%;
+    transform: inherit !important;
+    will-change: unset !important;
+    top: 15px !important;
+}
+
+.homecontent {
+    padding: 80px 0 0 0;
+}
+
+.homecontent .homelogo img {
+    display: block;
+    margin: 0 auto;
+}
+
+.homecontent .contentbox-wrap {
+    background: rgba(78, 86, 94, 0.5);
+    border: 1px solid #5c5c5c;
+    border-radius: 5px;
+    padding: 30px;
+    min-height: 235px;
+}
+
+.homecontent .inner {
+    position: relative;
+}
+
+.homecontent .inner i {
+    position: absolute;
+    right: 30px;
+    top: 50%;
+    transform: translate(0, -50%);
+    font-size: 20px;
+    color: #00acec;
+}

@@ -102,14 +102,14 @@ class UserController extends Controller
        
     }
 
-    function generateRandomString() {
-        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $randomString = '';
-        for ($i = 0; $i < 10; $i++) {
-            $randomString .= $characters[rand(0, strlen($characters) - 1)];
-        }
-        return $randomString;
-    }
+    // function generateRandomString() {
+    //     $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    //     $randomString = '';
+    //     for ($i = 0; $i < 10; $i++) {
+    //         $randomString .= $characters[rand(0, strlen($characters) - 1)];
+    //     }
+    //     return $randomString;
+    // }
      // End Randing the Data Function
 
      // Start Edit User
@@ -231,12 +231,15 @@ class UserController extends Controller
         $scheduled_callbacks = isset($request->scheduled_callbacks) ? '1' : '0';
         $agentonly_callbacks = isset($request->agentonly_callbacks) ? '1' : '0';
         $agentcall_manual = isset($request->agentcall_manual) ? '1' : '0';
-        $agent_call_log_view_override = isset($request->agent_call_log_view_override) ? '1' : '0';
+        $agent_call_log_view_override = isset($request->agent_call_log_view_override) ? 'Y' : 'N';
 
 
 
         $userAgent = userAgent::where('api_user',$request->User)->first();
+
+       
         $OrganizationServices = OrganizationServices::find($userAgent->services_id);
+
         $phpArray = json_decode($OrganizationServices->connection_parameters, true);
 
         $Agent_detail= $this->get_agent_detail($userAgent->services_id,$request->User);
@@ -340,9 +343,9 @@ class UserController extends Controller
     function save_agents(Request $request)
     {       
         try {
-            $password = base64_encode($this->generateRandomString());
+            // $password = base64_encode($this->generateRandomString());
 
-            $api_password = base64_decode($password);
+            // $api_password = base64_decode($password);
 
             $org_user = User::where('id', $request->organization_user)->first();
             $agent_choose_ingroups = isset($request->agent_choose_ingroups) ? '1' : '0';
@@ -429,8 +432,8 @@ class UserController extends Controller
 
            
 
-            $password = base64_encode($this->generateRandomString());
-            $api_password = base64_decode($password);
+            // $password = base64_encode($this->generateRandomString());
+            // $api_password = base64_decode($password);
 
             $active = isset($request->active) && $request->active == 1 ? 'Y' : 'N';
 
@@ -455,7 +458,7 @@ class UserController extends Controller
 
                 'user' => $request->extension[$i],
 
-                'pass' => $api_password,
+                // 'pass' => $api_password,
                 'full_name' => $request->full_name[$i],
                 'user_group' =>$options_value['user_group'],
                 'active' => $active,

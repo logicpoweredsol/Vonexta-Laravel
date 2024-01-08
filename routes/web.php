@@ -27,6 +27,9 @@ use \App\Http\Controllers\HomeController;
 
 Route::get('/', function () {
     if(Auth::check()) {
+        if(auth()->user()->hasRole('superadmin')){
+            return redirect('/dashboard');
+        }
         return redirect('/home');
     } else {
         return view('welcome');

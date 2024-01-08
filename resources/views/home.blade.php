@@ -30,25 +30,38 @@
 
 </head>
 <body>
-    
-    
-
-    <div class="container mt-5">
-
-        <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"  class="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Sign out</a>
         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
             @csrf
         </form>
 
-
-        <div class="card">
+        <div class="homecontent-wrap">
+          <div class="homeheader-wrap">
+            <div class="row">
+              <div class="col-sm-3 offset-sm-9 justify-content-end d-flex">
+                <div class="dropdown">
+                  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    
+                  </button>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="#" onclick="OpenResetModel()">Forgot Password</a>
+                    <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Sign out</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="homecontent">
+            <div class="homelogo">
+              <a href="#"><img src="https://admin-vn21.vonexta.com/dist/img/vonexta_logo.png" alt="Vonexta"></a>
+            </div>
             <div class="card-body mb-5">
-             
+            
               <div class="row justify-content-md-center mt-5" >
-               
-                <div class="col-md-5">
+              
+                <di v class="col-md-5">
                     <div class="contentbox-wrap">
-                      <div class="inner d-flex">
+                      <div class="inner">
                         <div class="img-wrapper">
                           <img src="{{asset('dist/img/agent-11.png')}}" alt="">
                         </div>
@@ -59,16 +72,22 @@
                           </div>
                         @else
                             
+
+                        @php
+                            $check_number = count($userAgents);
+                        @endphp
                         <div class="contentbox">
                           <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <button class="btn btn-secondary @if($check_number > 1) dropdown-toggle @endif " type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                               Agent
                             </button>
     
                             @php
                               $agent_user_detail = [];
+                              $check_number = count($userAgents);
                             @endphp
-    
+
+                            @if ($check_number > 1)
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                               @foreach ($userAgents as $userAgent)
     
@@ -90,23 +109,25 @@
                             
                               @endforeach
                             </div>
+                            @endif
+                            
                           </div>
                           <p class="mt-1">(communicate with your customers and prospects)</p>
                         </div>
     
                         @endif
                         
-    
-                       
+                        <i class="fas fa-arrow-right"></i>
+                      
                       </div>
                       <a href="#" class="overlaylink"></a>
                     </div>
-                </div>
+                </di>
     
                 @if (auth()->user()->hasRole('superadmin') || auth()->user()->hasRole('admin') )
                   <div class="col-md-5">
                     <div class="contentbox-wrap">
-                      <div class="inner d-flex">
+                      <div class="inner">
                         <div class="img-wrapper">
                           <img src="{{asset('dist/img/agent-11.png')}}" alt="">
                         </div>
@@ -114,6 +135,7 @@
                           <h5>Administrator</h5>
                           <p class="mt-1">Configure your contact center</p>
                         </div>
+                        <i class="fas fa-arrow-right"></i>
                       </div>
                       <a href="{{url('dashboard')}}" class="overlaylink"></a>
                     </div>
@@ -124,12 +146,12 @@
       
               </div>
     
-           
+          
     
             </div>
-           
+          </div>
         </div>
-    </div>
+
    
    
      <!-- jQuery -->
@@ -145,6 +167,7 @@
      <script src="{{ asset('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
      <!-- AdminLTE App -->
      <script src="{{ asset('dist/js/adminlte.min.js') }}"></script>
+     <script src="{{ asset('views/profile/profile.js') }}"></script>
      <script>
          const baseUrl = "{{ url('/') }}";
      </script>
