@@ -19,14 +19,22 @@ $sub_menu_sub = null!==request()->segment(4) && !is_numeric(request()->segment(4
     <!-- Sidebar -->
     <div class="sidebar">
       <!-- Sidebar user (optional) -->
-      <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+      
+      {{-- <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
           <img src="{{ asset('dist/img/user2-160x160.jpg') }}" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
           <a href="#" class="d-block">{{ Auth::user()->name }}</a>
         </div>
+      </div> --}}
+
+      <div class="user-panel mt-2 pb-1 mb-1 d-flex">
+        <div class="info">
+          <a href="#" style="font-size: x-large !important;" class="d-block font-weight-bold">{{Auth::user()->organizations[0]->name  }}</a>
+        </div>
       </div>
+
       <!-- Sidebar Menu -->
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
@@ -43,6 +51,7 @@ $sub_menu_sub = null!==request()->segment(4) && !is_numeric(request()->segment(4
 
             @php
                  $services = get_user_nav(Auth::user()->id);
+                //  {{dd($services);}}
             
             @endphp
                   
@@ -262,8 +271,23 @@ $sub_menu_sub = null!==request()->segment(4) && !is_numeric(request()->segment(4
 
         </ul>
       </nav>
+
+      
+
       <!-- /.sidebar-menu -->
+
+      <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+        <div class="image">
+          <img src="{{ asset('dist/img/user2-160x160.jpg') }}" class="img-circle elevation-2" alt="User Image">
+        </div>
+        <div class="info">
+          <a href="#" class="d-block">{{ Auth::user()->name }}</a>
+        </div>
+      </div>
+
     </div>
+
+    
     <!-- /.sidebar -->
 </aside>
 
