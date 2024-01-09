@@ -29,7 +29,7 @@ $sub_menu_sub = null!==request()->segment(4) && !is_numeric(request()->segment(4
         </div>
       </div> --}}
 
-      <div class="user-panel mt-2 pb-1 mb-1 d-flex">
+      <div class="user-panel mt-2 pb-1 mb-1 text-center">
         <div class="info">
           <a href="#" style="font-size: x-large !important;" class="d-block font-weight-bold">{{Auth::user()->organizations[0]->name  }}</a>
         </div>
