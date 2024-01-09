@@ -1,3 +1,4 @@
+
 @extends('layouts.app')
 @push('css')
 <!-- DataTables -->
@@ -51,8 +52,8 @@
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="">Home</a></li>
-                            <li class="breadcrumb-item"><a href="">Agents</a></li>
+                            <li class="breadcrumb-item"><a href="{{url('/')}}">Home</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('services.agents', ['service' => strtolower($service), 'organization_services_id' => $organization_services_id]) }}">Agents</a></li>
                             <li class="breadcrumb-item active">Edit Agents</li>
                         </ol>
                     </div>
@@ -382,15 +383,13 @@
                         <div class="tab-pane fade" id="call-log" role="tabpanel" aria-labelledby="call-logs-tab">
 
                             <div class="d-flex justify-content-end">
-                                <div class="col-md-3 mb-3">
-                                    <select class="form-control select2" id="table_log" multiple  style="width: 200px" onchange="change_tab2(this.id); show_call_log_tb(this.id);">
-                                    {{-- <select class="form-control" id="table_log"  style="width: 200px" onchange="change_tab2(this.id);"> --}}
-                                        <option selected value="inbound-log">Inbound</option>
-                                        <option value="outbound-log">Outbound</option>
-                                        <option value="manual-log">manual calls</option>
-                                        <option value="transfer-log">Transfers</option>
+                                <div class="col-md-4 mb-3">
+                                    <select class="form-control select2" id="table_log" multiple  style="width: 100%" onchange="show_call_log_tb();">
+                                        <option selected value="Inbound">Inbound</option>
+                                        <option value="Outbound">Outbound</option>
+                                        <option value="Manual">manual calls</option>
+                                        <option value="Transfer">Transfers</option>
                                     </select>
-                                    {{-- <button class="btn btn-danger" onclick="check();"> ++ </button> --}}
                                 </div>
                             </div>
 
@@ -469,7 +468,7 @@
 
 <script src="{{ asset('plugins/bs-stepper/js/bs-stepper.min.js') }}"></script>
 <script src="{{ asset('views/services/dialler/users/edit.js') }}"></script>
-<script src="{{ asset('views/services/dialler/users/index.js') }}"></script>
+
 
 
 <script>
@@ -489,7 +488,6 @@
         // from    : 0,
         type    : 'single',
         step    : 1,
-        postfix : 'Calls Limit',
         prettify: false,
         hasGrid : true
       });

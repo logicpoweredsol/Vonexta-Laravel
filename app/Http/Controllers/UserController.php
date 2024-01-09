@@ -24,6 +24,9 @@ class UserController extends Controller
         $user_agent_detail = [];
         $service_Users =  $this->get_user($organization_servicesID);
 
+
+ 
+
         $users = $organization->users;
 
         $userAgent_inDB = userAgent::count();
@@ -40,19 +43,6 @@ class UserController extends Controller
                 $this->store_agent_into_db($user ,$user_id,$organization_servicesID, $orgID, $orgUserID);
             }
         }
-
-        // if($userAgent_inDB !=  count($service_Users['user_id'])){
-        //     foreach($service_Users['user_id'] as $i=>$api_agent){
-        //         $user = $service_Users['user'][$i];
-        //         $user_id = $service_Users['user_id'][$i];
-        //         $organization_servicesID = $organization_servicesID;
-        //         $orgID = $organization->id;
-        //         $orgUserID = $users[0]->id;
-        //         $this->store_agent_into_db($user ,$user_id,$organization_servicesID, $orgID, $orgUserID);
-        //     }
-        // }
-
-
         $userAgent = userAgent::with('user_detail')->get();
 
         return view('dialer.Agent.index',compact('service','users','organization_servicesID' ,'userAgent' ,'organization'));
@@ -102,15 +92,18 @@ class UserController extends Controller
        
     }
 
-    // function generateRandomString() {
-    //     $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    //     $randomString = '';
-    //     for ($i = 0; $i < 10; $i++) {
-    //         $randomString .= $characters[rand(0, strlen($characters) - 1)];
-    //     }
-    //     return $randomString;
-    // }
+    function generateRandomString() {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $randomString = '';
+        for ($i = 0; $i < 10; $i++) {
+            $randomString .= $characters[rand(0, strlen($characters) - 1)];
+        }
+        return $randomString;
+    }
      // End Randing the Data Function
+
+
+
 
      // Start Edit User
      public function edit($service , $organization_services_id ,$AgentID){
@@ -122,7 +115,7 @@ class UserController extends Controller
         }
 
 
-        return view('dialer.Agent.edit' ,compact('dailer_agent_user','organization_services_id'));
+        return view('dialer.Agent.edit' ,compact('service','dailer_agent_user','organization_services_id'));
     }
 
 

@@ -1,5 +1,5 @@
 $(document).ready(function(){
-    $('#compaignns , #Inbound, #usersDT, #bulk-table').DataTable({
+    $('#agent_list').DataTable({
         "paging": true,
         "lengthChange": true,
         "searching": true,
@@ -7,11 +7,10 @@ $(document).ready(function(){
         "info": true,
         "autoWidth": false,
         "responsive": true,
+        "deferRender": true  
     });
 
-
     $("[data-bootstrap-switch]").bootstrapSwitch();
-    // $('.select2').select2();
 
 });
 
@@ -109,111 +108,11 @@ function add_row() {
 
 
 
-// function add_row() {
-
-
-   
-//     var originalSelect = $('#email_1');
-
-//     var clonedSelect = originalSelect.clone();
-
-//     var f = 0;
-
-//     var row_number = $(".add_row tr").length;
-
-//     var email = $("#email_" + row_number).val();
-//     var extension = $("#extension_" + row_number).val();
-//     var full_name = $("#full_name_" + row_number).val();
-//     var active = $("#active_" + row_number).val();
-
-//     if (email == '' || email == null) {
-//         $("#email_" + row_number).css('border', '1px solid red');
-//         f = 1;  // Use a single equal sign for assignment
-//     }
-//     if (extension == '' || extension == null) {
-//         $("#extension_" + row_number).css('border', '1px solid red');
-//         f = 1;  // Use a single equal sign for assignment
-//     }
-//     if (full_name == '' || full_name == null) {
-//         $("#full_name_" + row_number).css('border', '1px solid red');
-//         f = 1;  // Use a single equal sign for assignment
-//     }
-//     if (active == '' || active == null) {
-//         $("#active_" + row_number).css('border', '1px solid red');
-//         f = 1;  // Use a single equal sign for assignment
-//     }
-
-//     if (f == 0) {
-//         row_number = row_number + 1;
-//         var html = `<tr id=${row_number}>
-//                         <td>
-
-//                         <select class="form-control select2" name="email[]" id="email_${row_number}" style="width: 100%;">`;
-//                           clonedSelect.find('option').each(function(index, option) {
-                       
-//                                 var optionValue = $(option).val();
-//                                 var optionText = $(option).text();
-//             html +=            '<option value="'+optionValue+'">'+optionText+'</option>';
-//                         // console.log("Option " + index + ": Value - " + optionValue + ", Text - " + optionText);
-//                     });
-        
-
-//         html +=                `</td>
-//                         <td><input type="text" class="form-control" onkeyup="allow_only_number(this.id);"  onchange="ceck_previous_extension(this.id);"  name="extension[]" id="extension_${row_number}">
-//                             <span style = "color:red" id="extension-error-${row_number}"></span>
-//                             <span style = "color:green" id="extension-success-${row_number}"></span>
-
-//                         </td>
-//                         <td><input type="text" class="form-control" name="full_name[]" id="full_name_${row_number}"></td>
-//                         <td>
-//                         <select class="form-control" required name="active[]" id="active_${row_number}">
-//                                     <option value="1">Active</option>
-//                                     <option value="0">No Active</option>
-//                                         </select>
-//                         </td>
-//                         <td>
-//                             <button type="button" onclick="add_row();" class="btn btn-success btn-sm">+</button>
-//                             <button type="button"  onclick="remove_row(${row_number});" class="btn btn-danger btn-sm">-</button>
-//                         </td>
-//                     </tr>`;
-
-//         $(".add_row").append(html);
-//     }
-// }
 
 
 function remove_row(row_number){
     $("#" +row_number).remove();
 
-}
-
-function change_tab2(id) {
-
-    var id_array = ['inbound-log', 'outbound-log', 'manual-log','transfer-log'];
-    var id = $("#table_log").val();
-
-    id_array.forEach(element => {
-        if (element == id) {
-            $("." + element).removeClass('d-none');
-        } else {
-            $("." + element).addClass('d-none');
-        }
-    });
-}
-
-
-function Change_tab(id) {
-    var id_array = ['compaigns', 'inbounds'];
-
-    var id = $("#"+id).val();
-
-    id_array.forEach(element => {
-        if (id.includes(element)) {
-            $("." + element).removeClass('d-none');
-        } else {
-            $("." + element).addClass('d-none');
-        }
-    });
 }
 
 
@@ -588,53 +487,68 @@ function closeSwal() {
 
 
 
-function show_call_log_tb() {
-    var table_log = $("#table_log").val();
-    var tb_th = [];
 
-    var All_tf = {
-        'inbound-log': ['Call Time', 'Phone Number', 'Contact List', 'Type', 'Source', 'Disposition'],
-        'outbound-log': ['Call Date', 'Lead ID', 'Phone Number', 'Campaign', 'Call length', 'Status'],
-        'manual-log': ['Call Date', 'Lead ID', 'Phone Number', 'Campaign', 'Call length', 'Status'],
-        'transfer-log': ['Transfer Date', 'Lead ID', 'Phone Number', 'Transferred to']
-    };
 
-    table_log.forEach(logType => {
-        if (All_tf[logType]) {
-            tb_th = tb_th.concat(All_tf[logType]);
+
+
+
+
+
+
+
+var selected_agent = [];
+
+function bulk_button(id) {
+
+
+    // Toggle the checked status of the checkbox
+    var checkbox = $("#" + id);
+
+    // checkbox.prop('checked', !checkbox.prop('checked'));
+
+    // Check if the checkbox is now checked
+    if (checkbox.prop('checked')) {
+        selected_agent.push(checkbox.val());
+    } 
+    else {
+        // Remove the value from the selected_agent array if it exists
+        var index = selected_agent.indexOf(checkbox.val());
+        if (index > -1) {
+            selected_agent.splice(index, 1);
         }
-    });
+    }
 
-    var html = '<div class="card ' + table_log + '">';
-    html += '<div class="card-header">';
-    html += '<h3 class="card-title"><b>' + table_log + ':</b></h3>';
-    html += '</div>';
-    html += '<div class="card-body">';
-    html += '<table class="table table-striped table-hover vonexta-table">';
-    html += '<thead>';
-    html += '<tr>';
-    
-    tb_th.forEach(element => {
-        html += '<th>' + element + '</th>';
-    });
-    
-    html += '</tr>';
-    html += '</thead>';
-    html += '</table>';
-    html += '</div>';
-    html += '</div>';
 
-    $(".call-log-tb").html(html);
-    console.log(tb_th);
+
+    console.log(selected_agent);
+
+
+    if(selected_agent.length > 0){
+        $(".check_btn").removeClass('d-none');
+    }else{
+        $(".check_btn").addClass('d-none');
+    }
+
 }
 
 
 
+function bulk_button_action(actionType) {
+
+    var url;
+    if (actionType === 'emergency') {
+        url = `${baseUrl}/services/dialer/agents/emergency`;
+    } else if (actionType === 'disable') {
+        url = `${baseUrl}/services/dialer/agents/disable`;
+    } else if (actionType === 'delete') {
+        url = `${baseUrl}/services/dialer/agents/delete`;
+    }
 
 
-// var Inbound = ['Call Time' , 'Phone Number' , 'Contact List' ,'Type' , 'Source' , 'Disposition'];
-// var Outbound = ['Call Date' ,'Lead ID' ,'Phone Number','Compaign','Call length','Status'];
-// var Manual = ['Call Date' ,'Lead ID','Phone Number','Compaign','Call length','Status'];
-// var Transfers = ['Transfer Date','lead ID', 'Phone Number', 'Transferred to'];
+    console.warn(url);
+    // return url;
+}
+
+
 
 

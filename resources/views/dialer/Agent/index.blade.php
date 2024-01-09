@@ -81,24 +81,44 @@
 
 
 
+            <a href="javascript:void(0);" onclick='bulk_button_action("emergency");' class="btn btn-sm btn-warning check_btn d-none" >
+                <i class="fas fa-sign-out-alt"></i> Emergency Logout
+              </a>
+
+              <a href="javascript:void(0);"  onclick='bulk_button_action("disable");' class="btn btn-sm btn-secondary check_btn d-none" >
+                <i class="fas fa-ban"></i> Disable
+              </a>
+
+              <a href="javascript:void(0);"  onclick='bulk_button_action("delete");' class="btn btn-sm btn-danger check_btn d-none" >
+                <i class="fas fa-trash"></i> Delete
+              </a>
+
             <a href="javascript:void(0);" type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#add-agent-model" > <i class="fas fa-plus"></i> Add Agent</a>
             
 
             {{-- <a href="javascript:void(0);" class="btn btn-sm btn-primary mr-2" id="btnAddUser">
               <i class="fas fa-plus"></i> Add Agent
             </a> --}}
+
+            
+
             <a href="javascript:void(0);" class="btn btn-sm btn-primary" id="Modal2">
                 <i class="fas fa-plus"></i> Add Bulk Users
               </a>
+
+
+            
+
           </div>
         </div>
         <div class="card-body">
             @php
                 $agent_user_detail = [];
             @endphp
-            <table id="usersDT" class="table table-striped table-hover vonexta-table">
+            <table id="agent_list" class="table table-striped table-hover vonexta-table">
                 <thead>
                     <tr>
+                        <th></th>
                         <th>User</th>
                         <th>Extention</th>
                         <th>Full Name</th>
@@ -120,6 +140,7 @@
                     @endphp
 
                     <tr>
+                        <td> <input type="checkbox" style="  width: 20px; height: 20px; margin-top: 7px;" value="{{$detail['user']}}" id="{{$detail['user']}}" class="form-control" onclick="bulk_button(this.id);" ></td>
                         <td>
                             {{$service_User->user_detail->email}}
                         </td>
