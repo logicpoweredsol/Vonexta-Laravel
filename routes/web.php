@@ -64,10 +64,10 @@ Route::middleware(['auth','checkUserStatus'])->group(function () {
             Route::post('/save-agent', [UserController::class, 'save_agents'])->name('services.save-agent');
             Route::post('/bulk-agent', [UserController::class, 'save_bulk_agents'])->name('services.bulk-save-agent');
 
+            Route::POST('/emergency-logout', [UserController::class, 'emergency_logout'])->name('services.emergency-logout');
+            Route::POST('/bulk-action', [UserController::class, 'bulk_action'])->name('services.bulk-action');
 
-            // Route::post('/save-agent',function(){
-            //     dd("ok");
-            // })->name('save-agent');
+
             
 
         });

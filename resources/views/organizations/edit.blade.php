@@ -243,7 +243,7 @@
                                         <div class="card-body table-responsive">
                                             <table id="servicesTable" class="table table-hover">
                                                 <thead>
-                                                <th> </th>
+                                                <th>#</th>
                                                 <th>Service</th>
                                                 <th>Service Nick Name</th>
                                                 <th>Slug</th>

@@ -488,6 +488,36 @@ function closeSwal() {
 
 
 
+function EmergencyLogout(type, organization_servicesID, extension) {
+    $.ajax({
+        url: `${baseUrl}/services/${type}/agents/emergency-logout`,
+        method: 'POST',
+        headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+        data: {
+            'extension': extension,
+            'organization_servicesID': organization_servicesID
+        },
+        success: function(response) {
+            let errorMessage = "";
+            if (typeof response === 'object' && response.hasOwnProperty('result')) {
+                errorMessage = response.result;
+            } else if (typeof response === 'string') {
+                errorMessage = response;
+            }
+            if (errorMessage.includes("Error")) {
+                error('Agent was not logged in'); 
+            } else {
+                success('Agent has been logged out'); 
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error("Error occurred:", error);
+        }
+    });
+}
+
+
+
 
 
 
@@ -518,11 +548,6 @@ function bulk_button(id) {
         }
     }
 
-
-
-    console.log(selected_agent);
-
-
     if(selected_agent.length > 0){
         $(".check_btn").removeClass('d-none');
     }else{
@@ -533,16 +558,54 @@ function bulk_button(id) {
 
 
 
-function bulk_button_action(actionType) {
+function bulk_button_action(actionType,organization_servicesID) {
+ 
 
-    var url;
-    if (actionType === 'emergency') {
-        url = `${baseUrl}/services/dialer/agents/emergency`;
-    } else if (actionType === 'disable') {
-        url = `${baseUrl}/services/dialer/agents/disable`;
-    } else if (actionType === 'delete') {
-        url = `${baseUrl}/services/dialer/agents/delete`;
-    }
+
+    $.ajax({
+        url: `${baseUrl}/services/dialer/agents/bulk-action`,
+        method: 'POST',
+        headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+        data: {
+            'extension': selected_agent,
+            'organization_servicesID': organization_servicesID,
+            'actionType':actionType
+        },
+        success: function(response) {
+            var agent = '';
+            
+            // Check if response[1] exists
+            if (typeof response[1] !== 'undefined') {
+                for (let index = 1; index < response.length; index++) {
+                    if (agent == '') {
+                        agent = response[index]['value'];
+                    } else {
+                        agent = agent + ',' + response[index]['value'];
+                    }
+                }
+        
+                var message = '';
+                if (actionType == 'emergency') {
+                    message = 'These agents were logged out:';
+                } else if (actionType == 'disable') {
+                    message = 'These agents were disable out:';
+                } else if (actionType == 'delete') {
+                    message = 'These agents were delete out:';
+                }
+                success(message + agent);
+            } else if (actionType == 'emergency') {
+                error('Agents are already logged Out');
+            } else if (actionType == 'disable') {
+                error('Agent are Already disable');
+            } else if (actionType == 'delete') {
+                error('Agent are Already delete');
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error("Error occurred:", error);
+        }
+    });
+
 
 
     console.warn(url);

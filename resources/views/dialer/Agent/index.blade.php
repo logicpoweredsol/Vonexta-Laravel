@@ -81,15 +81,15 @@
 
 
 
-            <a href="javascript:void(0);" onclick='bulk_button_action("emergency");' class="btn btn-sm btn-warning check_btn d-none" >
+            <a href="javascript:void(0);" onclick='bulk_button_action("emergency",{{$organization_servicesID}});' class="btn btn-sm btn-warning check_btn d-none" >
                 <i class="fas fa-sign-out-alt"></i> Emergency Logout
               </a>
 
-              <a href="javascript:void(0);"  onclick='bulk_button_action("disable");' class="btn btn-sm btn-secondary check_btn d-none" >
+              <a href="javascript:void(0);"  onclick='bulk_button_action("disable" ,{{$organization_servicesID}});' class="btn btn-sm btn-secondary check_btn d-none" >
                 <i class="fas fa-ban"></i> Disable
               </a>
 
-              <a href="javascript:void(0);"  onclick='bulk_button_action("delete");' class="btn btn-sm btn-danger check_btn d-none" >
+              <a href="javascript:void(0);"  onclick='bulk_button_action("delete" ,{{$organization_servicesID}});' class="btn btn-sm btn-danger check_btn d-none" >
                 <i class="fas fa-trash"></i> Delete
               </a>
 
@@ -140,7 +140,7 @@
                     @endphp
 
                     <tr>
-                        <td> <input type="checkbox" style="  width: 20px; height: 20px; margin-top: 7px;" value="{{$detail['user']}}" id="{{$detail['user']}}" class="form-control" onclick="bulk_button(this.id);" ></td>
+                        <td> <input type="checkbox" style="width: 20px; height: 20px; margin-top: 7px;" value="{{$detail['user']}}" id="{{$detail['user']}}" class="form-control" onclick="bulk_button(this.id);" ></td>
                         <td>
                             {{$service_User->user_detail->email}}
                         </td>
@@ -169,7 +169,11 @@
                                 <div class="dropdown-menu" role="menu">
                                   <a class="dropdown-item" href="{{ route('services.agents.edit', ['service' => strtolower($service), 'organization_services_id' => $service_User->services_id ,'AgentID' => $detail['user']  ] ) }}">Modify</a>
                                   <a class="dropdown-item" href="#">Logs</a>
-                                  <a class="dropdown-item" href="#">Emergency Logout</a>
+                                  
+                                  @php
+                                     $extension =  $detail['user'];
+                                  @endphp
+                                  <a class="dropdown-item" href="javascript:;" onclick="EmergencyLogout('{{$service}}' , {{$service_User->services_id}} , {{$extension}}   )">Emergency Logout</a>
                                   <div class="dropdown-divider"></div>
                                   <a class="dropdown-item" href="#">Delete</a>
                                 </div>

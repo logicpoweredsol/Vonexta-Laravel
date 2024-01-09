@@ -385,7 +385,7 @@
                             <div class="d-flex justify-content-end">
                                 <div class="col-md-4 mb-3">
                                     <select class="form-control select2" id="table_log" multiple  style="width: 100%" onchange="show_call_log_tb();">
-                                        <option selected value="Inbound">Inbound</option>
+                                        <option value="Inbound">Inbound</option>
                                         <option value="Outbound">Outbound</option>
                                         <option value="Manual">manual calls</option>
                                         <option value="Transfer">Transfers</option>

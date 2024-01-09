@@ -19,7 +19,7 @@ $(document).ready(function(){
     });
 
 
-    show_call_log_tb('Inbound');
+    show_call_log_tb();
 
 });
 
@@ -54,16 +54,33 @@ function show_call_log_tb(first) {
         }
     });
 
+
+    if(table_log.length == 0 && table_log == ""){
+        tb_th = tb_th.concat(All_tf['Inbound']);
+    }
+
+    let tb_th_unique = tb_th.filter((value, index, self) => {
+        return self.indexOf(value) === index;
+    });
+
     var html = `
         <div class="card ${table_log.join(' ')}">
-            <div class="card-header">
-                <h3 class="card-title"><b>${table_log.join(', ')} Logs </b></h3>
-            </div>
+            <div class="card-header">`;
+
+
+
+            if(table_log.length == 0){
+                html += `<h3 class="card-title"><b></b></h3>`;
+            }else{
+                html += ` <h3 class="card-title"><b>${table_log.join(', ')}  Logs </b></h3>`;
+            }
+               
+            html += `</div>
             <div class="card-body">
                 <table class="table table-striped table-hover vonexta-table" id="call-log-table">
                     <thead>
                         <tr>
-                            ${tb_th.map(element => `<th>${element}</th>`).join('')}
+                            ${tb_th_unique.map(element => `<th>${element}</th>`).join('')}
                         </tr>
                     </thead>
                 </table>

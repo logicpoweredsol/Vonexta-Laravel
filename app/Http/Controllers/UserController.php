@@ -499,5 +499,122 @@ class UserController extends Controller
     }
 
 
+
+    function emergency_logout(Request $request)  {
+
+        $OrganizationServices = OrganizationServices::find($request->organization_servicesID);
+        $phpArray = json_decode($OrganizationServices->connection_parameters, true);
+
+        $apiEndpoint = 'https://' . $phpArray['server_url'] . '/APIv2/Dashboard/API.php';
+        // POST data
+        $postData = [
+            'Action' => 'EmergencyLogout',
+            'apiUser' =>  $phpArray['api_user'],
+            'apiPass' =>  $phpArray['api_pass'],
+            'session_user' =>  $phpArray['api_user'],
+            'responsetype' => 'json',
+
+            'apiUserAgent' => $request->extension,
+
+        ];
+        $ch = curl_init($apiEndpoint);
+
+        // Set cURL options
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
+        $response = curl_exec($ch);
+        curl_close($ch);
+
+        $api_response = json_decode($response, true);
+
+        return  $api_response;
+
+
+    }
+
+    function bulk_action(Request $request)  {
+
+
+        $return_response = [];
+        array_push($return_response, ['key' => $request->actionType]);
+
+        
+        $OrganizationServices = OrganizationServices::find($request->organization_servicesID);
+        $phpArray = json_decode($OrganizationServices->connection_parameters, true);
+
+
+        foreach($request->extension as $extension){
+            if($request->actionType == 'emergency'){
+                $apiEndpoint = 'https://' . $phpArray['server_url'] . '/APIv2/Dashboard/API.php';
+                  // POST data
+                $postData = [
+                    'Action' => 'EmergencyLogout',
+                    'apiUser' =>  $phpArray['api_user'],
+                    'apiPass' =>  $phpArray['api_pass'],
+                    'session_user' =>  $phpArray['api_user'],
+                    'responsetype' => 'json',
+    
+                    'apiUserAgent' => $extension,
+    
+                ];
+    
+            }elseif($request->actionType == 'disable'){
+    
+            //     $apiEndpoint = 'https://' . $phpArray['server_url'] . '/APIv2/disable/API.php';
+            //     // POST data
+            //   $postData = [
+            //       'Action' => 'disable',
+            //       'apiUser' =>  $phpArray['api_user'],
+            //       'apiPass' =>  $phpArray['api_pass'],
+            //       'session_user' =>  $phpArray['api_user'],
+            //       'responsetype' => 'json',
+    
+            //       'apiUserAgent' => $request->extension,
+    
+            //   ];
+    
+    
+            }elseif($request->actionType == 'delete'){
+                // $apiEndpoint = 'https://' . $phpArray['server_url'] . '/APIv2/delete/API.php';
+                // // POST data
+                // $postData = [
+                //     'Action' => 'delete',
+                //     'apiUser' =>  $phpArray['api_user'],
+                //     'apiPass' =>  $phpArray['api_pass'],
+                //     'session_user' =>  $phpArray['api_user'],
+                //     'responsetype' => 'json',
+    
+                //     'apiUserAgent' => $request->extension,
+    
+                // ];
+            }
+
+            $ch = curl_init($apiEndpoint);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
+            $response = curl_exec($ch);
+            curl_close($ch);
+            $api_response = json_decode($response, true);
+
+            // Convert $api_response to a string if it's an array
+                if (is_array($api_response)) {
+                    $api_response = json_encode($api_response); // Convert array to JSON string
+                }
+
+                if (strpos($api_response, 'Error:') === false) {
+                    array_push($return_response, ['value' => $extension]);
+                }            
+        }
+
+        return $return_response;
+
+     
+
+
+    }
+
+
    
 }
