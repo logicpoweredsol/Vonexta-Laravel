@@ -8,8 +8,16 @@ $(function () {
 
 
 $(document).ready(function(){
-    $('#Campaigns ,#Enbound').DataTable({
-        "paging": true,
+
+    $('.adminlet3').tooltip();
+    showPagination =true;
+    if ($('#tbl').find('tbody tr').length <= 10) {
+        showPagination = false;  // If records are 10 or less, hide pagination
+    }
+
+
+    $('#Campaigns ,#Enbound,.table').DataTable({
+        "paging": showPagination,
         "lengthChange": true,
         "searching": true,
         "ordering": true,
@@ -18,13 +26,157 @@ $(document).ready(function(){
         "responsive": true
     });
 
-
     show_call_log_tb();
+
+
+
+ //Activatu
+    $('#reservation2').daterangepicker({
+       
+        opens: 'left', // Position of the calendar dropdown
+        autoApply: false, // Auto-apply the selected date range
+        showApplyButton: true, // Display the Apply button
+        showCancelButton: true, // Display the Cancel button
+        locale: {
+            format: 'YYYY-MM-DD', // Date format
+            separator: ' to ', // Separator between start and end date
+        },
+        // Define predefined date ranges
+        ranges: {
+            'Today': [moment(), moment()],
+            'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+            'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+            'This Month': [moment().startOf('month'), moment().endOf('month')],
+            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        }
+
+    }).on('apply.daterangepicker', function(ev, picker) {
+
+    
+
+        var startDate = picker.startDate.format('YYYY-MM-DD');
+        var endDate = picker.endDate.format('YYYY-MM-DD');
+        var organization_services_id = $("#organization_services_id").val();
+        var extension = $("#User").val();        
+        $.ajax({
+            url: `${baseUrl}/services/dialer/agents/activity`,
+            method: 'POST',
+            headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+            data: {
+                'startDate':startDate,
+                'endDate':endDate,
+                'extension': extension,
+                'organization_services_id': organization_services_id
+            },
+            success: function(response) {
+
+                console.log(response);
+                var html = "";
+                if(response['data']['event_time'] != null){
+                    for (var p = 0; p < response['data']['event_time'].length; p++) {
+                        html += "<tr>";
+                        html += "<td>" + response['data']['event_time'][p] + "</td>";
+                        html += "<td>" + response['data']['sub_status'][p] + "</td>";
+                        html += "<td>" + response['data']['event_time'][p] + "</td>";
+                        html += "<td>" + response['data']['campaign_id'][p] + "</td>";
+                        html += "</tr>";
+                    }
+                } 
+                $("#activity-tbody").html(html);
+
+                // var dataTable = $('.table').DataTable();
+
+                //     // Destroy the existing DataTable and then reinitialize it with the updated HTML
+                //     dataTable.destroy();
+                    // $('.table').DataTable({
+                    //     "paging": true,
+                    //     "lengthChange": true,
+                    //     "searching": true,
+                    //     "ordering": true,
+                    //     "info": true,
+                    //     "autoWidth": false,
+                    //     "responsive": true
+                    // });
+
+            },
+            error: function(xhr, status, error) {
+                console.error("Error occurred:", error);
+            }
+        });
+
+    });
+
+    
+
+
+
+
+
+    $('#reservation1').daterangepicker({
+       
+        opens: 'left', // Position of the calendar dropdown
+        autoApply: false, // Auto-apply the selected date range
+        showApplyButton: true, // Display the Apply button
+        showCancelButton: true, // Display the Cancel button
+        locale: {
+            format: 'YYYY-MM-DD', // Date format
+            separator: ' to ', // Separator between start and end date
+        },
+        // Define predefined date ranges
+        ranges: {
+            'Today': [moment(), moment()],
+            'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+            'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+            'This Month': [moment().startOf('month'), moment().endOf('month')],
+            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        }
+
+    }).on('apply.daterangepicker', function(ev, picker) {
+        var startDate = picker.startDate.format('YYYY-MM-DD');
+        var endDate = picker.endDate.format('YYYY-MM-DD');
+
+        var organization_services_id = $("#organization_services_id").val();
+        var extension = $("#User").val();
+
+        var  selected_table = $("#table_log").val();
+        
+
+        if(selected_table.length > 0){
+            $.ajax({
+                url: `${baseUrl}/services/dialer/agents/call_log`,
+                method: 'POST',
+                headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+                data: {
+                    'startDate':startDate,
+                    'endDate':endDate,
+                    'extension': extension,
+                    'organization_services_id': organization_services_id,
+                    'selected_table':selected_table
+                },
+                success: function(response) {
+    
+                    console.log(response);
+    
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error occurred:", error);
+                }
+            });
+    
+        }else{
+            alert('At least one filter to be selected ');
+        }
+
+       
+    });
+
 
 });
 
 
-
+var tb_th = [];
 function show_call_log_tb(first) {
     var table_log;
     
@@ -33,14 +185,11 @@ function show_call_log_tb(first) {
     } else {
         table_log = $("#table_log").val();
     }
-   
-    var tb_th = [];
-
     var All_tf = {
         'Inbound': ['Call Time', 'Phone Number', 'Contact List', 'Type', 'Source', 'Disposition'],
-        'Outbound': ['Call Date', 'Lead ID', 'Phone Number', 'Campaign', 'Call length', 'Status'],
-        'Manual': ['Call Date', 'Lead ID', 'Phone Number', 'Campaign', 'Call length', 'Status'],
-        'Transfer': ['Transfer Date', 'Lead ID', 'Phone Number', 'Transferred to']
+        'Outbound': ['Contact ID', 'Phone Number', 'Campaign','Status'],
+        'Manual': ['Contact ID', 'Phone Number', 'Campaign', 'Status'],
+        'Transfer': [ 'Contact ID', 'Phone Number', 'Transferred to']
     };
 
     // Convert the table_log string into an array if needed
@@ -99,6 +248,9 @@ function show_call_log_tb(first) {
         "autoWidth": false,
         "responsive": false,
     });
+
+
+
 }
 
 

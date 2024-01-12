@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="{{ asset('plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
 <link rel="stylesheet" href="{{ asset('plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }}">
 
+
  <!-- Select2 -->
  <link rel="stylesheet" href="{{ asset('plugins/select2/css/select2.min.css') }}">
 
@@ -35,10 +36,10 @@
                 success("{{ session('success') }}");
             });
         </script>
-        @elseif (session()->has('failed'))
+        @elseif (session()->has('error'))
         <script>
             document.addEventListener("DOMContentLoaded", function() {
-                failed("{{ session('failed') }}");
+                error("{{ session('error') }}");
             });
         </script>
         @endif
@@ -48,8 +49,16 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>Agents</h1>
+
+                        @php
+                        $email_address = get_email($dailer_agent_user['user']);
+                        @endphp
+                
+                
+                        <h1>Edit   {{  $email_address}} - {{$dailer_agent_user['user']}} </h1>
                     </div>
+
+                   
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="{{url('/')}}">Home</a></li>
@@ -67,7 +76,7 @@
                 <div class="card-body">
                     <ul class="nav nav-tabs vonexta-nav" id="campaigns-tabs" role="tablist">
                         <li class="nav-item vonext-campaign-item">
-                            <a class="nav-link active" id="Organization-home-tab" data-toggle="pill" href="#Organization-home" role="tab" aria-controls="Organization-home" aria-selected="true">Details</a>
+                            <a class="nav-link @if( !session()->has('tab') && !session('tab')) active @endif "  id="Organization-home-tab" data-toggle="pill" href="#Organization-home" role="tab" aria-controls="Organization-home" aria-selected="true">Details</a>
                         </li>
 
                         <li class="nav-item vonext-campaign-item">
@@ -79,15 +88,20 @@
                         </li>
 
                         <li class="nav-item vonext-campaign-item">
-                            <a class="nav-link" id="call-logs-tab" data-toggle="pill" href="#call-log" role="tab" aria-controls="campaigns-leadRecycling" aria-selected="false">Call Logs</a>
+                            <a class="nav-link @if(session()->has('tab') && session('tab') == 'call-Logs')  active @endif " id="call-logs-tab" data-toggle="pill" href="#call-log" role="tab" aria-controls="campaigns-leadRecycling" aria-selected="false">Call Logs</a>
+                        </li>
+
+                        <li class="nav-item vonext-campaign-item">
+                            <a class="nav-link" id="activity-tab" data-toggle="pill" href="#activity" role="tab" aria-controls="campaigns-leadRecycling" aria-selected="false">Activity</a>
                         </li>
                     </ul>
 
                     <div class="tab-content" id="campaigns-tabs Content">
 
-                        <div class="tab-pane fade show active " id="Organization-home" role="tabpanel" aria-labelledby="Organization-home-tab">
+                        <div class="tab-pane fade show @if( !session()->has('tab') && !session('tab')) show active @endif   " id="Organization-home" role="tabpanel" aria-labelledby="Organization-home-tab">
                             <form method="POST" action="{{ route('services.update-agent.details', ['service' => strtolower('Dailer')]) }}" class="form-horizontal">
-                                <input type="hidden" class="form-control" id="User" name="User" value="{{ isset($dailer_agent_user['user']) ? $dailer_agent_user['user'] : '' }}" placeholder="User">
+                                <input type="hidden" class="form-control" id="User" name="User" value="{{ isset($dailer_agent_user['user']) ? $dailer_agent_user['user'] : '' }}">
+                                <input type="hidden" class="form-control" id="organization_services_id" name="organization_services_id" value="{{$organization_services_id}}" >
 
                                
                                 @csrf
@@ -111,9 +125,7 @@
                                             <div class="col-sm-12 col-md-6 col-lg-6">
                                                 <div class="form-group">
                                                     <label for="phone" class="form-label">Email</label>
-                                                    @php
-                                                        $email_address = get_email($dailer_agent_user['user']);
-                                                    @endphp
+                                                  
                                                     <input type="email" class="form-control" id="email" name="email" readonly  value="{{$email_address}}">
                                                 </div>
                                             </div>
@@ -129,7 +141,22 @@
                                             <div class="col-sm-12 col-md-6 col-lg-6">
                                                 <div class="form-group">
                                                     <label for="Voice Mail" class="form-label">Voice Mail</label>
-                                                    <input type="text" class="form-control" id="Voice_Mail" name="Voice_Mail" value="{{ isset($dailer_agent_user['voicemail_id']) ? $dailer_agent_user['voicemail_id'] : '' }}" placeholder="Voice Mail..">
+
+                                                    @php
+                                                        $responds = get_voicemail($organization_services_id);
+
+                                                        $integerPart = filter_var($dailer_agent_user['phone_login'], FILTER_SANITIZE_NUMBER_INT);
+
+                                                    @endphp                                                    
+                                            
+                                                    <select name="voice_mail" @if (!$responds) disabled @endif  class="form-control" id="voice_mail">
+                                                        <option value="" selected>No Voicemail</option>
+                                                        <option value="{{$integerPart}}" {{ isset($dailer_agent_user['voicemail_id']) && $dailer_agent_user['voicemail_id'] == $integerPart  ? 'selected' : '' }}  selected >Agent's voicemail  ( {{$integerPart}} )</option>
+                                                        @foreach ($responds['voicemail_id'] as $i=>$respond)
+                                                        <option value="{{ $responds['voicemail_id'][$i] }}" {{ isset($dailer_agent_user['voicemail_id']) && $dailer_agent_user['voicemail_id'] == $responds['voicemail_id'][$i] ? 'selected' : '' }}>{{$responds['voicemail_id'][$i] }}  -  {{$responds['fullname'][$i] }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                    {{-- <input type="text" class="form-control" id="Voice_Mail" name="Voice_Mail" value="{{ isset($dailer_agent_user['voicemail_id']) ? $dailer_agent_user['voicemail_id'] : '' }}" placeholder="Voice Mail.."> --}}
                                                 </div>
                                             </div>
 
@@ -204,13 +231,13 @@
                                         <div class="row mb-3">
                                             <div class="col-sm-12 col-md-6 col-lg-6">
                                                 <div class="form-check">
-                                                    <input type="checkbox" class="form-check-input" {{(isset($dailer_agent_user['agent_choose_ingroups']) && $dailer_agent_user['agent_choose_ingroups']=='1' ) ? 'checked' : '' }} id="toggle1" name="agent_choose_ingroups" data-bootstrap-switch data-off-color="danger" data-on-color="success">
+                                                    <input type="checkbox" class="form-check-input" {{(isset($dailer_agent_user['agent_choose_ingroups']) && $dailer_agent_user['agent_choose_ingroups']=='1' ) ? 'checked' : '' }} id="toggle1" name="Inbound_Upon_Login" data-bootstrap-switch data-off-color="danger" data-on-color="success">
                                                     <label class="form-check-label" for="toggle1"> <b>Select Inbound Upon Login</b> </label>
                                                 </div>
                                             </div>
 
                                             <div class="col-sm-12 col-md-6 col-lg-6">
-                                                <input type="checkbox" class="form-check-input" {{(isset($dailer_agent_user['agent_choose_blended']) && $dailer_agent_user['agent_choose_blended']=='1' ) ? 'checked' : '' }} id="toggle2" name="agent_choose_blended" data-bootstrap-switch data-off-color="danger" data-on-color="success">
+                                                <input type="checkbox" class="form-check-input" {{(isset($dailer_agent_user['agent_choose_blended']) && $dailer_agent_user['agent_choose_blended']=='1' ) ? 'checked' : '' }} id="toggle2" name="Auto_Outbound_Upon_Login" data-bootstrap-switch data-off-color="danger" data-on-color="success">
                                                 <label class="form-check-label" for="toggle2"> <b>Select Auto-Outbound Upon Login</b> </label>
                                             </div>
                                         </div>
@@ -220,13 +247,13 @@
                                         <div class="row mb-3">
                                             <div class="col-sm-12 col-md-6 col-lg-6">
                                                 <div class="form-check">
-                                                    <input type="checkbox" class="form-check-input" {{(isset($dailer_agent_user['closer_default_blended']) && $dailer_agent_user['closer_default_blended']=='1' ) ? 'checked' : '' }} id="toggle3" name="closer_default_blended" data-bootstrap-switch data-off-color="danger" data-on-color="success">
+                                                    <input type="checkbox" class="form-check-input" {{(isset($dailer_agent_user['closer_default_blended']) && $dailer_agent_user['closer_default_blended']=='1' ) ? 'checked' : '' }} id="toggle3" name="Allow_Outbound" data-bootstrap-switch data-off-color="danger" data-on-color="success">
                                                     <label class="form-check-label" for="toggle3"><b>Allow Outbound</b></label>
                                                 </div>
                                             </div>
                                             <!-- add here -->
                                             <div class="col-sm-12 col-md-6 col-lg-6">
-                                                <input type="checkbox" class="form-check-input" {{(isset($dailer_agent_user['agentcall_manual']) && $dailer_agent_user['agentcall_manual']=='1' ) ? 'checked' : '' }} id="toggle6" name="agentcall_manual" data-bootstrap-switch data-off-color="danger" data-on-color="success">
+                                                <input type="checkbox" class="form-check-input" {{(isset($dailer_agent_user['agentcall_manual']) && $dailer_agent_user['agentcall_manual']=='1' ) ? 'checked' : '' }} id="toggle6" name="Allow_Manual_Calls" data-bootstrap-switch data-off-color="danger" data-on-color="success">
                                                 <label class="form-check-label" for="toggle6"><b>Allow Manual Calls</b></label>
                                             </div>
                                         </div>
@@ -239,7 +266,7 @@
                                                 </div>
                                             </div>
                                             <div class="col-sm-12 col-md-6 col-lg-6">
-                                                <input type="checkbox" class="form-check-input" {{(isset($dailer_agent_user['agent_call_log_view_override']) && $dailer_agent_user['agent_call_log_view_override']=='Y' ) ? 'checked' : '' }} id="toggle6" name="agent_call_log_view_override" data-bootstrap-switch data-off-color="danger" data-on-color="success">
+                                                <input type="checkbox" class="form-check-input" {{(isset($dailer_agent_user['agent_call_log_view_override']) && $dailer_agent_user['agent_call_log_view_override']=='Y' ) ? 'checked' : '' }} id="toggle6" name="Call_Log_View" data-bootstrap-switch data-off-color="danger" data-on-color="success">
                                                 <label class="form-check-label" for="toggle7"><b> Allow Call Log View</b></label>
                                             </div>
 
@@ -248,7 +275,7 @@
                                         <div class="row mb-3">
                                             <div class="col-sm-12 col-md-6 col-lg-6">
                                                 <div class="form-check">
-                                                    <input type="checkbox" class="form-check-input" {{(isset($dailer_agent_user['agentonly_callbacks']) && $dailer_agent_user['agentonly_callbacks']=='1' ) ? 'checked' : '' }} id="toggle5" name="agentonly_callbacks" data-bootstrap-switch data-off-color="danger" data-on-color="success">
+                                                    <input type="checkbox" class="form-check-input" {{(isset($dailer_agent_user['agentonly_callbacks']) && $dailer_agent_user['agentonly_callbacks']=='1' ) ? 'checked' : '' }} id="toggle5" name="Personal_Callbacks" data-bootstrap-switch data-off-color="danger" data-on-color="success">
                                                     <label class="form-check-label" for="toggle5"><b>Allow Personal Callbacks</b></label>
                                                 </div>
                                             </div>
@@ -296,57 +323,7 @@
                         </div>
 
                         <div class="tab-pane fade" id="Organization-user" role="tabpanel" aria-labelledby="Organization-user-tab">
-                            <div class="d-flex justify-content-end">
-                                
-                                {{-- <div class="form-group">
-                                    <select class="select2" multiple="multiple" data-placeholder=""  id="skills_log"  onchange="Change_tab(this.id);">
-                                        <option selected value="compaigns">compaigns</option>
-                                        <option value="inbounds">Inbound</option>
-                                    </select>
-                                </div> --}}
-
-                                {{-- <div class="col-md-3 mb-3">
-
-            
-                                    
-                                    <select class="form-control" id="skills_log" style="width:200px"  onchange="Change_tab(this.id);">
-                                        <option selected value="compaigns">compaigns</option>
-                                        <option value="inbounds">Inbound</option>
-                                    </select> 
-                                    
-                                </div> --}}
-                            </div>
-                            {{-- Campaigns --}}
-                            <div class="card compaigns">
-                                <div class="card-header">
-                                    <h3 class="card-title"><b>Campaigns</b></h3>
-                                </div>
-                                <div class="card-body">
-
-                                    <table id="Campaigns" class="table table-striped table-hover vonexta-table">
-                                        <thead>
-                                            <tr>
-                                                <th>Name</th>
-                                                <th>Level</th>
-                                                <th>Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>0000</td>
-                                                <td>0000</td>
-                                                <td>
-                                                    <a href="#" class="btn btn-sm btn-primary" class="btnEdit" data-id=""><i class="fas fa-pen"></i><a>
-                                                            <a href="#" class="btn btn-sm btn-danger" class="btnDelete" data-id=""><i class="fas fa-trash"></i><a>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-
-                                    </table>
-                                </div>
-
-                            </div>
-
+                       
                             {{-- Inbound --}}
                             <div class="card inbounds mt-3">
                                 <div class="card-header">
@@ -360,46 +337,165 @@
                                             <tr>
                                                 <th>Name</th>
                                                 <th>Level</th>
-                                                <th>Actions</th>
+                                                <th>Invited </th>
+                                                <th>Call's Today </th>
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            @foreach($call_log_inbounds as $call_log_inbound)
                                             <tr>
-                                                <td>0000</td>
-                                                <td>0000</td>
+                                                <td> <span class="adminlet3" data-toggle="tooltip" data-placement="top" title="{{$call_log_inbound['group_id']}}"><i class="fas fa-list"></i> </span> </td>
                                                 <td>
-                                                    <a href="" class="btn btn-sm btn-primary" class="btnEdit" data-id=""><i class="fas fa-pen"></i><a>
-                                                            <a href="#" class="btn btn-sm btn-danger" class="btnDelete" data-id=""><i class="fas fa-trash"></i><a>
+                                                    <select name="" id="">
+                                                        <?php for($i=1 ;$i<=20; $i++){ ?>
+                                                            <option value="{{$i}}"> {{$i}} </option>
+                                                        <?php } ?>
+                                                    </select>
                                                 </td>
+                                                <td>
+                                                <input type="checkbox" class="form-check-input"   data-bootstrap-switch data-off-color="danger" data-on-color="success">
+                                                </td>
+                                                <td>{{$call_log_inbound['calls_today']}}</td>
                                             </tr>
+
+
+                                            @endforeach
+                                           
                                         </tbody>
 
                                     </table>
                                 </div>
 
                             </div>
+
+                            {{-- OutBound --}}
+                            <div class="card compaigns">
+                                <div class="card-header">
+                                    <h3 class="card-title"><b>OutBound</b></h3>
+                                </div>
+                                <div class="card-body">
+
+                                    <table id="Campaigns" class="table table-striped table-hover vonexta-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Level</th>
+                                                <th>Calls Today</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                        @foreach($call_log_outbounds as $call_log_outbound)
+                                            <tr>
+                                            <td>{{$call_log_outbound->campaign_id}} <span class="adminlet3" data-toggle="tooltip" data-placement="top" title=""><i class="fas fa-list"></i> </span> </td>
+                                                <td>
+                                                    <select name="" id="">
+                                                        <?php for($i=1 ;$i<=20; $i++){ ?>
+                                                            <option value="{{$i}}"> {{$i}} </option>
+                                                        <?php } ?>
+                                                    </select>
+                                                </td>
+                                               
+                                                <td>{{$call_log_outbound['calls_today']}}</td>
+                                            </tr>
+
+
+                                            @endforeach
+
+                                           
+                                        </tbody>
+
+                                    </table>
+                                </div>
+
+                            </div>
+
+                           
                         </div>
 
-                        <div class="tab-pane fade" id="call-log" role="tabpanel" aria-labelledby="call-logs-tab">
+                        <div class="tab-pane fade  @if(session()->has('tab') && session('tab') == 'call-Logs') show active @endif " id="call-log" role="tabpanel" aria-labelledby="call-logs-tab">
 
                             <div class="d-flex justify-content-end">
                                 <div class="col-md-4 mb-3">
                                     <select class="form-control select2" id="table_log" multiple  style="width: 100%" onchange="show_call_log_tb();">
-                                        <option value="Inbound">Inbound</option>
-                                        <option value="Outbound">Outbound</option>
-                                        <option value="Manual">manual calls</option>
-                                        <option value="Transfer">Transfers</option>
+                                        <option selected value="Inbound">Inbound</option>
+                                        <option selected value="Outbound">Outbound</option>
+                                        <option  value="Manual">Manual Calls</option>
+                                        <option  value="Transfer">Transfers</option>
                                     </select>
                                 </div>
                             </div>
 
+                            <div class="row d-flex justify-content-end">
+                                {{-- <div class="col-md-8"></div> --}}
+                                <div class="col-md-4">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                          <span class="input-group-text">
+                                            <i class="far fa-calendar-alt"></i>
+                                          </span>
+                                        </div>
+                                        <input type="text" class="form-control float-right" id="reservation1">
+                                      </div>
+                                </div>
+                            </div>
+
+
                             <div class="call-log-tb"></div>
 
-
-                            
-
-
                         </div>
+
+                        <div class="tab-pane fade" id="activity" role="tabpanel" aria-labelledby="activity-tab">
+                            <div class="card compaigns">
+                                <div class="card-header">
+                                    <h3 class="card-title"><b>Agent Activity</b></h3>
+                                    
+                                </div>
+
+                                <div class="row d-flex justify-content-end">
+                                    {{-- <div class="col-md-8"></div> --}}
+                                    
+                                    <div class="col-md-4 mt-3">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                              <span class="input-group-text">
+                                                <i class="far fa-calendar-alt"></i>
+                                              </span>
+                                            </div>
+                                            <input type="text" class="form-control float-right" id="reservation2">
+                                          </div>
+                                    </div>
+                                </div>
+                              
+
+                                <div class="card-body">
+
+                                    <table  class="table table-striped table-hover vonexta-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Time</th>
+                                                <th>Activity</th>
+                                                <th>Session Length</th>
+                                                <th>Campaign</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="activity-tbody">
+                                            <!-- <tr>
+                                                <td>0000</td>
+                                                <td>0000</td>
+                                                <td>0000</td>
+                                                <td>0000</td>
+                                            </tr> -->
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </div>
+                        </div>
+
+                            </div>
+                        </div>
+                        
                     </div>
                 </div>
             <!-- /.card-body -->
@@ -432,6 +528,7 @@
 <script src="{{ asset('plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
 <script src="{{ asset('plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
 <script src="{{ asset('plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
+<script src="{{asset('plugins/daterangepicker/daterangepicker.js')}}"></script>
 
 <!-- Ion Slider -->
 <script src="{{ asset('plugins/ion-rangeslider/js/ion.rangeSlider.min.js') }}"></script>
@@ -471,6 +568,7 @@
 
 
 
+
 <script>
    $(function () {
     $('.select2').select2();
@@ -498,6 +596,10 @@
       });
 
     });
+ 
+
+
+
 
 </script>
 

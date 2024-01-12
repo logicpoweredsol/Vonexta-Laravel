@@ -66,6 +66,9 @@ Route::middleware(['auth','checkUserStatus'])->group(function () {
 
             Route::POST('/emergency-logout', [UserController::class, 'emergency_logout'])->name('services.emergency-logout');
             Route::POST('/bulk-action', [UserController::class, 'bulk_action'])->name('services.bulk-action');
+            Route::POST('/activity',[UserController::class,'check_activity'])->name('services.activity');
+            Route::POST('/call_log',[UserController::class,'check_call_log'])->name('services.call_log');
+            Route::get('/log/{organization_services_id}/{AgentID}', [UserController::class, 'log'])->name('services.agents.log');
 
 
             

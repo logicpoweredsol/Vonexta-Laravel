@@ -1,15 +1,5 @@
 $(document).ready(function(){
-    $('#agent_list').DataTable({
-        "paging": true,
-        "lengthChange": true,
-        "searching": true,
-        "ordering": true,
-        "info": true,
-        "autoWidth": false,
-        "responsive": true,
-        "deferRender": true  
-    });
-
+ 
     $("[data-bootstrap-switch]").bootstrapSwitch();
 
 });
@@ -457,7 +447,7 @@ function closeSwal() {
 
 
 
-  function bluck_success(message) {
+  function add_more_agent(message) {
     Swal.fire({
         title: 'Success',
         text: message,
@@ -471,7 +461,7 @@ function closeSwal() {
         allowEscapeKey: false,
         allowEnterKey: false,
         footer: `
-            <div>
+            <div >
                 <button class="swal2-confirm swal2-styled" onclick="addMoreAgents()">Add More Agents</button>
                 <button class="swal2-cancel swal2-styled" onclick="closeSwal()">Close</button>
             </div>

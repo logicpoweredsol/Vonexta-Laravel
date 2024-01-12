@@ -34,17 +34,17 @@
                 success("{{ session('success') }}");
             });
         </script>
-        @elseif (session()->has('failed'))
+        @elseif (session()->has('error'))
         <script>
             document.addEventListener("DOMContentLoaded", function () {
-                failed("{{ session('failed') }}");
+                error("{{ session('error') }}");
             });
         </script> 
 
-        @elseif(session()->has('bluck_success'))
+        @elseif(session()->has('add_more_agent'))
             <script>
                 document.addEventListener("DOMContentLoaded", function () {
-                    failed("{{ session('bluck_success') }}");
+                    add_more_agent("{{ session('add_more_agent') }}");
                 });
             </script> 
      @endif
@@ -111,11 +111,23 @@
 
           </div>
         </div>
-        <div class="card-body">
+        <div class="card-body" style="position: relative;">
+            <div class="acbz" style="position: absolute;width: 300px;right: 275px;top: 15px ;z-index:9;">
+
+                <select class="form-control"  id="search_filter" >
+                    <option value="all">All</option>
+                    <option value="Active">Active</option>
+                    <option value="Not Active">Not Active</option>
+                </select>
+               
+            </div>
+           
+
+
             @php
                 $agent_user_detail = [];
             @endphp
-            <table id="agent_list" class="table table-striped table-hover vonexta-table">
+            <table id="tbl" class="table table-striped table-hover vonexta-table">
                 <thead>
                     <tr>
                         <th></th>
@@ -168,7 +180,7 @@
                                 </button>
                                 <div class="dropdown-menu" role="menu">
                                   <a class="dropdown-item" href="{{ route('services.agents.edit', ['service' => strtolower($service), 'organization_services_id' => $service_User->services_id ,'AgentID' => $detail['user']  ] ) }}">Modify</a>
-                                  <a class="dropdown-item" href="#">Logs</a>
+                                  <a class="dropdown-item" href="{{ route('services.agents.log', ['service' => strtolower($service), 'organization_services_id' => $service_User->services_id ,'AgentID' => $detail['user']  ] ) }}">Logs</a>
                                   
                                   @php
                                      $extension =  $detail['user'];
@@ -355,13 +367,13 @@
                                 <div class="row mb-3">
                                     <div class="col-sm-12 col-md-6 col-lg-6">
                                         <div class="form-check">
-                                            <input type="checkbox" class="form-check-input"  id="agent_choose_ingroups" name="agent_choose_ingroups" data-bootstrap-switch data-off-color="danger" data-on-color="success" >
+                                            <input type="checkbox" class="form-check-input"  id="agent_choose_ingroups" name="Inbound_Upon_Login" data-bootstrap-switch data-off-color="danger" data-on-color="success" >
                                             <label class="form-check-label" for="agent_choose_ingroups"> <b>Select Inbound Upon Login</b> </label>
                                         </div>
                                     </div>
 
                                     <div class="col-sm-12 col-md-6 col-lg-6">
-                                        <input type="checkbox" class="form-check-input"  id="agent_choose_blended" name="agent_choose_blended" data-bootstrap-switch data-off-color="danger" data-on-color="success" >
+                                        <input type="checkbox" class="form-check-input"  id="agent_choose_blended" name="Auto_Outbound_Upon_Login" data-bootstrap-switch data-off-color="danger" data-on-color="success" >
                                         <label class="form-check-label" for="agent_choose_blended"> <b>Select Auto-Outbound Upon Login</b> </label>
                                     </div>
                                 </div>
@@ -369,7 +381,7 @@
                                 <div class="row mb-3">
                                     <div class="col-sm-12 col-md-6 col-lg-6">
                                         <div class="form-check">
-                                            <input type="checkbox" class="form-check-input"  id="closer_default_blended" name="closer_default_blended" data-bootstrap-switch data-off-color="danger" data-on-color="success" >
+                                            <input type="checkbox" class="form-check-input"  id="closer_default_blended" name="Allow_Outbound" data-bootstrap-switch data-off-color="danger" data-on-color="success" >
                                             <label class="form-check-label" for="closer_default_blended"><b>Allow Outbound</b></label>
                                         </div>
                                     </div>
@@ -383,13 +395,13 @@
                                 <div class="row mb-3">
                                     <div class="col-sm-12 col-md-6 col-lg-6">
                                         <div class="form-check">
-                                            <input type="checkbox" class="form-check-input"  id="agentonly_callbacks" name="agentonly_callbacks" data-bootstrap-switch data-off-color="danger" data-on-color="success" >
+                                            <input type="checkbox" class="form-check-input"  id="agentonly_callbacks" name="Personal_Callbacks" data-bootstrap-switch data-off-color="danger" data-on-color="success" >
                                         <label class="form-check-label" for="agentonly_callbacks"><b>Allow Personal Callbacks</b></label>
                                         </div>
                                     </div>
 
                                     <div class="col-sm-12 col-md-6 col-lg-6">
-                                        <input type="checkbox" class="form-check-input"  id="agentcall_manual" name="agentcall_manual" data-bootstrap-switch data-off-color="danger" data-on-color="success" >
+                                        <input type="checkbox" class="form-check-input"  id="agentcall_manual" name="Allow_Manual_Calls" data-bootstrap-switch data-off-color="danger" data-on-color="success" >
                                         <label class="form-check-label" for="agentcall_manual"><b>Allow Manual Calls</b></label>
                                     </div>
                                 </div>
@@ -397,7 +409,7 @@
                                 <div class="row mb-3">
                                     <div class="col-sm-12 col-md-6 col-lg-6">
                                         <div class="form-check">
-                                            <input type="checkbox" class="form-check-input" id="agent_call_log_view_override" name="agent_call_log_view_override" data-bootstrap-switch data-off-color="danger" data-on-color="success" >
+                                            <input type="checkbox" class="form-check-input" id="agent_call_log_view_override" name="Call_Log_View" data-bootstrap-switch data-off-color="danger" data-on-color="success" >
                                             <label class="form-check-label" for="agent_call_log_view_override"><b>Allow Call Log View</b></label>
                                         </div>
                                     </div>
@@ -628,6 +640,7 @@
 
     <script src="{{ asset('plugins/bs-stepper/js/bs-stepper.min.js') }}"></script>
     <script src="{{ asset('views/services/dialler/users/index.js') }}"></script>
+    <script src="{{ asset('views/datatable/datatable.js') }}"></script>
 
 
     <script>

@@ -16,6 +16,16 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         <!-- Font Awesome -->
         <link rel="stylesheet" href="{{ asset('plugins/fontawesome-free/css/all.min.css') }}">
+
+        <!-- daterange picker -->
+        {{-- <link rel="stylesheet" href="{{asset('plugins/daterangepicker/daterangepicker.css')}}"> --}}
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css">
+        <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
         <!-- Theme style -->
         <link rel="stylesheet" href="{{ asset('dist/css/adminlte.min.css') }}">
         <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
@@ -49,6 +59,14 @@
                 </li> --}}
                 </ul>
 
+
+                @if( ! auth()->user()->hasRole('superadmin'))
+                <div class="text-center">
+                    <a href="#" style="font-size: x-large !important;" class="d-block font-weight-bold text-white">{{Auth::user()->organizations[0]->name  }}</a>
+                </div>  
+                @endif
+
+
                 <!-- Right navbar links -->
                 <ul class="navbar-nav ml-auto">
                 <!-- Navbar Search -->
@@ -74,6 +92,7 @@
                 </li> --}}
                 <li class="nav-item">
                 <div class="hidden sm:flex sm:items-center sm:ml-6">
+                    
                     <x-dropdown align="right" width="48">
                         <x-slot name="trigger">
                             <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">

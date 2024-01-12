@@ -18,18 +18,14 @@ class UserController extends Controller
 
     // Start Randing the Data Function
     public function index($service ,$organization_servicesID){
-
+        session()->forget('tab');
         $user = Auth::user();
         $organization = $user->organizations->first();
         $user_agent_detail = [];
         $service_Users =  $this->get_user($organization_servicesID);
-
-
- 
-
         $users = $organization->users;
-
         $userAgent_inDB = userAgent::count();
+
 
 
         // if($userAgent_inDB  < 0){
@@ -44,6 +40,11 @@ class UserController extends Controller
             }
         }
         $userAgent = userAgent::with('user_detail')->get();
+
+        // dd( $userAgent);
+
+        // $userAgent = userAgent::with('user_detail')->take(5)->get();
+
 
         return view('dialer.Agent.index',compact('service','users','organization_servicesID' ,'userAgent' ,'organization'));
     }
@@ -109,13 +110,28 @@ class UserController extends Controller
      public function edit($service , $organization_services_id ,$AgentID){
 
         $dailer_agent_user = '';
+        $call_log_inbounds = '';
+        $call_log_outbounds = '';
+
         $dailer_agent_user_response =   $this->get_agent_detail($organization_services_id ,$AgentID);
         if($dailer_agent_user_response['result'] == 'success'){
             $dailer_agent_user = $dailer_agent_user_response['data'];
         }
 
 
-        return view('dialer.Agent.edit' ,compact('service','dailer_agent_user','organization_services_id'));
+        $get_call_log_response_inbound_dume =   $this->get_call_inbound_log($organization_services_id ,$AgentID);
+        if($get_call_log_response_inbound_dume['result'] == 'success'){
+            $call_log_inbound_all_agent = $get_call_log_response_inbound_dume['data'];
+            $call_log_inbounds  = $this->findArrayByKey($call_log_inbound_all_agent ,$AgentID);
+        }
+
+        $get_call_log_response_outbound_dume =   $this->get_call_outbound_log($organization_services_id ,$AgentID);
+        if($get_call_log_response_outbound_dume['result'] == 'success'){
+            $call_log_outbound_all_agent = $get_call_log_response_outbound_dume['data'];
+            $call_log_outbounds  = $this->findArrayByKey($call_log_outbound_all_agent ,$AgentID);
+        }
+
+        return view('dialer.Agent.edit' ,compact('service','dailer_agent_user','organization_services_id','call_log_inbounds' ,'call_log_outbounds'));
     }
 
 
@@ -147,6 +163,76 @@ class UserController extends Controller
         
         return json_decode($response, true);
     }
+
+    public function get_call_inbound_log($organization_services_id ,$AgentID) {
+        $OrganizationServices = OrganizationServices::find($organization_services_id);
+        $phpArray = json_decode($OrganizationServices->connection_parameters, true);
+        $apiEndpoint = 'https://' . $phpArray['server_url'] . '/APIv2/Inbound/API.php';
+        // POST data
+        $postData = [
+            'Action' => 'GetAllAgentRank',
+            'apiUser' =>  $phpArray['api_user'],
+            'apiPass' =>  $phpArray['api_pass'],
+            'session_user' =>  $phpArray['api_user'],
+            'responsetype' => 'json',
+            'user'=>$AgentID
+        ];
+        $ch = curl_init($apiEndpoint);
+    
+        // Set cURL options
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
+    
+        // Execute cURL session and get the response
+        $response = curl_exec($ch);
+    
+        // Close cURL session
+        curl_close($ch);
+        
+        return json_decode($response, true);
+    }
+    public function get_call_outbound_log($organization_services_id ,$AgentID) {
+        $OrganizationServices = OrganizationServices::find($organization_services_id);
+        $phpArray = json_decode($OrganizationServices->connection_parameters, true);
+        $apiEndpoint = 'https://' . $phpArray['server_url'] . '/APIv2/Inbound/API.php';
+        // POST data
+        $postData = [
+            'Action' => 'GetAllAgentRank',
+            'apiUser' =>  $phpArray['api_user'],
+            'apiPass' =>  $phpArray['api_pass'],
+            'session_user' =>  $phpArray['api_user'],
+            'responsetype' => 'json',
+            'user'=>$AgentID
+        ];
+        $ch = curl_init($apiEndpoint);
+    
+        // Set cURL options
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
+    
+        // Execute cURL session and get the response
+        $response = curl_exec($ch);
+    
+        // Close cURL session
+        curl_close($ch);
+        
+        return json_decode($response, true);
+    }
+
+
+    function findArrayByKey($array, $key) {
+        if (array_key_exists($key, $array)) {
+            return $array[$key];
+        } else {
+            return null; // or handle the case where the key is not found
+        }
+    }
+
+
+
+    
      // End  Edit User
     
 
@@ -178,9 +264,11 @@ class UserController extends Controller
              'full_name'=> $request->name,
              'user_group'=>  $request->group,
              'active' => $request->active,
-             'voicemail_id'=> $request->Voice_Mail,
+             'voicemail_id'=> $request->voice_mail,
              'email'=> $request->email,
- 
+
+          
+
              'mobile_number' =>  $options_value['mobile_number'],
              'agent_choose_ingroups'=> $options_value['agent_choose_ingroups'],
              'agent_choose_blended'=> $options_value['agent_choose_blended'],
@@ -190,6 +278,16 @@ class UserController extends Controller
              'agentcall_manual'=> $options_value['agentcall_manual'],
              'agent_call_log_view_override'=> $options_value['agent_call_log_view_override'],
              'max_inbound_calls'=> $options_value['max_inbound_calls'],
+
+
+            //  'hotkeys_active' => 0,
+            //  'user_level' => 1,
+            //  'vicidial_recording_override' => "DISABLED",
+            //  'agent_lead_search_override' => "DISABLED",
+            //  'vdc_agent_api_access' =>1,
+            //  'modify_same_user_level' =>'N',
+
+
  
          ];
          $ch = curl_init($apiEndpoint);
@@ -207,9 +305,12 @@ class UserController extends Controller
          
          $responce =  json_decode($response, true);
 
+        //  dd($responce);
+
         if($responce['result'] == 'success'){
             return redirect()->back()->with('success', 'Agent Updated successfully');
         }else{
+
             return redirect()->back()->with('error', 'Some thing Went Wrong ');
         }
     }
@@ -218,13 +319,13 @@ class UserController extends Controller
     function update_agent_in_db_options(Request $request) {
 
         // dd($request->all());
-        $agent_choose_ingroups = isset($request->agent_choose_ingroups) ? '1' : '0';
-        $agent_choose_blended = isset($request->agent_choose_blended) ? '1' : '0';
-        $closer_default_blended = isset($request->closer_default_blended) ? '1' : '0';
+        $agent_choose_ingroups = isset($request->Inbound_Upon_Login) ? '1' : '0';
+        $agent_choose_blended = isset($request->Auto_Outbound_Upon_Login) ? '1' : '0';
+        $closer_default_blended = isset($request->Allow_Outbound) ? '1' : '0';
         $scheduled_callbacks = isset($request->scheduled_callbacks) ? '1' : '0';
-        $agentonly_callbacks = isset($request->agentonly_callbacks) ? '1' : '0';
-        $agentcall_manual = isset($request->agentcall_manual) ? '1' : '0';
-        $agent_call_log_view_override = isset($request->agent_call_log_view_override) ? 'Y' : 'N';
+        $agentonly_callbacks = isset($request->Personal_Callbacks) ? '1' : '0';
+        $agentcall_manual = isset($request->Allow_Manual_Calls) ? '1' : '0';
+        $agent_call_log_view_override = isset($request->Call_Log_View) ? 'Y' : 'N';
 
 
 
@@ -341,13 +442,13 @@ class UserController extends Controller
             // $api_password = base64_decode($password);
 
             $org_user = User::where('id', $request->organization_user)->first();
-            $agent_choose_ingroups = isset($request->agent_choose_ingroups) ? '1' : '0';
-            $agent_choose_blended = isset($request->agent_choose_blended) ? '1' : '0';
-            $closer_default_blended = isset($request->closer_default_blended) ? '1' : '0';
+            $agent_choose_ingroups = isset($request->Inbound_Upon_Login) ? '1' : '0';
+            $agent_choose_blended = isset($request->Auto_Outbound_Upon_Login) ? '1' : '0';
+            $closer_default_blended = isset($request->Allow_Outbound) ? '1' : '0';
             $scheduled_callbacks = isset($request->scheduled_callbacks) ? '1' : '0';
-            $agentonly_callbacks = isset($request->agentonly_callbacks) ? '1' : '0';
-            $agentcall_manual = isset($request->agentcall_manual) ? '1' : '0';
-            $agent_call_log_view_override = isset($request->agent_call_log_view_override) ? 'Y' : 'N';
+            $agentonly_callbacks = isset($request->Personal_Callbacks) ? '1' : '0';
+            $agentcall_manual = isset($request->Allow_Manual_Calls) ? '1' : '0';
+            $agent_call_log_view_override = isset($request->Call_Log_View) ? 'Y' : 'N';
 
             $active = isset($request->active) && $request->active == 1 ? 'Y' : 'N';
 
@@ -365,7 +466,6 @@ class UserController extends Controller
                 'session_user' =>  $phpArray['api_user'],
                 'responsetype' => 'json',
                 'user' => $request->user,
-                'pass' => $api_password,
                 'full_name' => $request->full_name,
                 'user_group' =>  $request->user_group,
                 'active' => $active,
@@ -408,7 +508,7 @@ class UserController extends Controller
 
         
 
-        return redirect()->back()->with('bluck_success', 'New agent added successfully.');
+        return redirect()->back()->with('add_more_agent', 'New agent added successfully.');
         } catch (\Exception $e) {
             // Handle the exception, log it, or return an error response
             return redirect()->back()->with('error', 'An error occurred: ' . $e->getMessage());
@@ -423,10 +523,7 @@ class UserController extends Controller
             $org_user = user::where('id',$request->email[$i])->first();
 
 
-           
-
-            // $password = base64_encode($this->generateRandomString());
-            // $api_password = base64_decode($password);
+    
 
             $active = isset($request->active) && $request->active == 1 ? 'Y' : 'N';
 
@@ -610,10 +707,107 @@ class UserController extends Controller
 
         return $return_response;
 
-     
+    }
 
+    public function check_activity(Request $request)
+    {
+
+        // dd($request->all());
+        $OrganizationServices = OrganizationServices::find($request->organization_services_id);
+        $phpArray = json_decode($OrganizationServices->connection_parameters, true);
+
+        $apiEndpoint = 'https://' . $phpArray['server_url'] . '/APIv2/Users/API.php';
+        // POST data
+        $postData = [
+            'Action' => 'GetAgentLog',
+            'apiUser' =>  $phpArray['api_user'],
+            'apiPass' =>  $phpArray['api_pass'],
+            'session_user' =>  $phpArray['api_user'],
+            'responsetype' => 'json',
+            'start_date'=>$request->startDate,
+            'end_date'=>$request->endDate,
+            'agentlog'=>'userlog',
+            'user' => $request->extension,
+
+        ];
+        $ch = curl_init($apiEndpoint);
+
+        // Set cURL options
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
+        $response = curl_exec($ch);
+        curl_close($ch);
+
+        $api_response = json_decode($response, true);
+
+        return  $api_response;
 
     }
+
+
+    public function check_call_log(Request $request)
+    {
+        $data = [];
+        $key = [];
+
+        $OrganizationServices = OrganizationServices::find($request->organization_services_id);
+        $phpArray = json_decode($OrganizationServices->connection_parameters, true);
+        $apiEndpoint = 'https://' . $phpArray['server_url'] . '/APIv2/Users/API.php';
+
+        foreach ($request->selected_table as $key => $filter) {
+            # code...
+            $postData = [
+                'Action' => 'GetAgentLog',
+                'apiUser' =>  $phpArray['api_user'],
+                'apiPass' =>  $phpArray['api_pass'],
+                'session_user' =>  $phpArray['api_user'],
+                'responsetype' => 'json',
+                'start_date'=>$request->startDate,
+                'end_date'=>$request->endDate,
+                'agentlog'=>strtolower($filter),
+                'user' => $request->extension,
+    
+            ];
+            $ch = curl_init($apiEndpoint);
+    
+            // Set cURL options
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
+            $response = curl_exec($ch);
+            curl_close($ch);
+    
+            $api_response = json_decode($response, true);
+            if($api_response['result'] == 'success'){
+    
+                if($api_response['data'] !=null){
+                    
+                    array_push($data ,$api_response['data']);
+                }
+    
+            }
+
+        }
+        return  $data;
+
+    }
+
+
+    public function log($service , $organization_services_id ,$AgentID){
+
+        $dailer_agent_user = '';
+        $dailer_agent_user_response =   $this->get_agent_detail($organization_services_id ,$AgentID);
+        if($dailer_agent_user_response['result'] == 'success'){
+            $dailer_agent_user = $dailer_agent_user_response['data'];
+        }
+
+        $tab = 'call-Logs';
+        session()->put('tab', $tab);
+
+        return view('dialer.Agent.edit' ,compact('service','dailer_agent_user','organization_services_id'));
+    }
+
 
 
    
