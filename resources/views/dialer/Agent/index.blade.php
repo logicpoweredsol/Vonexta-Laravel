@@ -450,26 +450,50 @@
                             </div>
 
                             <div id="skills-part" class="content" role="tabpanel" aria-labelledby="skills-part-trigger">
+                                <div class="card-header">
+                                    <h3 class="card-title"><b>Inbound:</b></h3>
+                                </div>
+                                <div class="card-body">
                                 
                                 <table id="compaignns" class="table table-striped table-hover vonexta-table">
                                     <thead>
                                         <tr>
                                             <th>Name</th>
                                             <th>Level</th>
-                                            <th>Actions</th>
+                                            <th>Invited</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
                                             <td>0000</td>
                                             <td>0000</td>
-                                            <td>
-                                                <a href="#" class="btn btn-sm btn-primary" class="btnEdit" data-id=""><i class="fas fa-pen"></i><a>
-                                                <a href="#" class="btn btn-sm btn-danger" class="btnDelete" data-id=""><i class="fas fa-trash"></i><a>
-                                            </td>
+                                            <td>0000</td>
                                         </tr>
                                     </tbody>
                                 </table>
+                                </div>
+                                <div class="card-header">
+                                    <h3 class="card-title"><b>compaign:</b></h3>
+                                </div>
+                                <div class="card-body">
+                                
+                                <table id="compaignns" class="table table-striped table-hover vonexta-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Level</th>
+                                            <th>Invited</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>0000</td>
+                                            <td>0000</td>
+                                            <td>0000</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                </div>
 
 
 
