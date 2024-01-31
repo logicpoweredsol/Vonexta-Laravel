@@ -622,6 +622,7 @@ function impersonate_modal(id)
 {
     $('#user_password_box').addClass('d-none');
     $("#org_user_id").val(id);
+    $("#user_idd").val(id);
     $("#Impersonate-Modal").modal('show');
 }
 
@@ -631,17 +632,27 @@ function impersonate_modal(id)
 function send_impersonation_email()
 {
     var org_user_id = $("#org_user_id").val();
+
+    var type = $('input[name="options"]:checked').val();
     $.ajax({
         url: `${baseUrl}/organizations/user/send-email`,
         method: 'POST',
         headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
         data: {
-            "user":org_user_id
+            "user":org_user_id,
+            'type':type
         },
         success: function(response) {
             if(response){
-                $('#user_password_box').removeClass('d-none');
+
                 $('#user_email_box').addClass('d-none');
+                $('#Send').addClass('d-none');
+
+                $('#user_password_box').removeClass('d-none');
+                $('#Verify').removeClass('d-none');
+
+               
+               
             }
            
         },
@@ -651,6 +662,11 @@ function send_impersonation_email()
     });
 }
 
+
+function verifoy(){
+
+    $("#verify_form").submit();
+}
 
 
 

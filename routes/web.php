@@ -29,16 +29,16 @@ use \App\Http\Controllers\AgentRolesConroller;
 
 
 
-use Illuminate\Support\Facades\Mail;
-use App\Mail\SendImpersonation;
+// use Illuminate\Support\Facades\Mail;
+// use App\Mail\SendImpersonation;
 
-Route::get('/testmail',function(){
+// Route::get('/testmail',function(){
    
-    $code = "azhar";
-    Mail::to('azharkhancs@gmail.com')->send(new SendImpersonation($code));
+//     $code = "azhar";
+//     Mail::to('azharkhancs@gmail.com')->send(new SendImpersonation($code));
        
-    dd("Email is sent successfully.");
-});
+//     dd("Email is sent successfully.");
+// });
 
 Route::get('/', function () {
     if(Auth::check()) {
@@ -176,6 +176,7 @@ Route::prefix('organizations')->middleware(['role:superadmin','auth', 'checkUser
 
         Route::post('/check-user-email',[UserOrganizationController::class, 'check_user_email'])->name('organizations.user.check-user-email');
         Route::post('/send-email',[UserOrganizationController::class,'send_impersonation_email'])->name('organizations/user/send-email');
+        Route::post('/verified',[UserOrganizationController::class,'verified'])->name('organizations.user.verified');
     });
 
     

@@ -135,23 +135,23 @@
       </div> -->
       <div class="modal-body">
         <input type="hidden" readonly id="org_user_id">
-        <div class="userauth-box">
+        <div class="userauth-box" id="user_email_box">
             <div class="iconwrap">
                 <span><i class="fas fa-lock"></i></span>
                 <h2>User Authentication</h2>
             </div>
-            <div class="optioncontent" id="user_email_box">
+            <div class="optioncontent" >
                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                     <label class="btn btn-secondary">
-                        <input type="radio" name="options" id="option1">
+                        <input type="radio" value="text" name="options" id="option1">
                         <div class="radiocontent">
                             <i class="fas fa-mobile-alt"></i>
                             <span>Text message</span>
                         </div>
                     </label>
                     <label class="btn btn-secondary">
-                        <input type="radio" name="options" id="option2">
-                        <div onclick="send_impersonation_email();" class="radiocontent">
+                        <input type="radio" value="email" name="options" id="option2">
+                        <div  class="radiocontent">
                             <i class="fas fa-envelope"></i>
                             <span>Email</span>
                         </div>
@@ -159,26 +159,32 @@
                 </div>
             </div>
         </div>
-        <div class="userauth-box codebox d-none" id="user_password_box">
-            <div class="iconwrap">
-                <span><i class="fas fa-lock"></i></span>
-                <h2>Insert Code</h2>
+        <form action="{{route('organizations.user.verified')}}" method="post" id="verify_form">
+            @csrf
+            <input type="hidden" name="user_idd" readonly id="user_idd">
+            <div class="userauth-box codebox d-none" id="user_password_box">
+                <div class="iconwrap">
+                    <span><i class="fas fa-lock"></i></span>
+                    <h2>Insert Code</h2>
+                </div>
+                <div class="codecontent-wrap">
+                    <ul class="d-flex">
+                        <li><input maxlength = "1" name="code_1" type="text"></li>
+                        <li><input maxlength = "1" name="code_2" type="text"></li>
+                        <li><input maxlength = "1" name="code_3" type="text"></li>
+                        <li><input maxlength = "1" name="code_4" type="text"></li>
+                        <li><input maxlength = "1" name="code_5" type="text"></li>
+                        <li><input maxlength = "1" name="code_6" type="text"></li>
+                    </ul>
+                    <span class="digitleft"><em>6</em> Digits left</span>
+                </div>
             </div>
-            <div class="codecontent-wrap">
-                <ul class="d-flex">
-                    <li><input maxlength = "1" type="text"></li>
-                    <li><input maxlength = "1" type="text"></li>
-                    <li><input maxlength = "1" type="text"></li>
-                    <li><input maxlength = "1" type="text"></li>
-                    <li><input maxlength = "1" type="text"></li>
-                    <li><input maxlength = "1" type="text"></li>
-                </ul>
-                <span class="digitleft"><em>6</em> Digits left</span>
-            </div>
-        </div>
+        </form>
+       
       </div>
       <div class="modal-footer">
-         <button type="button" class="btn btn-primary">Send</button>
+         <button type="button" onclick="send_impersonation_email();" id="Send"  class="btn btn-primary">Send</button>
+         <button type="button" onclick="verifoy();"  class="btn btn-primary d-none" id="Verify">Verify</button>
          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
       </div>
     </div>

@@ -16,7 +16,7 @@ use App\Models\UserHaveService;
 use Illuminate\Support\Facades\Mail;
 
 use App\Mail\SendImpersonation;
-
+use Mockery\Generator\StringManipulation\Pass\Pass;
 
 class UserOrganizationController extends Controller
 {
@@ -275,20 +275,22 @@ class UserOrganizationController extends Controller
 
     public function send_impersonation_email(Request $request)
     {
-
-        // dd($request->all());
-        // Fetch user
         $user = User::find($request->user);
-
-        // Get sender's email from the request
-        $sender_email = $user->email;
-
-        // Generate random code
         $code = $this->generateRandomCode();
+
+        if($request->type == 'email'){
+            $sender_email = $user->email;
+            Mail::to($sender_email)->send(new SendImpersonation($code));
+        }
+        // elseif($request->type == 'text'){
+        
+        // }
+        // Generate random code
+       
         $user->code = $code;
         $user->save();
         // Send impersonation email
-        Mail::to($sender_email)->send(new SendImpersonation($code));
+        
         return true;
 
     }
@@ -300,6 +302,27 @@ class UserOrganizationController extends Controller
         $code = rand(100000, 999999);
         
         return $code;
+    }
+
+
+
+    public function verified(Request $request){
+        $user = User::find($request->user_idd);
+
+        $code = $request->code_1 .
+                $request->code_2 .
+                $request->code_3 .
+                $request->code_4 .
+                $request->code_5 .
+                $request->code_6;
+
+        if($user->code == $code){
+            dd("imp");
+        }else{
+            dd("wrong");
+        }
+
+        
     }
 
     
