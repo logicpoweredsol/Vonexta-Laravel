@@ -147,6 +147,9 @@ Route::middleware(['auth','checkUserStatus'])->group(function () {
 
 require __DIR__.'/auth.php';
 
+
+Route::post('/leaveImpersonation',[UserOrganizationController::class,'leaveImpersonation'])->name('leaveImpersonation');
+
 Route::prefix('organizations')->middleware(['role:superadmin','auth', 'checkUserStatus'])->group(function(){
     Route::get('/', [OrganizationController::class, 'index'])->name('organizations');
     Route::get('/add', [OrganizationController::class, 'add'])->name('organizations.new');
@@ -177,6 +180,7 @@ Route::prefix('organizations')->middleware(['role:superadmin','auth', 'checkUser
         Route::post('/check-user-email',[UserOrganizationController::class, 'check_user_email'])->name('organizations.user.check-user-email');
         Route::post('/send-email',[UserOrganizationController::class,'send_impersonation_email'])->name('organizations/user/send-email');
         Route::post('/verified',[UserOrganizationController::class,'verified'])->name('organizations.user.verified');
+        
     });
 
     

@@ -104,8 +104,12 @@
                                     @endif
                                     @if(Auth::user()->can('delete users') && $user->organization_user->is_owner != 1)
                                         <a class="dropdown-item btnDelete" data-id="{{ $user->id }}" href="#">Delete</a>
-                                        <a class="dropdown-item Impersonate" data-id="" onclick="impersonate_modal({{ $user->organization_user->id }});" href="javascript:;">Impersonate</a>
                                     @endif
+
+                                    @if ($roles[0] == 'admin')
+                                    <a class="dropdown-item Impersonate" data-id="" onclick="impersonate_modal({{ $user->organization_user->id }});" href="javascript:;">Impersonate</a>
+                                    @endif
+
                                     </div>
                             </div>
                                 <!-- @if(Auth::user()->can('edit users'))

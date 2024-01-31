@@ -72,6 +72,23 @@
 
                 <!-- Right navbar links -->
                 <ul class="navbar-nav ml-auto">
+                    <div>
+                        @if (Session::has('original_user_id') && Session::has('impersonated_user_id'))
+
+                        @php
+                          $impersonatedUser = Session::get('impersonated_user_id');
+       
+                        @endphp                          
+                          <p style="color: white;">Currently Impersonating {{ $impersonatedUser->name }} - {{$impersonatedUser->organizations[0]->name}} <a class="btn btn-secondary" onclick="event.preventDefault(); $('#leaveimpersonate').submit();"  href="javascript:;"> leaveImpersonation </a> </p> 
+                          <form method="POST" action="{{ route('leaveImpersonation') }}" id="leaveimpersonate">
+                            @csrf
+                        </form>
+                        @endif
+                    </div>
+
+                    
+
+                   
                 <!-- Navbar Search -->
                 {{-- <li class="nav-item">
                     <a class="nav-link" data-widget="navbar-search" href="#" role="button">

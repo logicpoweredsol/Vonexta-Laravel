@@ -14,7 +14,7 @@ use App\Models\UserOrganization;
 use App\Models\Organization;
 use App\Models\UserHaveService;
 use Illuminate\Support\Facades\Mail;
-
+use Illuminate\Support\Facades\Session;
 use App\Mail\SendImpersonation;
 use Mockery\Generator\StringManipulation\Pass\Pass;
 
@@ -307,7 +307,7 @@ class UserOrganizationController extends Controller
 
 
     public function verified(Request $request){
-        $user = User::find($request->user_idd);
+        $user = User::with('organizations')->find($request->user_idd);
 
         $code = $request->code_1 .
                 $request->code_2 .
@@ -317,12 +317,24 @@ class UserOrganizationController extends Controller
                 $request->code_6;
 
         if($user->code == $code){
-            dd("imp");
+            Session::put('original_user_id', Auth::id());
+            Session::put('impersonated_user_id', $user);
+            Auth::user()->impersonate($user);
+
+            return redirect('/dashboard');
         }else{
             dd("wrong");
         }
 
         
+    }
+
+
+    public function leaveImpersonation(Request $request) {
+        Session::forget('original_user_id');
+        Session::forget('impersonated_user_id');
+        Auth::user()->leaveImpersonation();
+        return redirect('/dashboard');
     }
 
     
