@@ -106,14 +106,4 @@ class SuperAdminController extends Controller
         }
     }
 
-
-
-
-
-
-
-
-  
-
-
 }

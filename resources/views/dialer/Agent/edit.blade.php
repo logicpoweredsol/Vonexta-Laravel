@@ -1,4 +1,3 @@
-
 @extends('layouts.app')
 @push('css')
 <!-- DataTables -->
@@ -8,10 +7,10 @@
 <link rel="stylesheet" href="{{ asset('plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }}">
 
 
- <!-- Select2 -->
- <link rel="stylesheet" href="{{ asset('plugins/select2/css/select2.min.css') }}">
+<!-- Select2 -->
+<link rel="stylesheet" href="{{ asset('plugins/select2/css/select2.min.css') }}">
 
- 
+
 <!-- Ion Slider -->
 <link rel="stylesheet" href="{{ asset('plugins/ion-rangeslider/css/ion.rangeSlider.min.css') }}">
 <!-- bootstrap slider -->
@@ -22,11 +21,11 @@
 @section('content')
 <!-- Content Wrapper. Contains page content -->
 
-    @if (auth()->user()->hasRole('user'))
-    <div class="content-wrapper" style="margin-left: 0rem">
+@if (auth()->user()->hasRole('user'))
+<div class="content-wrapper" style="margin-left: 0rem">
     @else
     <div class="content-wrapper">
-    @endif
+        @endif
 
 
 
@@ -53,16 +52,19 @@
                         @php
                         $email_address = get_email($dailer_agent_user['user']);
                         @endphp
-                
-                
-                        <h1>Edit   {{  $email_address}} - {{$dailer_agent_user['user']}} </h1>
+
+
+                        <h1>Edit {{ $email_address}} - {{$dailer_agent_user['user']}} </h1>
                     </div>
 
-                   
+
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="{{url('/')}}">Home</a></li>
-                            <li class="breadcrumb-item"><a href="{{ route('services.agents', ['service' => strtolower($service), 'organization_services_id' => $organization_services_id]) }}">Agents</a></li>
+
+                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
+                            @php $nick_name  =service_name($organization_services_id); @endphp
+                            <li class="breadcrumb-item"><a href="{{ route('services.agents', ['service' => strtolower('dailer'), 'organization_services_id' => $organization_services_id]) }}">{{$nick_name}} </a></li>
+                            <li class="breadcrumb-item active"><a href="{{ route('services.agents', ['service' => strtolower($service), 'organization_services_id' => $organization_services_id]) }}">Agents</a></li>
                             <li class="breadcrumb-item active">Edit Agents</li>
                         </ol>
                     </div>
@@ -76,12 +78,12 @@
                 <div class="card-body">
                     <ul class="nav nav-tabs vonexta-nav" id="campaigns-tabs" role="tablist">
                         <li class="nav-item vonext-campaign-item">
-                            <a class="nav-link @if( !session()->has('tab') && !session('tab')) active @endif "  id="Organization-home-tab" data-toggle="pill" href="#Organization-home" role="tab" aria-controls="Organization-home" aria-selected="true">Details</a>
+                            <a class="nav-link @if( !session()->has('tab') && !session('tab')) active @endif " id="Organization-home-tab" data-toggle="pill" href="#Organization-home" role="tab" aria-controls="Organization-home" aria-selected="true">Details</a>
                         </li>
 
-                        <li class="nav-item vonext-campaign-item">
+                        <!-- <li class="nav-item vonext-campaign-item">
                             <a class="nav-link" id="options-tab" data-toggle="pill" href="#options" role="tab" aria-controls="campaigns-disposition" aria-selected="false">Options</a>
-                        </li>
+                        </li> -->
 
                         <li class="nav-item vonext-campaign-item">
                             <a class="nav-link" id="Organization-user-tab" data-toggle="pill" href="#Organization-user" role="tab" aria-controls="campaigns-leadRecycling" aria-selected="false">Skills</a>
@@ -101,9 +103,11 @@
                         <div class="tab-pane fade show @if( !session()->has('tab') && !session('tab')) show active @endif   " id="Organization-home" role="tabpanel" aria-labelledby="Organization-home-tab">
                             <form method="POST" action="{{ route('services.update-agent.details', ['service' => strtolower('Dailer')]) }}" class="form-horizontal">
                                 <input type="hidden" class="form-control" id="User" name="User" value="{{ isset($dailer_agent_user['user']) ? $dailer_agent_user['user'] : '' }}">
-                                <input type="hidden" class="form-control" id="organization_services_id" name="organization_services_id" value="{{$organization_services_id}}" >
+                                <input type="hidden" class="form-control" id="organization_services_id" name="organization_services_id" value="{{$organization_services_id}}">
 
-                               
+
+                           
+
                                 @csrf
                                 <div class="card">
                                     <div class="card-header">
@@ -125,8 +129,8 @@
                                             <div class="col-sm-12 col-md-6 col-lg-6">
                                                 <div class="form-group">
                                                     <label for="phone" class="form-label">Email</label>
-                                                  
-                                                    <input type="email" class="form-control" id="email" name="email" readonly  value="{{$email_address}}">
+
+                                                    <input type="email" class="form-control" id="email" name="email" readonly value="{{$email_address}}">
                                                 </div>
                                             </div>
                                         </div>
@@ -134,26 +138,26 @@
                                             <div class="col-sm-12 col-md-6 col-lg-6">
                                                 <div class="form-group">
                                                     <label for="address" class="form-label">Extension</label>
-                                                    <input type="text" class="form-control" id="User" name="User" disabled value="{{ isset($dailer_agent_user['user']) ? $dailer_agent_user['user'] : '' }}" placeholder="User">
+                                                    <input type="text" class="form-control" id="extension" name="extension" disabled value="{{ isset($dailer_agent_user['user']) ? $dailer_agent_user['user'] : '' }}" placeholder="User">
                                                 </div>
-                                    
+
                                             </div>
                                             <div class="col-sm-12 col-md-6 col-lg-6">
                                                 <div class="form-group">
-                                                    <label for="Voice Mail" class="form-label">Voice Mail</label>
+                                                    <label for="Voice Mail" class="form-label">Voicemail</label>
 
                                                     @php
-                                                        $responds = get_voicemail($organization_services_id);
+                                                    $responds = get_voicemail($organization_services_id);
 
-                                                        $integerPart = filter_var($dailer_agent_user['phone_login'], FILTER_SANITIZE_NUMBER_INT);
+                                                    $integerPart = filter_var($dailer_agent_user['phone_login'], FILTER_SANITIZE_NUMBER_INT);
 
-                                                    @endphp                                                    
-                                            
-                                                    <select name="voice_mail" @if (!$responds) disabled @endif  class="form-control" id="voice_mail">
+                                                    @endphp
+
+                                                    <select name="voice_mail" @if (!$responds) disabled @endif class="form-control select2" id="voice_mail">
                                                         <option value="" selected>No Voicemail</option>
-                                                        <option value="{{$integerPart}}" {{ isset($dailer_agent_user['voicemail_id']) && $dailer_agent_user['voicemail_id'] == $integerPart  ? 'selected' : '' }}  selected >Agent's voicemail  ( {{$integerPart}} )</option>
+                                                        <option value="{{$integerPart}}" {{ isset($dailer_agent_user['voicemail_id']) && $dailer_agent_user['voicemail_id'] == $integerPart  ? 'selected' : '' }} selected>Agent's Voicemail ( {{$integerPart}} )</option>
                                                         @foreach ($responds['voicemail_id'] as $i=>$respond)
-                                                        <option value="{{ $responds['voicemail_id'][$i] }}" {{ isset($dailer_agent_user['voicemail_id']) && $dailer_agent_user['voicemail_id'] == $responds['voicemail_id'][$i] ? 'selected' : '' }}>{{$responds['voicemail_id'][$i] }}  -  {{$responds['fullname'][$i] }}</option>
+                                                        <option value="{{ $responds['voicemail_id'][$i] }}" {{ isset($dailer_agent_user['voicemail_id']) && $dailer_agent_user['voicemail_id'] == $responds['voicemail_id'][$i] ? 'selected' : '' }}>{{$responds['voicemail_id'][$i] }} - {{$responds['fullname'][$i] }}</option>
                                                         @endforeach
                                                     </select>
                                                     {{-- <input type="text" class="form-control" id="Voice_Mail" name="Voice_Mail" value="{{ isset($dailer_agent_user['voicemail_id']) ? $dailer_agent_user['voicemail_id'] : '' }}" placeholder="Voice Mail.."> --}}
@@ -164,32 +168,48 @@
                                         <div class="row">
                                             <div class="col-sm-12 col-md-6 col-lg-6">
                                                 <div class="form-group">
-                                                    <label for="Group" class="form-label">Group</label>
+                                                    <label for="Group" class="form-label">Role</label>
                                                     {{-- <input type="text" class="form-control" id="group" name="group" value="{{ isset($dailer_agent_user['user_group']) ? $dailer_agent_user['user_group'] : '' }}" placeholder="Group .."> --}}
-                                                    
+
                                                     @php
-                                                        $responses = get_group_user($organization_services_id);
-                                                        // dd($responses);
+                                                    $responses = get_group_user($organization_services_id);
+                                                     
                                                     @endphp
-                                                    <select name="group" class="form-control " id="group">
+                                                    <select name="group" class="form-control select2 " id="group">
                                                         @foreach ($responses as $response)
                                                         <option value="{{$response}}" {{ isset($dailer_agent_user['user_group']) && $dailer_agent_user['user_group'] == $response ? 'selected' : '' }}>{{ $response }}</option>
                                                         @endforeach
-                                                        
+
                                                     </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12 col-md-6 col-lg-6">
+                                                <div class="form-group">
+                                                    <label for="name" class="form-label">Agent Line</label>
+                                                    <input type="text" class="form-control" id="Sms_number" name="Sms_number" value="{{ isset($dailer_agent_user['mobile_number']) ? $dailer_agent_user['mobile_number'] : '' }}" placeholder="Mobile number"><br>
                                                 </div>
                                             </div>
 
                                             <div class="col-sm-12 col-md-6 col-lg-6">
                                                 <div class="form-group">
-                                                    <label for="active" class="form-label ">Active</label>
-                                                    <select name="active" class="form-control data" id="active" active="">
+                                                    <label for="active" class="form-label">Active</label>
+                                                    <select name="status" class="form-control data select5" id="status" active="">
                                                         <option value="Y" {{ (isset($dailer_agent_user['active']) && $dailer_agent_user['active'] == 'Y') ? 'selected' : '' }}>Yes</option>
                                                         <option value="N" {{ (isset($dailer_agent_user['active']) && $dailer_agent_user['active'] == 'N') ? 'selected' : '' }}>No</option>
                                                     </select>
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="col-sm-12 col-md-6 col-lg-6">
+                                        <div class="form-group fromgroup">
+                                            <label for="active" class="form-label">Custom Attribute 1</label>
+                                            <input type="text" class="form-control custom-attribute" name="custom_attribute" value="" placeholder="Custom attribute 1">
+                                            <button type="button" onclick="add_row();" class="btn btn-success btn-sm mt-2"> + </button>
+                                            <button type="button" onclick="remove_row();" class="btn btn-danger btn-sm mt-2"> - </button>
+                                        </div>
+
+                                        </div>
+
                                     </div>
                                     <!-- /.card-body -->
                                     <div class="card-footer">
@@ -221,7 +241,7 @@
                                         <div class="row">
                                             <div class="col-sm-12 col-md-6 col-lg-6">
                                                 <div class="form-group">
-                                                    <label for="name" class="form-label">SMS number</label>
+                                                    <label for="name" class="form-label">SMS Number</label>
                                                     <input type="text" class="form-control" id="Sms_number" name="Sms_number" value="{{ isset($dailer_agent_user['mobile_number']) ? $dailer_agent_user['mobile_number'] : '' }}" placeholder="Mobile number"><br>
                                                 </div>
                                             </div>
@@ -278,29 +298,10 @@
                                                     <input type="checkbox" class="form-check-input" {{(isset($dailer_agent_user['agentonly_callbacks']) && $dailer_agent_user['agentonly_callbacks']=='1' ) ? 'checked' : '' }} id="toggle5" name="Personal_Callbacks" data-bootstrap-switch data-off-color="danger" data-on-color="success">
                                                     <label class="form-check-label" for="toggle5"><b>Allow Personal Callbacks</b></label>
                                                 </div>
+                                               
                                             </div>
                                         </div>
 
-                                        {{-- //limit --}}
-
-                                        <div class="row mb-3">
-                                            <div class="col-md-4 mt-2">
-                                                <label> Inbound Calls Limit: </label>
-                                                <input id="max_inbound_calls" type="text" name="max_inbound_calls" value="{{ isset($dailer_agent_user['max_inbound_calls']) ? $dailer_agent_user['max_inbound_calls'] : '' }}">
-                                            </div>
-                                          </div>
-
-                                        {{-- <div class="row mb-3">
-                                            <div class="col-md-4 mt-2">
-                                                <label> Inbound Calls Limit: </label>
-                                                <input type="range" id="fixtures-events-range" name="max_inbound_calls" id="max_inbound_calls" min="1" max="1000" value="{{ isset($dailer_agent_user['max_inbound_calls']) ? $dailer_agent_user['max_inbound_calls'] : '' }}" oninput="update_input_value(this.id)">
-                                            </div>
-                                            <div class="col-md-2">
-                                                <div class="slidercontainer">
-                                                    <input class="form-control" type="number" readonly id="fixtures-events" value="{{ isset($dailer_agent_user['max_inbound_calls']) ? $dailer_agent_user['max_inbound_calls'] : '' }}" >
-                                                </div>         
-                                            </div>
-                                        </div> --}}
 
 
                                     </div>
@@ -323,7 +324,7 @@
                         </div>
 
                         <div class="tab-pane fade" id="Organization-user" role="tabpanel" aria-labelledby="Organization-user-tab">
-                       
+
                             {{-- Inbound --}}
                             <div class="card inbounds mt-3">
                                 <div class="card-header">
@@ -338,29 +339,33 @@
                                                 <th>Name</th>
                                                 <th>Level</th>
                                                 <th>Invited </th>
-                                                <th>Call's Today </th>
+                                                <th>Calls Today </th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach($call_log_inbounds as $call_log_inbound)
+
+
+                                            @if(isset($call_log_inbounds))
+                                            @foreach($call_log_inbounds as $row=>$call_log_inbound)
+
                                             <tr>
-                                                <td> <span class="adminlet3" data-toggle="tooltip" data-placement="top" title="{{$call_log_inbound['group_id']}}"><i class="fas fa-list"></i> </span> </td>
+                                                <td id='group_id_{{$row}}'>{{$call_log_inbound['group_id']}} <span class="adminlet3" onclick='open_inbound_model({{$row}});'><i class="fas fa-list"></i> </span> </td>
                                                 <td>
-                                                    <select name="" id="">
-                                                        <?php for($i=1 ;$i<=20; $i++){ ?>
-                                                            <option value="{{$i}}"> {{$i}} </option>
+                                                    <select id="group_grade_{{$row}}"  onchange='update_skill_inbound("{{$row}}");' style="border: none;">
+                                                        <?php for ($i = 1; $i <= 9; $i++) { ?>
+                                                            <option {{ $call_log_inbound['group_grade'] == $i  ? 'selected' : '' }} value="{{$i}}"> {{$i}} </option>
                                                         <?php } ?>
                                                     </select>
                                                 </td>
                                                 <td>
-                                                <input type="checkbox" class="form-check-input"   data-bootstrap-switch data-off-color="danger" data-on-color="success">
+                                                    <input type="checkbox"  {{$call_log_inbound['selected']=='1'  ? 'checked' : '' }} id='invited_{{$row}}'  class="form-check-input inbound-checkbox" data-bootstrap-switch data-off-color="danger" data-on-color="success">
                                                 </td>
                                                 <td>{{$call_log_inbound['calls_today']}}</td>
                                             </tr>
-
-
                                             @endforeach
-                                           
+
+                                            @endif
+
                                         </tbody>
 
                                     </table>
@@ -368,10 +373,21 @@
 
                             </div>
 
-                            {{-- OutBound --}}
+                            
+                            <div class="card-body">
+                                <div class="row mb-3">
+                                    <div class="col-md-4 mt-2">
+                                        <label> Inbound Calls Limit: </label>
+                                        <input id="max_inbound_calls"    type="text" oninput="update_inblound_call_limit(this.id);" name="max_inbound_calls"  value="{{ isset($dailer_agent_user['max_inbound_calls']) ? $dailer_agent_user['max_inbound_calls'] : '' }}" >
+                                    </div>
+                                </div>
+                            </div>
+                           
+
+                            <!-- outbound -->
                             <div class="card compaigns">
                                 <div class="card-header">
-                                    <h3 class="card-title"><b>OutBound</b></h3>
+                                    <h3 class="card-title"><b>Outbound</b></h3>
                                 </div>
                                 <div class="card-body">
 
@@ -384,25 +400,28 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-
-                                        @foreach($call_log_outbounds as $call_log_outbound)
-                                            <tr>
-                                            <td>{{$call_log_outbound->campaign_id}} <span class="adminlet3" data-toggle="tooltip" data-placement="top" title=""><i class="fas fa-list"></i> </span> </td>
-                                                <td>
-                                                    <select name="" id="">
-                                                        <?php for($i=1 ;$i<=20; $i++){ ?>
-                                                            <option value="{{$i}}"> {{$i}} </option>
-                                                        <?php } ?>
-                                                    </select>
-                                                </td>
-                                               
-                                                <td>{{$call_log_outbound['calls_today']}}</td>
-                                            </tr>
+                                            @if(isset($call_log_outbounds))
+                                                @foreach($call_log_outbounds as $row2=>$call_log_outbound)
+                                                <tr>
+                                                    <td id='campaign_id_{{$row2}}'>{{$call_log_outbound['campaign_id']}} <span class="adminlet3" onclick='open_outbound_model({{$row2}});'><i class="fas fa-list"></i> </span> </td>
 
 
-                                            @endforeach
+                                                    <td>
+                                                        <select id="campaign_grade_{{$row2}}" onchange='update_skill_outbound("{{$row2}}");' style="border: none;">
+                                                            <?php for ($i = 1; $i <= 9; $i++) { ?>
+                                                                <option {{ $call_log_outbound['campaign_grade'] == $i  ? 'selected' : '' }} value="{{$i}}"> {{$i}} </option>
+                                                            <?php } ?>
+                                                        </select>
 
-                                           
+                                                    </td>
+
+                                                    <td>{{$call_log_outbound['calls_today']}}</td>
+                                                </tr>
+                                                @endforeach
+
+                                            @endif
+
+
                                         </tbody>
 
                                     </table>
@@ -410,33 +429,33 @@
 
                             </div>
 
-                           
+
                         </div>
 
                         <div class="tab-pane fade  @if(session()->has('tab') && session('tab') == 'call-Logs') show active @endif " id="call-log" role="tabpanel" aria-labelledby="call-logs-tab">
 
-                            <div class="d-flex justify-content-end">
-                                <div class="col-md-4 mb-3">
-                                    <select class="form-control select2" id="table_log" multiple  style="width: 100%" onchange="show_call_log_tb();">
-                                        <option selected value="Inbound">Inbound</option>
-                                        <option selected value="Outbound">Outbound</option>
-                                        <option  value="Manual">Manual Calls</option>
-                                        <option  value="Transfer">Transfers</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="row d-flex justify-content-end">
-                                {{-- <div class="col-md-8"></div> --}}
-                                <div class="col-md-4">
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                          <span class="input-group-text">
-                                            <i class="far fa-calendar-alt"></i>
-                                          </span>
+                            <div class="row justify-content-end">
+                                <div class="col-md-6 mb-3">
+                                    <div class="tagcalender-wrapper d-flex justify-content-end">
+                                        <div class="tagswrap">
+                                            <select class="form-control select2" id="table_log" multiple style="width: 100%" onchange="show_call_log_tb();">
+                                                <option selected value="Inbound">Inbound</option>
+                                                <option selected value="Outbound">Outbound</option>
+                                                <option value="Manual">Manual Calls</option>
+                                                <option value="Transfer">Transfers</option>
+                                            </select>
                                         </div>
-                                        <input type="text" class="form-control float-right" id="reservation1">
-                                      </div>
+                                        <div class="calenderwrap">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        <i class="far fa-calendar-alt"></i>
+                                                    </span>
+                                                </div>
+                                                <input type="text" class="form-control float-right" id="reservation1">
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -446,31 +465,31 @@
                         </div>
 
                         <div class="tab-pane fade" id="activity" role="tabpanel" aria-labelledby="activity-tab">
+
+
+                            <div class="row d-flex justify-content-end mb-3">
+
+                                <div class="col-md-4 mt-3">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="far fa-calendar-alt"></i>
+                                            </span>
+                                        </div>
+                                        <input type="text" class="form-control float-right" id="reservation2">
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="card compaigns">
                                 <div class="card-header">
                                     <h3 class="card-title"><b>Agent Activity</b></h3>
-                                    
-                                </div>
 
-                                <div class="row d-flex justify-content-end">
-                                    {{-- <div class="col-md-8"></div> --}}
-                                    
-                                    <div class="col-md-4 mt-3">
-                                        <div class="input-group">
-                                            <div class="input-group-prepend">
-                                              <span class="input-group-text">
-                                                <i class="far fa-calendar-alt"></i>
-                                              </span>
-                                            </div>
-                                            <input type="text" class="form-control float-right" id="reservation2">
-                                          </div>
-                                    </div>
                                 </div>
-                              
 
                                 <div class="card-body">
 
-                                    <table  class="table table-striped table-hover vonexta-table">
+                                    <table class="table table-striped table-hover vonexta-table" id='active-log'>
                                         <thead>
                                             <tr>
                                                 <th>Time</th>
@@ -493,16 +512,95 @@
                             </div>
                         </div>
 
-                            </div>
-                        </div>
-                        
                     </div>
                 </div>
-            <!-- /.card-body -->
+
             </div>
-        </section>
-    <!-- /.content -->
+    </div>
+    <!-- /.card-body -->
 </div>
+</section>
+<!-- /.content -->
+
+
+<div class="modal fade" id="detail_modal">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title" id='skill_name'></h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <table class='table table-striped table-hover vonexta-table'>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Extension</th>
+                            <th>Invited</th>
+                            <th>Level</th>
+                        </tr>
+                    </thead>
+                    <tbody id='detail_modal_body'>
+                        <tr>
+                        
+                        </tr>
+                    </tbody>
+                </table>
+              
+            </div>
+            <!-- <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary">Save changes</button>
+            </div> -->
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+</div>
+
+
+
+
+<!-- Modal for outbound Skill -->
+<div class="modal fade" id="Outbound-Skill">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title" id='skill_name'></h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <table class='table table-striped table-hover vonexta-table'>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Extension</th>
+                            <th>Level</th>
+                        </tr>
+                    </thead>
+                    <tbody id='Outbound-Skill-body'>
+                        <tr>
+                        
+                        </tr>
+                    </tbody>
+                </table>
+              
+            </div>
+            <!-- <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary">Save changes</button>
+            </div> -->
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+</div>
+
+    </div>
 @endSection
 
 @push('scripts')
@@ -538,30 +636,6 @@
 
 <!-- SweetAlert2 -->
 <script src="{{ asset('plugins/sweetalert2/sweetalert2.min.js') }}"></script>
-{{-- <script>
-    const csrfToken = $('meta[name="csrf-token"]').attr('content');
-    console.log(123)
-    $(document).ready(function() {
-
-    });
-    $("#toggle4").change(function() {
-         $('#toggle4').val();
-         alert('changed')
-    });
-
-    $('#toggle4').on('ifChanged', function(event){
-        alert('changed')
-    // if(this.checked) // if changed state is "CHECKED"
-    // {
-    //     var correspondence_address = $('#correspondence_address').val();
-    //     $('#permanent_address').val(correspondence_address);
-    // }
-    // else
-    // {
-    //   $('#permanent_address').val('');
-    // }
-});
-</script> --}}
 
 <script src="{{ asset('plugins/bs-stepper/js/bs-stepper.min.js') }}"></script>
 <script src="{{ asset('views/services/dialler/users/edit.js') }}"></script>
@@ -570,9 +644,15 @@
 
 
 <script>
-   $(function () {
+$(function () {
     $('.select2').select2();
-   });
+});
+
+$(function(){
+    $('.select5').select2({
+        minimumResultsForSearch: Infinity
+    });
+});
   </script>
 
 

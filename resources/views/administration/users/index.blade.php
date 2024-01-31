@@ -80,11 +80,12 @@
                     <div>
                 </div>
             @endif
-            <table id="usersDT" class="table table-bordered table-striped table-hover">
+            <table id="usersDT" class="table table-striped table-hover vonexta-table">
                 <thead>
                     <tr>
                         <th>Name</th>
                         <th>Email</th>
+                        <th>User Type</th>
                         <th>Status</th>
                         <th>Actions</th>
                     </tr>
@@ -99,7 +100,15 @@
                             <td>
                                 {{ $user->email }}
                             </td>
-                   
+                            <td>
+
+                            @foreach ($user->getRoleNames() as $role)
+                              {{ucfirst($role)}}
+                            @endforeach
+                             
+                             
+                            </td>
+                               
                             <td>
 
                                 @if($user->active==1)
@@ -111,15 +120,26 @@
                                 
                             </td>
                             <td>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default">Actions</button>
+                                <button type="button" class="btn btn-default dropdown-toggle dropdown-icon" data-toggle="dropdown">
+                                  <span class="sr-only">Toggle Dropdown</span>
+                                </button>
+                                <div class="dropdown-menu" role="menu">
                                 @if(Auth::user()->can('edit users'))
-                                    <a href="{{ route('administration.users.view', $user->id) }}" class="btn btn-sm btn-primary"><i class="fas fa-pen"></i><a>
+                                  <a class="dropdown-item" href="{{ route('administration.users.view', $user->id) }}">Edit</a>
                                 @endif
+
                                 @if(Auth::user()->can('delete users'))
-                                    <a href="#" class="btn btn-sm btn-danger btnDelete" data-id="{{ $user->id }}"><i class="fas fa-trash"></i><a>
+                                  <a class="dropdown-item btnDelete" href="javascript:;" data-id="{{ $user->id }}">Disable</a>
                                 @endif
+                                </div>
+                            </div>
+                                
                             </td>
                         </tr>
                     @endforeach
+                    
                 </tbody>
             </table>
         </div>

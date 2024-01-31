@@ -92,7 +92,7 @@
                         <div class="form-group row">
                             <label for="role" class="col-sm-2 col-form-label">Role</label>
                             <div class="col-sm-10">
-                                <select class="form-control" id="role" name="role">
+                                <select class="form-control" id="role" name="role" onchange='toggal_service();'>
                                     @foreach($roles as $role)
                                         <option value="{{ $role->name }}" @if($edit_userRoles[0]==$role->name) {{ "selected" }} @endif>{{ ucfirst($role->name) }}</option>
                                     @endforeach
@@ -101,6 +101,8 @@
                             </div>
                         </div>
 
+
+                        @if($edit_userRoles[0] == 'admin')
                         <div class="form-group row">
                             <label for="Services_row" class="col-sm-2 col-form-label">Services</label>
                             <div class="col-sm-10">
@@ -123,7 +125,37 @@
                                 </span>
                             </div>
                         </div>
+                        @else
+                        <div class="form-group row d-none" id='div_services' >
+                            <label for="Services_row" class="col-sm-2 col-form-label">Services</label>
+                            <div class="col-sm-10">
+                                <div class="row" id="Services_row" @error('Services') aria-invalid="true" @enderror>
+                                    @foreach($user_have_service as $Services)
+                                    <div class="col-sm-6 mb-3">
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" id="{{ str_replace(" ", "_", $Services->user_have_service->service_nick_name) }}" name="Services[]" data-bootstrap-switch data-off-color="danger" data-on-color="success"  @if (in_array($Services->user_have_service->id,$edit_user_service )) checked @endif value="{{$Services->user_have_service->id }}">
+                                            <label class="form-check-label" for="{{ str_replace(" ", "_", $Services->user_have_service->service_nick_name) }}"> {{ ucwords($Services->user_have_service->service_nick_name)}}</label>
+                                        </div>
+                                    </div>
+        
+                                    
+                                    @endforeach
+                                </div>
+                                <span class="error">
+                                    @error('Services')
+                                        <label id="Services-error" class="error invalid-feedback" for="Services_row" style="display: inline-block;">{{ $message }}</label>
+                                    @enderror
+                                </span>
+                            </div>
+                        </div>
 
+
+
+
+                        @endif
+
+
+                      
                         {{-- <div class="form-group row">
                             <label for="permissions_row" class="col-sm-2 col-form-label">This user can</label>
                             <div class="col-sm-10">

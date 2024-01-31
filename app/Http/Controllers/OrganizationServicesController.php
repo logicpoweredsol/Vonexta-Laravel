@@ -138,6 +138,7 @@ class OrganizationServicesController extends Controller
 
     public function ceck_service_detail(Request $request) {
         // API endpoint
+        // dd($request->all());
 
         $status = true;
         $apiEndpoint = 'https://' . $request->serverUrl . '/APIv2/Users/API.php';
@@ -146,7 +147,7 @@ class OrganizationServicesController extends Controller
             'Action' => 'GetAllUsers',
             'apiUser' => $request->apiUser,
             'apiPass' => $request->apiPass,
-            'session_user' => $request->apiUser,
+            'session_user' => auth()->user()->email,
             'responsetype' => 'json',
         ];
         $ch = curl_init($apiEndpoint);
@@ -173,10 +174,13 @@ class OrganizationServicesController extends Controller
 
             $connection_parameters = json_encode($Make_detail_into_json);
 
-            $check_in_DB_OrganizationServices = OrganizationServices::where('connection_parameters', $connection_parameters)->first();
-            if( $check_in_DB_OrganizationServices != '' &&  $check_in_DB_OrganizationServices != null){
-                $status = 'Service is Already Used';
+            if($request->action != 'edit'){
+                $check_in_DB_OrganizationServices = OrganizationServices::where('connection_parameters', $connection_parameters)->first();
+                if( $check_in_DB_OrganizationServices != '' &&  $check_in_DB_OrganizationServices != null){
+                    $status = 'Service is Already Used';
+                }
             }
+          
 
         }else{
             $status = 'Please check API credentials';

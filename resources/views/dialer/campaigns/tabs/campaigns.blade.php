@@ -2,9 +2,9 @@
                             <thead>
                                 <tr>
                                     {{-- <th>#</th> --}}
-                                    <th>Campaign ID</th>
-                                    <th>Campaign Name</th>
-                                    <th>Dial Method</th>
+                                    <th>Profile ID</th>
+                                    <th>Profile Name</th>
+                                    <th>Type</th>
                                     <th>Status</th>
                                     <th>Actions</th>
                                 </tr>

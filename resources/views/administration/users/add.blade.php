@@ -87,7 +87,7 @@
                         <div class="form-group row">
                             <label for="role" class="col-sm-2 col-form-label">Role</label>
                             <div class="col-sm-10">
-                                <select class="form-control" id="role" name="role" value="{{ old('role')  }}">
+                                <select class="form-control" id="role" name="role" value="{{ old('role')  }}"  onchange='toggal_service();'>
                                     <option value="admin">Admin</option>
                                     <option value="user">User</option>
                                 </select>
@@ -95,7 +95,8 @@
                             </div>
                         </div>
 
-                        <div class="form-group row">
+
+                        <div class="form-group row" id='div_services'>
                             <label for="Services_row" class="col-sm-2 col-form-label">Services</label>
                             <div class="col-sm-10">
                                 <div class="row" id="Services_row" @error('Services') aria-invalid="true" @enderror>
@@ -144,7 +145,7 @@
                     <a href="{{ route("administration.users")  }}" class="btn btn-default">Cancel</a>
                 </div>
                 <!-- /.card-footer-->
-            </div>
+            `   </div>
                 <!-- /.card -->
             </form>
         </section>

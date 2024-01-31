@@ -1,11 +1,9 @@
-
-
-
 @if(session()->has('org-user-edit'))
 
 @php
     $edit_data = session('org-user-edit');
    
+
 @endphp
 
     <form id="" action="{{route('organization.user.update')}}" method="post" class="form-horizontal">
@@ -39,9 +37,18 @@
                     <label for="email" class="col-sm-2 col-form-label">Email</label>
                     <div class="col-sm-10">
                         <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email') ?? $edit_data['user']->email  }}"  placeholder="Email" @error('email') aria-invalid="true" @enderror>
-                        <span class="error">
                             @error('email')
                                 <label id="email-error" class="error invalid-feedback" for="email" style="display: inline-block;">{{ $message }}</label>
+                            @enderror
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="email" class="col-sm-2 col-form-label">Phone</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control @error('Phone') is-invalid @enderror" id="Phone" name="Phone" value="{{$edit_data['user']->phone}}"  placeholder="Phone" @error('Phone') aria-invalid="true" @enderror>
+                            @error('email')
+                                <label id="Phone-error" class="error invalid-feedback" for="email" style="display: inline-block;">{{ $message }}</label>
                             @enderror
                         </span>
                     </div>

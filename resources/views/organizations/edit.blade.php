@@ -241,7 +241,7 @@
                                     <div class="card">
                                         <!-- /.card-header -->
                                         <div class="card-body table-responsive">
-                                            <table id="servicesTable" class="table table-hover">
+                                            <table id="servicesTable" class="table table-striped table-hover vonexta-table dataTable no-footer dtr-inline">
                                                 <thead>
                                                 <th>#</th>
                                                 <th>Service</th>
@@ -268,8 +268,21 @@
                                                             <td>{{ $myService->pivot->service_nick_name }}</td>
                                                             <td>{{ $myService->pivot->service_name }}</td>
                                                             <td>
-                                                                <a href="javascript:void(0);" class="btn btn-sm btn-primary btnEditService" data-id="{{ $myService->pivot->id  }}"><i class="fas fa-pencil-alt"></i></a>
-                                                                <a href="javascript:void(0);" class="btn btn-sm btn-danger btnRemoveService" data-id="{{ $myService->pivot->id  }}"><i class="fas fa-trash"></i></a>
+
+                                                            <div class="btn-group">
+                                                                    <button type="button" class="btn btn-default">Actions</button>
+                                                                    <button type="button" class="btn btn-default dropdown-toggle dropdown-icon" data-toggle="dropdown">
+                                                                        <span class="sr-only">Toggle Dropdown</span>
+                                                                    </button>
+                                                                    <div class="dropdown-menu" role="menu">
+                                                                  
+                                                                        <a class="dropdown-item btnEditService" data-id="{{ $myService->pivot->id  }}" href="javascript:void(0);">Edit</a>
+                                                                        <a class="dropdown-item btnRemoveService" data-id="{{ $myService->pivot->id  }}" href="javascript:void(0);">Delete</a>
+                                                                    
+                                                                    </div>
+                                                            </div>
+                                                                <!-- <a href="javascript:void(0);" class="btn btn-sm btn-primary btnEditService" data-id="{{ $myService->pivot->id  }}"><i class="fas fa-pencil-alt"></i></a>
+                                                                <a href="javascript:void(0);" class="btn btn-sm btn-danger btnRemoveService" data-id="{{ $myService->pivot->id  }}"><i class="fas fa-trash"></i></a> -->
                                                             </td>
                                                         </tr>
 

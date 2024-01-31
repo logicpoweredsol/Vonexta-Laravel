@@ -9,14 +9,15 @@ $(function () {
 
 $(document).ready(function(){
 
-    $('.adminlet3').tooltip();
-    showPagination =true;
-    if ($('#tbl').find('tbody tr').length <= 10) {
+    // $('.adminlet3').tooltip();
+    var showPagination =true;
+    var showPagination2 =true;
+
+    if ($('#Campaigns').find('tbody tr').length <= 10) {
         showPagination = false;  // If records are 10 or less, hide pagination
     }
 
-
-    $('#Campaigns ,#Enbound,.table').DataTable({
+    $('#Campaigns').DataTable({
         "paging": showPagination,
         "lengthChange": true,
         "searching": true,
@@ -25,6 +26,25 @@ $(document).ready(function(){
         "autoWidth": false,
         "responsive": true
     });
+
+
+    if ($('#Enbound').find('tbody tr').length <= 10) {
+        showPagination2 = false;  // If records are 10 or less, hide pagination
+    }
+
+    $('#Enbound').DataTable({
+        "paging": showPagination2,
+        "lengthChange": true,
+        "searching": true,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false,
+        "responsive": true
+    });
+
+
+
+    
 
     show_call_log_tb();
 
@@ -38,23 +58,12 @@ $(document).ready(function(){
         showApplyButton: true, // Display the Apply button
         showCancelButton: true, // Display the Cancel button
         locale: {
-            format: 'YYYY-MM-DD', // Date format
+            format: 'MM/DD/YYYY', // Date format
             separator: ' to ', // Separator between start and end date
         },
-        // Define predefined date ranges
-        ranges: {
-            'Today': [moment(), moment()],
-            'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-            'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-            'This Month': [moment().startOf('month'), moment().endOf('month')],
-            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-        }
 
     }).on('apply.daterangepicker', function(ev, picker) {
-
-    
-
+       
         var startDate = picker.startDate.format('YYYY-MM-DD');
         var endDate = picker.endDate.format('YYYY-MM-DD');
         var organization_services_id = $("#organization_services_id").val();
@@ -70,34 +79,76 @@ $(document).ready(function(){
                 'organization_services_id': organization_services_id
             },
             success: function(response) {
-
-                console.log(response);
                 var html = "";
-                if(response['data']['event_time'] != null){
+            
+                if (response['data']['event_time'] != null) {
                     for (var p = 0; p < response['data']['event_time'].length; p++) {
+                        var session_length = '';
+            
+                        // Convert the string to a Date object
+                        var originalDate = new Date(response['data']['event_time'][p]);
+                        var month = originalDate.getMonth() + 1; // Adding 1 because months are zero-based
+                        var day = originalDate.getDate();
+                        var year = originalDate.getFullYear();
+                        var formattedDate = (month < 10 ? '0' : '') + month + '/' + (day < 10 ? '0' : '') + day + '/' + year;
+            
+                        // Get the time part as a string
+                        var timePart = response['data']['event_time'][p].split(' ')[1];
+            
+                        // Combine the formatted date and the original time part
+                        var formattedDateTime = formattedDate + ' ' + timePart;
+            
                         html += "<tr>";
-                        html += "<td>" + response['data']['event_time'][p] + "</td>";
+                        html += "<td>" + formattedDateTime + "</td>";
                         html += "<td>" + response['data']['sub_status'][p] + "</td>";
-                        html += "<td>" + response['data']['event_time'][p] + "</td>";
+            
+                        if ((response['data']['sub_status'][p] == 'LOGOUT' || response['data']['sub_status'][p] == 'FORCE-LOGOUT')) {
+                            var logout_time = response['data']['event_time'][p];
+            
+                            if (response['data']['event_time'][p + 1]) {
+                                var login_time = response['data']['event_time'][p + 1];
+                                session_length = calculateTimeDifference(logout_time, login_time);
+                            } else {
+                                session_length = '';
+                            }
+                        }
+            
+                        html += "<td>" + session_length + "</td>";
                         html += "<td>" + response['data']['campaign_id'][p] + "</td>";
                         html += "</tr>";
                     }
-                } 
+                }
+
+                var dataTable = $('#active-log').DataTable();
+                dataTable.destroy();
+
+
                 $("#activity-tbody").html(html);
 
-                // var dataTable = $('.table').DataTable();
+         
+                var showPagination4 = true;
 
-                //     // Destroy the existing DataTable and then reinitialize it with the updated HTML
-                //     dataTable.destroy();
-                    // $('.table').DataTable({
-                    //     "paging": true,
-                    //     "lengthChange": true,
-                    //     "searching": true,
-                    //     "ordering": true,
-                    //     "info": true,
-                    //     "autoWidth": false,
-                    //     "responsive": true
-                    // });
+                if ($('#active-log tbody tr').length <= 10) {
+                    showPagination4 = false;  // If records are 10 or less, hide pagination
+                }
+
+                // Initialize DataTable again
+                $('#active-log').DataTable({
+                    "paging": showPagination4,
+                    "lengthChange": true,
+                    "searching": true,
+                    "ordering": false,
+                    "info": true,
+                    "autoWidth": false,
+                    "responsive": true
+                });
+                
+          
+                
+                
+                
+
+
 
             },
             error: function(xhr, status, error) {
@@ -107,12 +158,11 @@ $(document).ready(function(){
 
     });
 
+
+
     
 
-
-
-
-
+    //call Log :
     $('#reservation1').daterangepicker({
        
         opens: 'left', // Position of the calendar dropdown
@@ -120,18 +170,9 @@ $(document).ready(function(){
         showApplyButton: true, // Display the Apply button
         showCancelButton: true, // Display the Cancel button
         locale: {
-            format: 'YYYY-MM-DD', // Date format
+            format: 'MM/DD/YYYY', // Date format
             separator: ' to ', // Separator between start and end date
         },
-        // Define predefined date ranges
-        ranges: {
-            'Today': [moment(), moment()],
-            'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-            'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-            'This Month': [moment().startOf('month'), moment().endOf('month')],
-            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-        }
 
     }).on('apply.daterangepicker', function(ev, picker) {
         var startDate = picker.startDate.format('YYYY-MM-DD');
@@ -141,8 +182,6 @@ $(document).ready(function(){
         var extension = $("#User").val();
 
         var  selected_table = $("#table_log").val();
-        
-
         if(selected_table.length > 0){
             $.ajax({
                 url: `${baseUrl}/services/dialer/agents/call_log`,
@@ -156,10 +195,70 @@ $(document).ready(function(){
                     'selected_table':selected_table
                 },
                 success: function(response) {
+                    var html = "";
+                    var  table_log = $("#table_log").val();
+                        table_log.forEach(category => {
+                            var data = response[category];
+                            if (typeof data !== 'undefined' && data['call_date'] !== null) {
+                                for (var p = 0; p < data['call_date'].length; p++) {
+
+                                     // Convert the string to a Date object
+                                    var originalDate = new Date(data['call_date'][p]);
+                                    var month = originalDate.getMonth() + 1; // Adding 1 because months are zero-based
+                                    var day = originalDate.getDate();
+                                    var year = originalDate.getFullYear();
+                                    var formattedDate = (month < 10 ? '0' : '') + month + '/' + (day < 10 ? '0' : '') + day + '/' + year;
+                        
+                                    // Get the time part as a string
+                                    var timePart = data['call_date'][p].split(' ')[1];
+                        
+                                    // Combine the formatted date and the original time part
+                                    var formattedDateTime = formattedDate + ' ' + timePart;
+
+
+                                    html += "<tr>";
+                                    html += "<td>" + formattedDateTime + "</td>";
+                                    html += "<td>" + data['phone_number'][p] + "</td>";
+                                    html += "<td>" + data['list_id'][p] + "</td>";
+                                    html += "<td>" + category + "</td>";
+                                    html += "<td>" + data['campaign_id'][p] + "</td>";
+                                    html += "<td>" + data['status'][p] + "</td>";
+
+                                    if(category == 'Outbound' ){
+                                        html += "<td>" + data['lead_id'][p] + "</td>";
+                                    }else{
+                                        html += "<td> - </td>";
+                                    }
+                                    html +="<td>" + data['length_in_sec'][p] + "</td>";
+                                  
+                                    html += "</tr>";
+                                }
+                            }
+                        });
+
+                        var dataTable = $('#call-logs').DataTable();
+                        dataTable.destroy();
+
+                        $("#call_lo_body").html(html);
+                        var showPagination4 = true;
     
-                    console.log(response);
+                        if ($('#call-logs tbody tr').length <= 10) {
+                            showPagination4 = false;  // If records are 10 or less, hide pagination
+                        }
+    
+                        // Initialize DataTable again
+                        $('#call-logs').DataTable({
+                            "paging": showPagination4,
+                            "lengthChange": true,
+                            "searching": true,
+                            "ordering": false,
+                            "info": true,
+                            "autoWidth": false,
+                            "responsive": true
+                        });
     
                 },
+
                 error: function(xhr, status, error) {
                     console.error("Error occurred:", error);
                 }
@@ -172,6 +271,30 @@ $(document).ready(function(){
        
     });
 
+    function calculateTimeDifference(time1, time2) {
+
+        // console.log("login time" + time1);
+        // console.log("logout time" + time2);
+
+        
+        // Parse input times into JavaScript Date objects
+        const datetime1 = new Date(time1);
+        const datetime2 = new Date(time2);
+    
+        // Calculate the difference in milliseconds
+        const diffInMilliseconds = Math.abs(datetime1 - datetime2);
+    
+        // Calculate hours, minutes, and seconds
+        const hours = Math.floor(diffInMilliseconds / 3600000);
+        const minutes = Math.floor((diffInMilliseconds % 3600000) / 60000);
+        const seconds = Math.floor((diffInMilliseconds % 60000) / 1000);
+    
+        // Format the result as 0:00:29
+        const formattedTimeDifference = `${hours}:${(minutes < 10 ? '0' : '')}${minutes}:${(seconds < 10 ? '0' : '')}${seconds}`;
+    
+        return formattedTimeDifference;
+    }
+    
 
 });
 
@@ -187,8 +310,8 @@ function show_call_log_tb(first) {
     }
     var All_tf = {
         'Inbound': ['Call Time', 'Phone Number', 'Contact List', 'Type', 'Source', 'Disposition'],
-        'Outbound': ['Contact ID', 'Phone Number', 'Campaign','Status'],
-        'Manual': ['Contact ID', 'Phone Number', 'Campaign', 'Status'],
+        'Outbound': ['Contact ID', 'Phone Number','Length'],
+        'Manual': ['Contact ID', 'Phone Number',],
         'Transfer': [ 'Contact ID', 'Phone Number', 'Transferred to']
     };
 
@@ -206,6 +329,8 @@ function show_call_log_tb(first) {
 
     if(table_log.length == 0 && table_log == ""){
         tb_th = tb_th.concat(All_tf['Inbound']);
+
+        // console.log(tb_th);
     }
 
     let tb_th_unique = tb_th.filter((value, index, self) => {
@@ -216,8 +341,6 @@ function show_call_log_tb(first) {
         <div class="card ${table_log.join(' ')}">
             <div class="card-header">`;
 
-
-
             if(table_log.length == 0){
                 html += `<h3 class="card-title"><b></b></h3>`;
             }else{
@@ -226,32 +349,253 @@ function show_call_log_tb(first) {
                
             html += `</div>
             <div class="card-body">
-                <table class="table table-striped table-hover vonexta-table" id="call-log-table">
+                <table class=" table table-striped table-hover vonexta-table" id='call-logs'>
                     <thead>
                         <tr>
                             ${tb_th_unique.map(element => `<th>${element}</th>`).join('')}
                         </tr>
                     </thead>
+                    <tbody id='call_lo_body'></tbody>
                 </table>
             </div>
         </div>
     `;
 
     $(".call-log-tb").html(html);
+    
+}
 
-    $('#call-log-table').DataTable({
-        "paging": true,
-        "lengthChange": true,
-        "searching": true,
-        "ordering": false,
-        "info": true,
-        "autoWidth": false,
-        "responsive": false,
+
+
+
+
+$('.inbound-checkbox').on('switchChange.bootstrapSwitch', function(event, state) {
+    var idValue = this.id;  // idValue will be 'invited_0', 'invited_1', etc.
+   var numericPart = idValue.split('_')[1];  // Extract the numeric part after the underscore
+   update_skill_inbound(numericPart);
+});
+
+
+function update_skill_inbound(row_number){
+    var group_id = $('#group_id_'+row_number).text();
+    var group_grade = $("#group_grade_"+row_number).val();
+    var invited = 'NO';
+    if ($('#invited_'+row_number).is(':checked')) {
+        invited = 'YES';
+    } else {
+        invited = 'NO';
+    }
+    var organization_services_id = $("#organization_services_id").val();
+    var extension = $("#User").val();
+
+
+
+    $.ajax({
+        url: `${baseUrl}/services/dialer/agents/update_skill_inbound`,
+        method: 'POST',
+        headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+        data: {
+            'group_id':group_id,
+            'group_grade':group_grade,
+            'invited': invited,
+            'organization_services_id': organization_services_id,
+            'extension':extension
+        },
+        success: function(response) {
+
+        },
+        error: function(xhr, status, error) {
+            console.error("Error occurred:", error);
+        }
+    });
+
+}
+
+
+function update_skill_outbound(row_number){
+
+    var campaign_id = $('#campaign_id_'+row_number).text();
+    var campaign_grade = $("#campaign_grade_"+row_number).val();
+
+    var organization_services_id = $("#organization_services_id").val();
+    var extension = $("#User").val();
+
+
+
+    $.ajax({
+        url: `${baseUrl}/services/dialer/agents/update_skill_outbound`,
+        method: 'POST',
+        headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+        data: {
+            'campaign_id':campaign_id,
+            'campaign_grade':campaign_grade,
+            'organization_services_id': organization_services_id,
+            'extension':extension
+        },
+        success: function(response) {
+
+        },
+        error: function(xhr, status, error) {
+            console.error("Error occurred:", error);
+        }
+    });
+
+
+}
+
+
+function update_inblound_call_limit(id){
+
+    var max_inbound_calls = $("#max_inbound_calls").val();
+    var organization_services_id = $("#organization_services_id").val();
+    var extension = $("#User").val();
+
+
+
+    $.ajax({
+        url: `${baseUrl}/services/dialer/agents/update_inblound_call_limit`,
+        method: 'POST',
+        headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+        data: {
+            'max_inbound_calls':max_inbound_calls,
+            'organization_services_id': organization_services_id,
+            'extension':extension
+        },
+        success: function(response) {
+
+        },
+        error: function(xhr, status, error) {
+            console.error("Error occurred:", error);
+        }
+    });
+
+
+}
+
+
+
+
+
+
+function open_inbound_model(row_number){
+
+    var group_id = $('#group_id_'+row_number).text();
+    var organization_services_id = $("#organization_services_id").val();
+    var extension = $("#User").val();
+
+
+    $.ajax({
+        url: `${baseUrl}/services/dialer/agents/get_skill_inbound_level`,
+        method: 'POST',
+        headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+        data: {
+            'group_id':group_id,
+            'organization_services_id': organization_services_id,
+            'extension':extension
+        },
+        success: function(response) {
+
+
+            console.log(response);
+
+            $("#skill_name").text(group_id);
+
+            var html = '';
+
+        for (let index = 0; index < response[0].length; index++) {
+            html += `<tr> 
+                        <td>${response[0][index]}</td>
+                        <td>${response[1][index]}</td> `;
+
+                        if(response[3][index] == 0){
+                            html += ` <td>NO</td> `;
+                        }else{
+                            html += ` <td>YES</td> `;
+                        }
+                       html += ` <td>${response[2][index]}</td>
+                       
+                        
+                    </tr>`;
+        }
+
+        $("#detail_modal_body").html(html);
+
+
+
+            // var html = '';
+
+            // for (let index = 0; index < response[0].length; index++) {
+
+            //     html  = `<tr> 
+            //                 <td> ${response[0][index]} </td>
+            //                 <td> </td>
+            //                 <td> </td>
+            //     </tr>`
+
+            //     const element = array[index];
+                
+            // }
+
+
+            // console.log(response);
+
+
+            // $("#detail_modal_body").html(html);
+
+        },
+        error: function(xhr, status, error) {
+            console.error("Error occurred:", error);
+        }
     });
 
 
 
+
+
+    $("#detail_modal").modal('show');
 }
+
+
+function open_outbound_model(row_number) {
+    var campaign_id_ = $('#campaign_id_' + row_number).text();
+    var organization_services_id = $("#organization_services_id").val();
+    var extension = $("#User").val();
+
+    $.ajax({
+        url: `${baseUrl}/services/dialer/agents/get_skill_outbound_level`,
+        method: 'POST',
+        headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+        data: {
+            'campaign_id': campaign_id_,
+            'organization_services_id': organization_services_id,
+            'extension': extension
+        },
+        success: function (response) {
+            $("#skill_name").text(campaign_id_);
+
+            var html = '';
+
+            for (let index = 0; index < response[0].length; index++) {
+                html += `<tr> 
+                            <td>${response[0][index]}</td>
+                            <td>${response[1][index]}</td>
+                            <td>${response[2][index]}</td>
+                        </tr>`;
+            }
+
+            $("#Outbound-Skill-body").html(html);
+            
+        },
+        error: function (xhr, status, error) {
+            console.error("Error occurred:", error);
+        }
+    });
+
+
+    $("#Outbound-Skill").modal('show');
+}
+
+
 
 
 
@@ -281,3 +625,44 @@ function show_call_log_tb(first) {
       timerProgressBar: true // Display a progress bar
     });
   }
+
+
+  var labelCounter = 1;
+    var placeholderCounter = 1;
+
+    function add_row() {
+        // Clone the original form group excluding the button
+        var originalFormGroup = $('.fromgroup').first();
+        var clonedFormGroup = originalFormGroup.clone();
+
+        // Increase the value of the label in the cloned form group
+        labelCounter++;
+        var currentLabel = clonedFormGroup.find('.form-label');
+        currentLabel.text('Custom Attribute ' + labelCounter);
+
+        // Clear the value of the cloned input
+        clonedFormGroup.find('.custom-attribute').val('');
+
+        // Increase the value of the placeholder in the cloned form group
+        placeholderCounter++;
+        clonedFormGroup.find('.custom-attribute').attr('placeholder', 'Custom attribute ' + placeholderCounter);
+
+        // Hide the button for the cloned form group
+        clonedFormGroup.find('.btn').hide();
+
+        // Move the button to the top of the cloned form group
+        clonedFormGroup.prepend(clonedFormGroup.find('.btn'));
+
+        // Append the cloned form group to the parent container
+        originalFormGroup.parent().append(clonedFormGroup);
+
+        // Show the button for the last inserted div
+        $('.container .form-group:last .btn').show();
+    }
+
+
+    function remove_row()
+    {
+        alert('ok');
+    }
+

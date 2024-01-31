@@ -60,7 +60,7 @@
           </div>
         </div>
         <div class="card-body">
-            <table id="organizationsDT" class="table table-bordered table-hover">
+            <table id="organizationsDT" class="table table-striped table-hover vonexta-table">
                 <thead>
                     <tr>
                         <th>Name</th>

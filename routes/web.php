@@ -14,6 +14,7 @@ use \App\Http\Controllers\ServiceController;
 use \App\Http\Controllers\PermissionController;
 use \App\Http\Controllers\SuperAdminController;
 use \App\Http\Controllers\HomeController;
+use \App\Http\Controllers\AgentRolesConroller;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -24,6 +25,20 @@ use \App\Http\Controllers\HomeController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+
+
+
+use Illuminate\Support\Facades\Mail;
+use App\Mail\SendImpersonation;
+
+Route::get('/testmail',function(){
+   
+    $code = "azhar";
+    Mail::to('azharkhancs@gmail.com')->send(new SendImpersonation($code));
+       
+    dd("Email is sent successfully.");
+});
 
 Route::get('/', function () {
     if(Auth::check()) {
@@ -40,6 +55,7 @@ Route::get('home',[HomeController::class,'index'])->middleware(['auth', 'verifie
 
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified', 'checkUserStatus'])->name('dashboard');
+
 
 Route::middleware(['auth','checkUserStatus'])->group(function () {
     Route::get('reset-password', [ProfileController::class, 'reset_password'])->name('reset-password');
@@ -59,9 +75,10 @@ Route::middleware(['auth','checkUserStatus'])->group(function () {
     
 
             Route::POST('/check-extension', [UserController::class, 'check_extension'])->name('services.extenxion-detail');
-            Route::POST('/get-extension-detail', [UserController::class, 'extension_detail'])->name('services.get-extenxion-detail');
+            Route::POST('/copy-skill', [UserController::class, 'extension_skill'])->name('services.copy-skill');
 
             Route::post('/save-agent', [UserController::class, 'save_agents'])->name('services.save-agent');
+            // Route::post('/create-session-variable', [UserController::class, 'save_agentcreate_session_variable'])->name('services.create-session-variable');
             Route::post('/bulk-agent', [UserController::class, 'save_bulk_agents'])->name('services.bulk-save-agent');
 
             Route::POST('/emergency-logout', [UserController::class, 'emergency_logout'])->name('services.emergency-logout');
@@ -70,14 +87,39 @@ Route::middleware(['auth','checkUserStatus'])->group(function () {
             Route::POST('/call_log',[UserController::class,'check_call_log'])->name('services.call_log');
             Route::get('/log/{organization_services_id}/{AgentID}', [UserController::class, 'log'])->name('services.agents.log');
 
+            Route::POST('/update-skills', [UserController::class, 'model_update_skills'])->name('services.agents.update-skills');
+
+            //update the skill tab record in edit agent 
+            Route::POST('/update_skill_inbound',[UserController::class,'update_skill_inbound'])->name('services.skill_inbound');
+            Route::POST('/update_skill_outbound',[UserController::class,'update_skill_outbound'])->name('services.update_skill_outbound');
+            //update the skill tab record in edit agent 
+
+            Route::POST('/update_inblound_call_limit',[UserController::class,'update_inblound_call_limit'])->name('services.update_inblound_call_limit');
+
+
+            Route::POST('/get_skill_inbound_level',[UserController::class,'get_skill_inbound_level'])->name('services.get_skill_inbound_level');
+            Route::POST('/get_skill_outbound_level',[UserController::class,'get_skill_outbound_level'])->name('services.get_skill_outbound_level');
+            // Route::POST('/inbound_Skills_on_add_agent',[UserController::class,'Skills_on_add_agent'])->name('services.Skills_on_add_agent');
+            // Route::POST('/compaign_Skills_on_add_agent',[UserController::class,'compaign_Skills_on_add_agent'])->name('services.compaign_Skills_on_add_agent');
+            
+            Route::get('agent-role/{organization_services_id}', [AgentRolesConroller::class, 'agentRole'])->name('services.agent-role');
+            Route::POST('/add-agent-role', [AgentRolesConroller::class, 'addAgentRole'])->name('services.add-agent-role');
+            Route::get('/agent-role-edit/{organization_services_id}/{user_group}', [AgentRolesConroller::class, 'edit'])->name('services.agent-role-edit');
+            Route::POST('/agent-role-update', [AgentRolesConroller::class, 'agentRoleUpdate'])->name('services.agent-role-update');
+
+
+
+            // Routes for rendering compaign
+            // Route::get('compaign', [CampaignController::class, 'all_compaigns'])->name('services.all_compaigns');
 
             
 
         });
 
         Route::middleware(['role_or_permission:admin|view campaigns'])->prefix('campaigns')->group(function() {
-            Route::put('/', [CampaignController::class, 'index'])->name('services.campaigns');
-            Route::get('/add', [CampaignController::class, 'add'])->name('services.campaigns.new');
+         
+
+            Route::get('/{organization_services_id}',[CampaignController::class, 'index'])->name('services.campaigns');
         });
     });
 
@@ -85,19 +127,21 @@ Route::middleware(['auth','checkUserStatus'])->group(function () {
    
     // Route::POST('/add-agents', [UserController::class, 'add_agents'])->name('add-agents');
 
-
-
     Route::prefix('administration')->group(function() {
-        Route::middleware(['role_or_permission:admin|view users'])->group(function() {
-            Route::prefix('users')->group(function(){
-                Route::get('/', [SystemUserController::class, 'index'])->name('administration.users');
-                Route::get('/add', [SystemUserController::class, 'add'])->name('administration.users.new');
-                Route::post('/add', [SystemUserController::class, 'store'])->name('administration.users.store');
-                Route::get('/edit/{user}', [SystemUserController::class, 'view'])->name('administration.users.view');
-                Route::put('/edit/{user}',[SystemUserController::class, 'edit'])->name('administration.users.edit');
-                Route::delete('/delete/{user}',[SystemUserController::class, 'delete'])->name('administration.users.delete');
-            });
+        Route::prefix('users')->group(function(){
+            Route::get('/', [SystemUserController::class, 'index'])->name('administration.users');
+            Route::get('/add', [SystemUserController::class, 'add'])->name('administration.users.new');
+            Route::post('/add', [SystemUserController::class, 'store'])->name('administration.users.store');
+            Route::get('/edit/{user}', [SystemUserController::class, 'view'])->name('administration.users.view');
+            Route::put('/edit/{user}',[SystemUserController::class, 'edit'])->name('administration.users.edit');
+            Route::post('/delete',[SystemUserController::class, 'delete'])->name('administration.users.delete');
+
+            Route::post('/store_user_by_agent_side', [SystemUserController::class, 'store_user_by_agent_side'])->name('administration.users.store_user_by_agent_side');
         });
+
+        // Route::middleware(['role_or_permission:admin|view users'])->group(function() {
+          
+        // });
     });
 });
 
@@ -131,6 +175,7 @@ Route::prefix('organizations')->middleware(['role:superadmin','auth', 'checkUser
         Route::post("/delete",[UserOrganizationController::class, 'delete'])->name('organizations.user.delete');
 
         Route::post('/check-user-email',[UserOrganizationController::class, 'check_user_email'])->name('organizations.user.check-user-email');
+        Route::post('/send-email',[UserOrganizationController::class,'send_impersonation_email'])->name('organizations/user/send-email');
     });
 
     

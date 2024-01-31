@@ -1,6 +1,16 @@
 $(document).ready(function(){
+
+
+    showPagination =true;
+    if ($('#usersDT').find('tbody tr').length <= 10) {
+        showPagination = false;  // If records are 10 or less, hide pagination
+    }
+
+
+
+
     $('#usersDT').DataTable({
-        "paging": true,
+        "paging": showPagination,
         "lengthChange": true,
         "searching": true,
         "ordering": true,
@@ -23,10 +33,11 @@ $(document).ready(function(){
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: `${baseUrl}/system/users/delete/${user}`,
-                    type: 'DELETE',
+                    url: `${baseUrl}/administration/users/delete`,
+                    method: 'POST',
+                    headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
                     data: {
-                        _token: csrfToken
+                        'user':user
                     },
                     success: function (response) {
                         let icon = response.status ? "success" : "error";

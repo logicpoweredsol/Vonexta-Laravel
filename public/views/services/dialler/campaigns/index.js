@@ -1,4 +1,5 @@
 $(document).ready(function(){
+    
     // BS-Stepper Init
     var campaignStepper = new Stepper(campaignStepperEl);
     $('#campaignsDT','#dispositionsDT','#leadRecyclingDT', '#accidDT').DataTable({
@@ -164,3 +165,4 @@ const validateForNextStep = (campaignType) => {
     }
     return isValidated;
 };
+

@@ -45,3 +45,17 @@ $(document).ready(function (){
         }
     })
 });
+
+
+
+function toggal_service(){
+    var role = $('#role').val();
+
+    if(role == 'user'){
+        $('#div_services').addClass('d-none');
+    }else{
+        $('#div_services').removeClass('d-none');
+    }
+
+
+}

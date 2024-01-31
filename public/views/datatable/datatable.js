@@ -1,13 +1,14 @@
-$(document).ready(function(){
+var table = "";
 
+$(document).ready(function () {
+    var showPagination = true;
 
-    showPagination =true;
     if ($('#tbl').find('tbody tr').length <= 10) {
-        showPagination = false;  // If records are 10 or less, hide pagination
+        showPagination = false; // If records are 10 or less, hide pagination
     }
 
     // Initialize DataTable
-    const table = $('#tbl').DataTable({
+    table = $('#tbl').DataTable({
         "paging": showPagination,
         "lengthChange": true,
         "searching": true,
@@ -16,24 +17,30 @@ $(document).ready(function(){
         "autoWidth": false,
         "responsive": true
     });
+});
 
-    // Get the select element for status
-    const statusEl = document.querySelector('#search_filter');
-    
-    // Add event listener for status change to redraw table
-    statusEl.addEventListener('change', function () {
-        table.draw();
-    });
+function search_filter(statusEl) {
+    // Remove the previous search function before adding a new one
+    $.fn.dataTable.ext.search.pop();
 
-    // Custom status filtering function
+    // Add a new search function
     $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
-        let selectedStatus = statusEl.value.trim().toLowerCase();  // Convert to lower case and trim
-        let rowStatus = data[5].trim().toLowerCase();  // Convert to lower case and trim
-        if(selectedStatus != 'all'){
-            return selectedStatus === rowStatus;
-        }else{
+        // Check if data[5] is defined and not null before accessing its properties
+        let rowStatus = (data[5] || '').trim().toLowerCase();
+
+
+        let valueToSearch = statusEl.trim().toLowerCase();
+    
+        if (valueToSearch !== 'all') {
+            return valueToSearch === rowStatus;
+        } else {
             return true;
         }
-       
     });
-});
+    
+
+    // Redraw the DataTable with the new search function
+    table.draw();
+
+    $("#cur_status").text(statusEl);
+}

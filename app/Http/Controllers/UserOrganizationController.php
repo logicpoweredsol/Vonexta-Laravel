@@ -13,7 +13,9 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\UserOrganization;
 use App\Models\Organization;
 use App\Models\UserHaveService;
+use Illuminate\Support\Facades\Mail;
 
+use App\Mail\SendImpersonation;
 
 
 class UserOrganizationController extends Controller
@@ -42,6 +44,7 @@ class UserOrganizationController extends Controller
         $user = new User();
         $user->name = $request->name;
         $user->email = $request->email;
+        $user->Phone = $request->Phone;
         $user->password = Hash::make($request->password);
         $user->email_verified_at = date("Y-m-d H:i:s");
         $user->created_by = Auth()->user()->id;
@@ -112,6 +115,7 @@ class UserOrganizationController extends Controller
             'roles'=>$roles
         ];
 
+
     
 
         session()->put('org-user-edit', $Data);
@@ -164,6 +168,7 @@ class UserOrganizationController extends Controller
         $user = User::find($request->user_id);
         $user->name = $request->name;
         $user->email = $request->email;
+        $user->Phone=$request->Phone;
         if($request->password != null &&  $request->password != ''){
             $user->password = Hash::make($request->password);
         }
@@ -265,6 +270,36 @@ class UserOrganizationController extends Controller
         }
         return $status;
         
+    }
+
+
+    public function send_impersonation_email(Request $request)
+    {
+
+        // dd($request->all());
+        // Fetch user
+        $user = User::find($request->user);
+
+        // Get sender's email from the request
+        $sender_email = $user->email;
+
+        // Generate random code
+        $code = $this->generateRandomCode();
+        $user->code = $code;
+        $user->save();
+        // Send impersonation email
+        Mail::to($sender_email)->send(new SendImpersonation($code));
+        return true;
+
+    }
+
+
+    public function generateRandomCode()
+    {
+        // Generate a 6-digit random code
+        $code = rand(100000, 999999);
+        
+        return $code;
     }
 
     

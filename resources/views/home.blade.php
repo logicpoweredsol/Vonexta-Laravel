@@ -85,6 +85,8 @@
                             @php
                               $agent_user_detail = [];
                               $check_number = count($userAgents);
+
+                      
                             @endphp
 
                             @if ($check_number > 1)
@@ -94,6 +96,8 @@
                               @php
                                 $detail = get_agent_detail($userAgent->services_id , $userAgent->api_user );
                               @endphp
+
+                  
     
                               @if($detail)
                                 @if ($detail['result'] == 'success' )

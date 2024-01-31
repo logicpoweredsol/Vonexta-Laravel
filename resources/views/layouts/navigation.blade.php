@@ -2,6 +2,8 @@
 @php
 $main_menu =  request()->segment(1);
 $sub_menu = request()->segment(2);
+
+
 $sub_menu_main = null!==request()->segment(3) && !is_numeric(request()->segment(3)) ? request()->segment(3) : '';
 $sub_menu_sub = null!==request()->segment(4) && !is_numeric(request()->segment(4)) ? request()->segment(4) : '';
 @endphp
@@ -65,7 +67,7 @@ $sub_menu_sub = null!==request()->segment(4) && !is_numeric(request()->segment(4
 
                     @if ( $server_check)
                 
-                    <li class="nav-item @if($sub_menu == strtolower($user_have->user_have_service->service_nick_name)) {{ 'menu-open' }} @endif">
+                    <li class="nav-item @if($sub_menu == strtolower($user_have->user_have_service->service_nick_name))  {{ 'menu-open' }} @endif">
                         <a href="#" class="nav-link @if($sub_menu==strtolower($user_have->user_have_service->service_nick_name)) {{ 'active' }} @endif">
                         <i class="nav-icon fas fa-tty"></i>
                         <p>
@@ -83,10 +85,10 @@ $sub_menu_sub = null!==request()->segment(4) && !is_numeric(request()->segment(4
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="{{ route('services.campaigns',['service' => strtolower($service->name)]) }}" class="nav-link @if($sub_menu_main=='campaigns') {{ 'active' }} @endif">
+                                <a href="{{ route('services.campaigns', ['service' => strtolower($service->name) ,'organization_services_id' => $user_have->user_have_service->id ]) }}" class="nav-link @if($sub_menu_main=='campaigns') {{ 'active' }} @endif">
                                 <i class="nav-icon fas fa-bullhorn"></i>
                                     <p>
-                                        Campaigns
+                                        Outbound Profiles
                                     </p>
                                 </a>
                             </li>
@@ -94,7 +96,7 @@ $sub_menu_sub = null!==request()->segment(4) && !is_numeric(request()->segment(4
                                 <a href="#" class="nav-link @if($sub_menu_main=='lists') {{ 'active' }} @endif">
                                 <i class="nav-icon fas fa-bars"></i>
                                     <p>
-                                        Lists
+                                        Contacts Lists
                                     </p>
                                 </a>
                             </li>
@@ -108,19 +110,19 @@ $sub_menu_sub = null!==request()->segment(4) && !is_numeric(request()->segment(4
                                 <li class="nav-item">
                                     <a href="#" class="nav-link">
                                     <i class="fas fa-people-arrows nav-icon"></i>
-                                    <p>Inbound Groups</p>
+                                    <p>Inbound Queues</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
                                     <a href="#" class="nav-link">
                                     <i class="fas fa-sim-card nav-icon"></i>
-                                    <p>DIDs</p>
+                                    <p>TFNs</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
                                     <a href="#" class="nav-link">
                                     <i class="fas fa-tape nav-icon"></i>
-                                    <p>IVRs</p>
+                                    <p>Call Trees</p>
                                     </a>
                                 </li>
                                 </ul>
@@ -137,7 +139,7 @@ $sub_menu_sub = null!==request()->segment(4) && !is_numeric(request()->segment(4
                                 <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-scroll"></i>
                                     <p>
-                                        Scripts
+                                        Call Guides
                                     </p>
                                 </a>
                             </li>
@@ -151,7 +153,7 @@ $sub_menu_sub = null!==request()->segment(4) && !is_numeric(request()->segment(4
                                 <li class="nav-item">
                                     <a href="#" class="nav-link">
                                     <i class="far fa-clock nav-icon"></i>
-                                    <p>Call Times</p>
+                                    <p>Time Sets</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
@@ -167,15 +169,15 @@ $sub_menu_sub = null!==request()->segment(4) && !is_numeric(request()->segment(4
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="#" class="nav-link">
+                                    <a href="{{ route('services.agent-role', ['service' => strtolower($service->name), 'organization_services_id' => $user_have->user_have_service->id]) }}" class="nav-link">
                                     <i class="fas fa-user-friends nav-icon"></i>
-                                    <p>User Groups</p>
+                                    <p>Agent Roles</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
                                     <a href="#" class="nav-link">
                                     <i class="fas fa-layer-group nav-icon"></i>
-                                    <p>Statuses</p>
+                                    <p>Outcomes</p>
                                     </a>
                                 </li>
                                 </ul>

@@ -1,4 +1,4 @@
-<style>
+<style>All Users
     .bootstrap-switch.bootstrap-switch-wrapper.bootstrap-switch-animate{
         width: 80px !important;
     }
@@ -39,11 +39,12 @@
                 <div>
             </div>
         @endif
-        <table id="usersDT" class="table table-bordered table-striped table-hover">
+        <table id="usersDT" class="table table-striped table-hover vonexta-table">
             <thead>
                 <tr>
                     <th>Name</th>
                     <th>Email</th>
+                    <th>Phone</th>
                     <th>Status</th>
                     <th>Role</th>
                     <th>Actions</th>
@@ -60,6 +61,11 @@
                             </td>
                             <td>
                                 {{ $user->organization_user->email }}
+                            </td>
+                            <td>
+
+                            {{$user->organization_user->phone}}
+                                
                             </td>
                         
                             <td>
@@ -87,13 +93,28 @@
                             </td>
 
                             <td>
-                                @if(Auth::user()->can('edit users'))
+                            <div class="btn-group">
+                                    <button type="button" class="btn btn-default">Actions</button>
+                                    <button type="button" class="btn btn-default dropdown-toggle dropdown-icon" data-toggle="dropdown">
+                                        <span class="sr-only">Toggle Dropdown</span>
+                                    </button>
+                                    <div class="dropdown-menu" role="menu">
+                                    @if(Auth::user()->can('edit users'))
+                                        <a class="dropdown-item" href="{{ url('organizations/user/edit/'.$user->organization_user->id .'/'. $user->organization_id) }}">Edit</a>
+                                    @endif
+                                    @if(Auth::user()->can('delete users') && $user->organization_user->is_owner != 1)
+                                        <a class="dropdown-item btnDelete" data-id="{{ $user->id }}" href="#">Delete</a>
+                                        <a class="dropdown-item Impersonate" data-id="" onclick="impersonate_modal({{ $user->organization_user->id }});" href="javascript:;">Impersonate</a>
+                                    @endif
+                                    </div>
+                            </div>
+                                <!-- @if(Auth::user()->can('edit users'))
                                     <a href="{{ url('organizations/user/edit/'.$user->organization_user->id .'/'. $user->organization_id) }}" class="btn btn-sm btn-primary"><i class="fas fa-pen"></i><a>
                                 @endif
                                 
                                 @if(Auth::user()->can('delete users') && $user->organization_user->is_owner != 1)
                                     <a href="#" class="btn btn-sm btn-danger btnDelete" data-id="{{ $user->id }}"><i class="fas fa-trash"></i><a>
-                                @endif
+                                @endif -->
                             </td>
                             
                         </tr>
@@ -103,4 +124,66 @@
             </tbody>
         </table>
     </div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="Impersonate-Modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- <div class="modal-header">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div> -->
+      <div class="modal-body">
+        <input type="hidden" readonly id="org_user_id">
+        <div class="userauth-box">
+            <div class="iconwrap">
+                <span><i class="fas fa-lock"></i></span>
+                <h2>User Authentication</h2>
+            </div>
+            <div class="optioncontent" id="user_email_box">
+                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                    <label class="btn btn-secondary">
+                        <input type="radio" name="options" id="option1">
+                        <div class="radiocontent">
+                            <i class="fas fa-mobile-alt"></i>
+                            <span>Text message</span>
+                        </div>
+                    </label>
+                    <label class="btn btn-secondary">
+                        <input type="radio" name="options" id="option2">
+                        <div onclick="send_impersonation_email();" class="radiocontent">
+                            <i class="fas fa-envelope"></i>
+                            <span>Email</span>
+                        </div>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="userauth-box codebox d-none" id="user_password_box">
+            <div class="iconwrap">
+                <span><i class="fas fa-lock"></i></span>
+                <h2>Insert Code</h2>
+            </div>
+            <div class="codecontent-wrap">
+                <ul class="d-flex">
+                    <li><input maxlength = "1" type="text"></li>
+                    <li><input maxlength = "1" type="text"></li>
+                    <li><input maxlength = "1" type="text"></li>
+                    <li><input maxlength = "1" type="text"></li>
+                    <li><input maxlength = "1" type="text"></li>
+                    <li><input maxlength = "1" type="text"></li>
+                </ul>
+                <span class="digitleft"><em>6</em> Digits left</span>
+            </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+         <button type="button" class="btn btn-primary">Send</button>
+         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+      </div>
+    </div>
   </div>
+</div>
+  </div>
+
+    

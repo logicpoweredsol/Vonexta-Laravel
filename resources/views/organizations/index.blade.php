@@ -63,7 +63,7 @@
                     <div>
                 </div>
             @endif
-            <table id="organizationsDT" class="table table-bordered table-hover">
+            <table id="organizationsDT" class="table table-striped table-hover vonexta-table">
                 <thead>
                     <tr>
                         {{-- <th>#</th> --}}
@@ -100,8 +100,19 @@
                                 @endif
                             </td>
                             <td>
-                                <a href="{{ route('organizations.view', $organization->id) }}" class="btn btn-sm btn-primary" class="btnEdit" data-id="{{ $organization->id }}"><i class="fas fa-pen"></i><a>
-                                <a href="#" class="btn btn-sm btn-danger" class="btnDelete" data-id="{{ $organization->id }}"><i class="fas fa-trash"></i><a>
+                            <div class="btn-group">
+                                    <button type="button" class="btn btn-default">Actions</button>
+                                    <button type="button" class="btn btn-default dropdown-toggle dropdown-icon" data-toggle="dropdown">
+                                        <span class="sr-only">Toggle Dropdown</span>
+                                    </button>
+                                    <div class="dropdown-menu" role="menu">
+                                        <a class="dropdown-item" href="{{ route('organizations.view', $organization->id) }}">Edit</a>
+                                        <a class="dropdown-item btnDelete" data-id="{{ $organization->id }} href="javascript:;">Delete</a>
+                                        
+                                    </div>
+                            </div>
+                                <!-- <a href="" class="btn btn-sm btn-primary" class="btnEdit" data-id="{{ $organization->id }}"><i class="fas fa-pen"></i><a>
+                                 <a href="#" class="btn btn-sm btn-danger" class="btnDelete" data-id="{{ $organization->id }}"><i class="fas fa-trash"></i><a> -->
                             </td>
                         </tr>
                     @endforeach

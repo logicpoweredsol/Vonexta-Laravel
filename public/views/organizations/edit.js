@@ -1,17 +1,31 @@
 $(document).ready(function () {
     var service_name_text = "";
 
-    var dtConfig = {
-        "paging": true,
+    // var dtConfig = {
+    //     "paging": true,
+    //     "lengthChange": true,
+    //     "searching": true,
+    //     "ordering": true,
+    //     "info": true,
+    //     "autoWidth": false,
+    //     "responsive": true,
+    // };
+    
+
+    // let ogServicesDT = $('#servicesTable').DataTable(dtConfig);
+    if ($('#servicesTable').find('tbody tr').length <= 10) {
+        showPagination2 = false;
+    }
+
+    $('#servicesTable').DataTable({
+        "paging": showPagination2,
         "lengthChange": true,
         "searching": true,
         "ordering": true,
         "info": true,
         "autoWidth": false,
-        "responsive": true,
-    };
-
-    let ogServicesDT = $('#servicesTable').DataTable(dtConfig);
+        "responsive": true
+    });
 
 
     $(document).on('click', '.btnRemoveService', function () {
@@ -334,7 +348,7 @@ $(document).ready(function () {
 
             if(service_type.includes("Dialer")){
                 service_type_name = true;
-                responce_status  = await ceck_service_detail(formData);
+                responce_status  = await ceck_service_detail(formData,'edit');
             }
 
 
@@ -492,7 +506,14 @@ $(document).ready(function () {
 
 
 
-    async function ceck_service_detail(formData){
+    async function ceck_service_detail(formData,action){
+
+        if(action !== 'undefined'){
+            var action = action;
+        }else{
+            var action = "";
+        }
+       
         var status = false;
         var params = new URLSearchParams(formData);
         // Create an empty object to store the key-value pairs
@@ -516,6 +537,7 @@ $(document).ready(function () {
                 'serverUrl':serverUrl,
                 'apiUser':apiUser,
                 'apiPass':apiPass,
+                'action':action,
                 _token: csrfToken
             },
             success: function (response) {
@@ -594,6 +616,40 @@ $(document).ready(function () {
 
     
 });
+
+
+function impersonate_modal(id)
+{
+    $('#user_password_box').addClass('d-none');
+    $("#org_user_id").val(id);
+    $("#Impersonate-Modal").modal('show');
+}
+
+
+
+
+function send_impersonation_email()
+{
+    var org_user_id = $("#org_user_id").val();
+    $.ajax({
+        url: `${baseUrl}/organizations/user/send-email`,
+        method: 'POST',
+        headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+        data: {
+            "user":org_user_id
+        },
+        success: function(response) {
+            if(response){
+                $('#user_password_box').removeClass('d-none');
+                $('#user_email_box').addClass('d-none');
+            }
+           
+        },
+        error: function(xhr, status, error) {
+            console.error("Error occurred:", error);
+        }
+    });
+}
 
 
 

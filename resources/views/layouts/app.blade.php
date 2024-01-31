@@ -10,7 +10,7 @@
         <!-- Google Font: Source Sans Pro -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
         {{-- <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" /> --}}
-        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+        {{-- <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" /> --}}
         @stack('css')
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -49,6 +49,8 @@
                         <li class="nav-item">
                             <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
                         </li>
+
+                        
                     @endif
 
                 {{-- <li class="nav-item d-none d-sm-inline-block">
@@ -64,6 +66,7 @@
                 <div class="text-center">
                     <a href="#" style="font-size: x-large !important;" class="d-block font-weight-bold text-white">{{Auth::user()->organizations[0]->name  }}</a>
                 </div>  
+              
                 @endif
 
 
@@ -159,7 +162,7 @@
         <script src="{{ asset('dist/js/adminlte.min.js') }}"></script>
 
         {{-- select2 --}}
-        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+        {{-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> --}}
         <script>
             const baseUrl = "{{ url('/') }}";
         </script>

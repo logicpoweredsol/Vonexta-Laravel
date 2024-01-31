@@ -1,144 +1,245 @@
 @extends('layouts.app')
 @push('css')
-    <!-- DataTables -->
-    <link rel="stylesheet" href="{{ asset('plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('plugins/bs-stepper/css/bs-stepper.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
+<!-- DataTables -->
+<link rel="stylesheet" href="{{ asset('plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
+<link rel="stylesheet" href="{{ asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
+<link rel="stylesheet" href="{{ asset('plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
+<link rel="stylesheet" href="{{ asset('plugins/bs-stepper/css/bs-stepper.min.css') }}">
+<link rel="stylesheet" href="{{ asset('css/custom.css') }}">
+
+<!-- Select2 -->
+<link rel="stylesheet" href="{{ asset('plugins/select2/css/select2.min.css') }}">
 @endpush
 @section('content')
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1>Campaigns</h1>
-          </div>
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
-              <li class="breadcrumb-item active">Campaigns</li>
-            </ol>
-          </div>
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1>Outbound Profiles</h1>
         </div>
-      </div><!-- /.container-fluid -->
-    </section>
-
-    <!-- Main content -->
-    <section class="content">
-
-      <!-- Default box -->
-      <div class="card">
-        <div class="card-header">
-          <h3 class="card-title">All Campaigns</h3>
-
-          <div class="card-tools">
-            <!-- <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
-              <i class="fas fa-minus"></i>
-            </button> -->
-            <a href="javascript:void(0);" class="btn btn-sm btn-primary" id="btnAddCampaign" title="Add Campaign">
-              <i class="fas fa-bullhorn"></i>
-            </a>
-            <a href="javascript:void(0);" class="btn btn-sm btn-secondary" id="btnAddDisposition" title="Add Disposition">
-              <i class="fas fa-tags"></i>
-            </a>
-            <a href="javascript:void(0);" class="btn btn-sm btn-warning" id="btnAddLeadRecycling" title="Add Lead Recycling">
-              <i class="fas fa-recycle"></i>
-            </a>
-            <a href="javascript:void(0);" class="btn btn-sm btn-info" id="btnAddAreaCode" title="Add Area Code">
-              <i class="fas fa-map"></i>
-            </a>
-          </div>
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
+            <li class="breadcrumb-item active">Outbound Profiles</li>
+          </ol>
         </div>
-        <div class="card-body">
-            @if(null!==session('msg'))
-                <div class="row">
-                    <div class="col-sm-12 col-md-12 col-lg-12">
-                        <div class="alert alert-success alert-dismissible">
-                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                            {{ session('msg'); }}
-                        </div>
-                    <div>
-                </div>
-            @endif
-            @if(null!==session('error'))
-                <div class="row">
-                    <div class="col-sm-12 col-md-12 col-lg-12">
-                        <div class="alert alert-danger alert-dismissible">
-                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                            {{ session('error'); }}
-                        </div>
-                    <div>
-                </div>
-            @endif
-            <ul class="nav nav-tabs vonexta-nav" id="campaigns-tabs" role="tablist">
-                <li class="nav-item vonext-campaign-item">
-                    <a class="nav-link active" id="campaigns-home-tab" data-toggle="pill" href="#campaigns-home" role="tab" aria-controls="campaigns-home" aria-selected="true">Campaigns</a>
-                </li>
-                <li class="nav-item vonext-campaign-item">
-                    <a class="nav-link" id="campaigns-disposition-tab" data-toggle="pill" href="#campaigns-disposition" role="tab" aria-controls="campaigns-disposition" aria-selected="false">Dispisitions</a>
-                </li>
-                <li class="nav-item vonext-campaign-item">
-                    <a class="nav-link" id="campaigns-leadRecycling-tab" data-toggle="pill" href="#campaigns-leadRecycling" role="tab" aria-controls="campaigns-leadRecycling" aria-selected="false">Lead Recycling</a>
-                </li>
-                <li class="nav-item vonext-campaign-item">
-                    <a class="nav-link" id="campaigns-areacodeCID-tab" data-toggle="pill" href="#campaigns-areacodeCID" role="tab" aria-controls="campaigns-areacodeCID" aria-selected="false">Area Code CID</a>
-                </li>
-            </ul>
-            <div class="tab-content" id="campaigns-tabsContent">
-                <div class="tab-pane fade show active" id="campaigns-home" role="tabpanel" aria-labelledby="campaigns-home-tab">
-                    @include('dialer.campaigns.tabs.campaigns')
-                </div>
-                <div class="tab-pane fade" id="campaigns-disposition" role="tabpanel" aria-labelledby="campaigns-disposition-tab">
-                    @include('dialer.campaigns.tabs.dispositions')
-                </div>
-                <div class="tab-pane fade" id="campaigns-leadRecycling" role="tabpanel" aria-labelledby="campaigns-leadRecycling-tab">
-                    @include('dialer.campaigns.tabs.lead_recycling')
-                </div>
-                <div class="tab-pane fade" id="campaigns-areacodeCID" role="tabpanel" aria-labelledby="campaigns-areacodeCID-tab">
-                    @include('dialer.campaigns.tabs.accid')
-                </div>
-            </div>
-        </div>
-        <!-- /.card-body -->
-        <div class="card-footer">
-
-        </div>
-        <!-- /.card-footer-->
       </div>
-      <!-- /.card -->
+    </div><!-- /.container-fluid -->
+  </section>
 
-    </section>
-    <!-- /.content -->
-  </div>
+  <!-- Main content -->
+  <section class="content">
+
+    <!-- Default box -->
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">All compaigns</h3>
+
+        <div class="card-tools">
+          <!-- <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+  <i class="fas fa-minus"></i>
+</button> -->
+
+
+
+
+
+          <a href="javascript:void(0);" type="button" class="btn btn-sm btn-primary" onclick="show_add_compaign_modal();"> <i class="fas fa-plus"></i> Add compaigns </a>
+
+        </div>
+        <div class="acbz" style="position: absolute;width: 250px;right: 275px;top: 20px ;z-index:9;">
+
+          <div class="btn-group" style="margin-left:50px;">
+            <button type="button" class="btn btn-default">Status - <span id="cur_status">All</span> </button>
+            <button type="button" class="btn btn-default dropdown-toggle dropdown-icon" data-toggle="dropdown">
+              <span class="sr-only">Toggle Dropdown</span>
+            </button>
+            <div class="dropdown-menu" role="menu">
+              <a class="dropdown-item" href="javascript:;" onclick="search_filter('all')">All</a>
+              <a class="dropdown-item" href="javascript:" onclick="search_filter('Active')">Active</a>
+              <a class="dropdown-item" href="javascript:" onclick="search_filter('Not Active')">Not Active</a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="card-body" style="position: relative;">
+
+        <table id="Compaign-table" class="table table-striped table-hover vonexta-table">
+          <thead>
+            <tr>
+              <th>Profile ID</th>
+              <th>Profile Name</th>
+              <th>Type</th>
+              <th>Velocity</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+
+            @foreach($get_compaignSkills['campaign_id'] as $i=> $get_compaignSkill)
+
+
+            <tr>
+              <td>{{$get_compaignSkills['campaign_id'][$i]}}</td>
+              <td>{{$get_compaignSkills['campaign_name'][$i]}}</td>
+              <td>{{$get_compaignSkills['dial_method'][$i]}}</td>
+              <td></td>
+              <td>{{$get_compaignSkills['active'][$i]}}</td>
+              <td>
+                <div class="btn-group">
+                  <button type="button" class="btn btn-default">Actions</button>
+                  <button type="button" class="btn btn-default dropdown-toggle dropdown-icon" data-toggle="dropdown">
+                    <span class="sr-only">Toggle Dropdown</span>
+                  </button>
+                  <div class="dropdown-menu" role="menu">
+                    <a class="dropdown-item" href="">Edit</a>
+                    <a class="dropdown-item" href="">Leads Pool</a>
+                    <a class="dropdown-item" href="">Lists</a>
+                    <a class="dropdown-item" href="">Dispositions</a>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            @endforeach
+
+
+          </tbody>
+
+        </table>
+        <script>
+          // Initialize DataTables
+        </script>
+      </div>
+      <!-- /.card-body -->
+      <div class="card-footer">
+
+      </div>
+      <!-- /.card-footer-->
+    </div>
+    <!-- /.card -->
+
+    <!-- add-compaign-modal -->
+    <div class="modal fade" id="compaignn-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Create Compaigns</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+
+          <form method="POST" action="" id="form_add_agent_role" class="form-horizontal">
+
+            @csrf
+            <input type="hidden" class="form-control" id="organization_service_id" name="organization_service_id" value="">
+
+            <div class="modal-body">
+              <div class="row">
+                <div class="col-sm-12 col-md-6 col-lg-6">
+                  <div class="form-group">
+                    <label for="name" class="form-label">Profile ID</label>
+                    <input type="text" class="form-control @error('name') is-invalid @enderror" id="profile_id" name="profile_id" value="" placeholder="Profile ID">
+                  </div>
+                  <span>
+                    @error('name')
+                    <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                  </span>
+                </div>
+                <div class="col-sm-12 col-md-6 col-lg-6">
+                  <div class="form-group">
+                    <label for="Profile Name" class="form-label">Profile Name</label>
+                    <input type="text" class="form-control" id="profile_name" name="profile_name" value="Profile Name">
+                  </div>
+                </div>
+                <div class="col-sm-12 col-md-6 col-lg-6">
+                  <div class="form-group">
+                    <label for="Type" class="form-label">Type</label>
+
+                    <input type="text" class="form-control" id="type" name="Type" value="Type">
+                  </div>
+                </div>
+                <div class="col-sm-12 col-md-6 col-lg-6">
+                  <div class="form-group">
+                    <label for="velocity" class="form-label">Velocity</label>
+                    <input type="text" class="form-control" id="velocity" name="velocity" value="Velocity">
+                  </div>
+                </div>
+                <div class="col-sm-12 col-md-6 col-lg-6">
+                  <div class="form-group">
+                    <label for="active" class="form-label">Status</label>
+                    <select name="active" class="form-control data select5" id="active" active="">
+                      <option value="Y">Active</option>
+                      <option value="N">Not Active</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary btn-sm">Add Compaigns</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+
   <!-- /.content-wrapper -->
   <!-- Adding Modals here --- Only Necessary Modals to be included... -->
   @include('dialer.campaigns.modals.add_campaign')
-@endSection
+  @endSection
 
-@push('scripts')
-    <script>
-        //Any constants to be used by this service/module...
-        const service = "{{ $service }}";
-        // {{ route('services.users.new',['service' => $service]) }}
-    </script>
-    <!-- DataTables  & Plugins -->
-    <script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
-    <script src="{{ asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
-    <script src="{{ asset('plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('plugins/jszip/jszip.min.js') }}"></script>
-    <script src="{{ asset('plugins/pdfmake/pdfmake.min.js') }}"></script>
-    <script src="{{ asset('plugins/pdfmake/vfs_fonts.js') }}"></script>
-    <script src="{{ asset('plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
-    <script src="{{ asset('plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
-    <script src="{{ asset('plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
-    <!-- BS-Stepper -->
-    <script src="{{ asset('plugins/bs-stepper/js/bs-stepper.min.js') }}"></script>
-    <script src="{{ asset('views/services/dialer/campaigns/index.js') }}"></script>
-@endpush
+  @push('scripts')
+
+  <!-- DataTables  & Plugins -->
+  <script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
+  <script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
+  <script src="{{ asset('plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
+  <script src="{{ asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
+  <script src="{{ asset('plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
+  <script src="{{ asset('plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
+  <script src="{{ asset('plugins/jszip/jszip.min.js') }}"></script>
+  <script src="{{ asset('plugins/pdfmake/pdfmake.min.js') }}"></script>
+  <script src="{{ asset('plugins/pdfmake/vfs_fonts.js') }}"></script>
+  <script src="{{ asset('plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
+  <script src="{{ asset('plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
+  <script src="{{ asset('plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
+  <!-- BS-Stepper -->
+  <script src="{{ asset('plugins/bs-stepper/js/bs-stepper.min.js') }}"></script>
+  <script src="{{ asset('views/services/dialer/campaigns/index.js') }}"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
+  <script>
+    // $(document).ready(function() {
+    //     // Initialize DataTable on page load
+    //     $('#Compaign-table').DataTable();
+    // });
+
+
+    function show_add_compaign_modal() {
+      $("#compaignn-modal").modal('show');
+    }
+
+
+    $(function() {
+        $('.select5').select2({
+          minimumResultsForSearch: Infinity,
+          width: "100%"
+        });
+        
+    });
+
+  </script>
+  @endpush
