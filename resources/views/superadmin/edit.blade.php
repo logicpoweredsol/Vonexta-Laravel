@@ -68,6 +68,17 @@
                         </div>
                     </div>
                     <div class="form-group row">
+                        <label for="email" class="col-sm-2 col-form-label">Phone</label>
+                        <div class="col-sm-10">
+                            <input type="number" class="form-control @error('Phone') is-invalid @enderror" id="phone" name="phone" value="{{$User->phone}}" placeholder="Phone" @error('phone') aria-invalid="true" @enderror>
+                            <span class="error">
+                                @error('Phone')
+                                    <label id="Phone-error" class="error invalid-feedback" for="Phone" style="display: inline-block;">{{ $message }}</label>
+                                @enderror
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
                         <label for="password" class="col-sm-2 col-form-label">Password</label>
                         <div class="col-sm-10">
                             <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password" value="{{ old('password')  }}" placeholder="Password"  @error('password') aria-invalid="true" @enderror>

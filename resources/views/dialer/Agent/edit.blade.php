@@ -154,12 +154,16 @@
                                                     @endphp
 
                                                     <select name="voice_mail" @if (!$responds) disabled @endif class="form-control select2" id="voice_mail">
-                                                        <option value="" selected>No Voicemail</option>
-                                                        <option value="{{$integerPart}}" {{ isset($dailer_agent_user['voicemail_id']) && $dailer_agent_user['voicemail_id'] == $integerPart  ? 'selected' : '' }} selected>Agent's Voicemail ( {{$integerPart}} )</option>
+                                                        <option value="" @if(!isset($dailer_agent_user['voicemail_id'])) selected @endif>No Voicemail</option>
+                                                        <option value="{{$integerPart}}" @if(isset($dailer_agent_user['voicemail_id']) && $dailer_agent_user['voicemail_id'] == $integerPart) selected @endif>Agent's Voicemail ({{$integerPart}})</option>
+                                                        
                                                         @foreach ($responds['voicemail_id'] as $i=>$respond)
-                                                        <option value="{{ $responds['voicemail_id'][$i] }}" {{ isset($dailer_agent_user['voicemail_id']) && $dailer_agent_user['voicemail_id'] == $responds['voicemail_id'][$i] ? 'selected' : '' }}>{{$responds['voicemail_id'][$i] }} - {{$responds['fullname'][$i] }}</option>
+                                                            <option value="{{ $responds['voicemail_id'][$i] }}" @if(isset($dailer_agent_user['voicemail_id']) && $dailer_agent_user['voicemail_id'] == $responds['voicemail_id'][$i]) selected @endif>
+                                                                {{ $responds['voicemail_id'][$i] }} - {{ $responds['fullname'][$i] }}
+                                                            </option>
                                                         @endforeach
                                                     </select>
+
                                                     {{-- <input type="text" class="form-control" id="Voice_Mail" name="Voice_Mail" value="{{ isset($dailer_agent_user['voicemail_id']) ? $dailer_agent_user['voicemail_id'] : '' }}" placeholder="Voice Mail.."> --}}
                                                 </div>
                                             </div>
@@ -201,13 +205,16 @@
                                             </div>
                                         </div>
                                         <div class="col-sm-12 col-md-6 col-lg-6">
-                                        <div class="form-group fromgroup">
-                                            <label for="active" class="form-label">Custom Attribute 1</label>
-                                            <input type="text" class="form-control custom-attribute" name="custom_attribute" value="" placeholder="Custom attribute 1">
-                                            <button type="button" onclick="add_row();" class="btn btn-success btn-sm mt-2"> + </button>
-                                            <button type="button" onclick="remove_row();" class="btn btn-danger btn-sm mt-2"> - </button>
-                                        </div>
-
+                                            <div class="customfield-wrap">
+                                                <div class="form-group fromgroup">
+                                                    <label for="active" class="form-label">Custom Attribute 1</label>
+                                                    <input type="text" class="form-control custom-attribute" name="custom_attribute" value="" placeholder="Custom attribute 1">
+                                                </div>
+                                                <div class="additionalfield-wrap">
+                                                    <button type="button" onclick="add_row();" class="btn btn-success btn-sm mt-2"> + </button>
+                                                    <button type="button" onclick="remove_row();" class="btn btn-danger btn-sm mt-2"> - </button>
+                                                </div>
+                                            </div>
                                         </div>
 
                                     </div>

@@ -308,7 +308,6 @@ class UserOrganizationController extends Controller
 
     public function verified(Request $request){
         $user = User::with('organizations')->find($request->user_idd);
-
         $code = $request->code_1 .
                 $request->code_2 .
                 $request->code_3 .
@@ -320,10 +319,9 @@ class UserOrganizationController extends Controller
             Session::put('original_user_id', Auth::id());
             Session::put('impersonated_user_id', $user);
             Auth::user()->impersonate($user);
-
             return redirect('/dashboard');
         }else{
-            dd("wrong");
+            return redirect()->back()->with('error', 'Incorrect code. Please resend the code.');
         }
 
         
@@ -334,7 +332,7 @@ class UserOrganizationController extends Controller
         Session::forget('original_user_id');
         Session::forget('impersonated_user_id');
         Auth::user()->leaveImpersonation();
-        return redirect('/dashboard');
+        return redirect('/organizations');
     }
 
     

@@ -1,5 +1,28 @@
+var table = "";
 $(document).ready(function(){
-    
+
+    var showPagination = true;
+
+    if ($('#Compaign-table').find('tbody tr').length <= 10) {
+        showPagination = false; // If records are 10 or less, hide pagination
+    }
+
+    // Initialize DataTable
+    table = $('#Compaign-table').DataTable({
+        "paging": showPagination,
+        "lengthChange": true,
+        "searching": true,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false,
+        "responsive": true
+    });
+
+
+
+
+
+
     // BS-Stepper Init
     var campaignStepper = new Stepper(campaignStepperEl);
     $('#campaignsDT','#dispositionsDT','#leadRecyclingDT', '#accidDT').DataTable({
@@ -11,6 +34,8 @@ $(document).ready(function(){
         "autoWidth": false,
         "responsive": true,
     });
+
+    $(".select5").select2();
     
     //Add campaign...
     $(document).on('click', '#btnAddCampaign',function(){
@@ -165,4 +190,35 @@ const validateForNextStep = (campaignType) => {
     }
     return isValidated;
 };
+
+
+function search_filter(statusEl) {
+    // Remove the previous search function before adding a new one
+    $.fn.dataTable.ext.search.pop();
+
+    // Add a new search function
+    $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
+        // Check if data[5] is defined and not null before accessing its properties
+        let rowStatus = (data[4] || '').trim().toLowerCase();
+        let valueToSearch = statusEl.trim().toLowerCase();
+        if (valueToSearch !== 'all') {
+            return valueToSearch === rowStatus;
+        } else {
+            return true;
+        }
+    });
+    
+
+    // Redraw the DataTable with the new search function
+    table.draw();
+
+    $("#cur_status").text(capitalizeFirstLetter(statusEl));
+}
+
+
+
+function capitalizeFirstLetter(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
 

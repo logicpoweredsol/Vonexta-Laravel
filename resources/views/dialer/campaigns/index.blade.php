@@ -22,8 +22,14 @@
         </div>
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
-            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
-            <li class="breadcrumb-item active">Outbound Profiles</li>
+
+          <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
+              @php $nick_name  =service_name($organization_servicesID); @endphp
+          <li class="breadcrumb-item"><a href="{{ route('services.agents', ['service' => strtolower('dailer'), 'organization_services_id' => $organization_servicesID]) }}">{{$nick_name}} </a></li>
+          <li class="breadcrumb-item active"><a href="javascript:;">Outbound Profiles</a></li>
+
+            <!-- <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
+            <li class="breadcrumb-item active"></li> -->
           </ol>
         </div>
       </div>
@@ -50,23 +56,25 @@
           <a href="javascript:void(0);" type="button" class="btn btn-sm btn-primary" onclick="show_add_compaign_modal();"> <i class="fas fa-plus"></i> Add compaigns </a>
 
         </div>
-        <div class="acbz" style="position: absolute;width: 250px;right: 275px;top: 20px ;z-index:9;">
-
-          <div class="btn-group" style="margin-left:50px;">
-            <button type="button" class="btn btn-default">Status - <span id="cur_status">All</span> </button>
-            <button type="button" class="btn btn-default dropdown-toggle dropdown-icon" data-toggle="dropdown">
-              <span class="sr-only">Toggle Dropdown</span>
-            </button>
-            <div class="dropdown-menu" role="menu">
-              <a class="dropdown-item" href="javascript:;" onclick="search_filter('all')">All</a>
-              <a class="dropdown-item" href="javascript:" onclick="search_filter('Active')">Active</a>
-              <a class="dropdown-item" href="javascript:" onclick="search_filter('Not Active')">Not Active</a>
-            </div>
-          </div>
-
-        </div>
+       
       </div>
       <div class="card-body" style="position: relative;">
+
+      <div class="acbz" style="position: absolute;width: 250px;right: 275px;top: 20px ;z-index:9;">
+
+        <div class="btn-group" style="margin-left:50px;">
+            <button type="button" class="btn btn-default">Status - <span id="cur_status">All</span> </button>
+            <button type="button" class="btn btn-default dropdown-toggle dropdown-icon" data-toggle="dropdown">
+                <span class="sr-only">Toggle Dropdown</span>
+            </button>
+            <div class="dropdown-menu" role="menu" >
+                <a class="dropdown-item" href="javascript:;" onclick="search_filter('all')">All</a>
+                <a class="dropdown-item" href="javascript:" onclick="search_filter('Active')" >Active</a>
+                <a class="dropdown-item" href="javascript:" onclick="search_filter('Not Active')" >Not Active</a>
+            </div>
+        </div>
+      </div>
+
 
         <table id="Compaign-table" class="table table-striped table-hover vonexta-table">
           <thead>
@@ -89,7 +97,15 @@
               <td>{{$get_compaignSkills['campaign_name'][$i]}}</td>
               <td>{{$get_compaignSkills['dial_method'][$i]}}</td>
               <td></td>
-              <td>{{$get_compaignSkills['active'][$i]}}</td>
+
+              <td>
+                @if ($get_compaignSkills['active'][$i] == 'Y')
+                <span class="text-success"> <strong>Active</strong> </span>
+                @else
+                <span class="text-danger"> <strong>Not Active</strong></span>
+                @endif
+              </td>
+
               <td>
                 <div class="btn-group">
                   <button type="button" class="btn btn-default">Actions</button>
@@ -217,7 +233,7 @@
   <script src="{{ asset('plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
   <!-- BS-Stepper -->
   <script src="{{ asset('plugins/bs-stepper/js/bs-stepper.min.js') }}"></script>
-  <script src="{{ asset('views/services/dialer/campaigns/index.js') }}"></script>
+  <script src="{{ asset('views/services/dialler/campaigns/index.js') }}"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 

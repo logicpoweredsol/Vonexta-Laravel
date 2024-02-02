@@ -34,24 +34,29 @@ class SuperAdminController extends Controller
 
 
     public function store(Request $request) {
+
         try {
             $validator = Validator::make($request->all(), [
                 "name" => "required|string|max:50",
                 "email" => "required|email|unique:users,email",
+                "phone" => "required|unique",
                 "password" => "required",
             ]);
     
             if ($validator->fails()) {
                 return redirect()->back()->withInput()->withErrors($validator);
             }
+
     
             $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
+                'phone' => $request->phone,
                 'password' => Hash::make($request->password),
                 'email_verified_at' => now(),
             ]);
     
+
             $role = Role::findByName('superadmin');
             $user->assignRole($role);
     
@@ -69,6 +74,8 @@ class SuperAdminController extends Controller
 
     public function edit($userID)  {
         $User = User::find($userID);
+
+    
         return view('superadmin.edit',compact('User'));
     }
 

@@ -631,6 +631,10 @@ function impersonate_modal(id)
 
 function send_impersonation_email()
 {
+
+    $('#Send').prop('disabled', true);
+
+
     var org_user_id = $("#org_user_id").val();
 
     var type = $('input[name="options"]:checked').val();
@@ -657,6 +661,7 @@ function send_impersonation_email()
            
         },
         error: function(xhr, status, error) {
+            $('#Send').prop('disabled', false);
             console.error("Error occurred:", error);
         }
     });

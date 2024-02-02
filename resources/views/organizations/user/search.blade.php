@@ -189,7 +189,7 @@
       <div class="modal-footer">
          <button type="button" onclick="send_impersonation_email();" id="Send"  class="btn btn-primary">Send</button>
          <button type="button" onclick="verifoy();"  class="btn btn-primary d-none" id="Verify">Verify</button>
-         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
       </div>
     </div>
   </div>

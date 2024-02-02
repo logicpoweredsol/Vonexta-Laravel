@@ -79,7 +79,7 @@
                           $impersonatedUser = Session::get('impersonated_user_id');
        
                         @endphp                          
-                          <p style="color: white;">Currently Impersonating {{ $impersonatedUser->name }} - {{$impersonatedUser->organizations[0]->name}} <a class="btn btn-secondary" onclick="event.preventDefault(); $('#leaveimpersonate').submit();"  href="javascript:;"> leaveImpersonation </a> </p> 
+                          <p style="color: white;">Currently Impersonating {{ $impersonatedUser->name }} - {{$impersonatedUser->organizations[0]->name}} <a class="btn btn-secondary" onclick="event.preventDefault(); $('#leaveimpersonate').submit();"  href="javascript:;"> Leave Impersonation </a> </p> 
                           <form method="POST" action="{{ route('leaveImpersonation') }}" id="leaveimpersonate">
                             @csrf
                         </form>

@@ -619,7 +619,21 @@ div.dataTables_wrapper div.dataTables_info {
     margin-right: 25px;
 }
 
-#update_skill_modal .modal-body{
+#update_skill_modal .modal-body {
     height: 600px;
     overflow: auto;
+}
+
+.customfield-wrap {
+    position: relative;
+}
+
+.customfield-wrap .additionalfield-wrap {
+    position: absolute;
+    right: -70px;
+    bottom: 4px;
+}
+
+.customfield-wrap .additionalfield-wrap button {
+    width: 30px;
 }
