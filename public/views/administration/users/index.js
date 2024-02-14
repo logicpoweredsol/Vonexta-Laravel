@@ -1,8 +1,6 @@
 $(document).ready(function(){
-   
-        
-    
-   
+
+
     showPagination =true;
     if ($('#usersDT').find('tbody tr').length <= 10) {
         showPagination = false;  // If records are 10 or less, hide pagination
@@ -75,35 +73,7 @@ $(document).ready(function(){
 });
 
 
-function add_user_modal_in_administration()
+function show_user_on_administrtion()
 {
-    $('#add-administration-user').modal('show');
+    $("#administration_user_modal").modal('show');
 }
-
-
-function edit_user_modal_in_administration()
-{
-    var id =$('#edit-user').val();
-    $.ajax({
-        url: `${baseUrl}/administration.users.edit`,
-        method: 'POST',
-        headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
-        data: {
-            "id":id
-        },
-        success: function(response) {
-
-        },
-        error: function(xhr, status, error) {
-            console.error("Error occurred:", error);
-        }
-    });
-    // $('#edit-administration-user').modal('show');
-}
-
-// function get_edit_user_from_db()
-// {
-//     var id =$('#edit-user').value();
-
-//     alert(id);
-// }

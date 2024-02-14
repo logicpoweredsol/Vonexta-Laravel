@@ -200,14 +200,9 @@ function copy_agent_skill(){
             }
 
 
-            
 
-
-
-
-
-            $('#max_inbound_calls').data("ionRangeSlider").update({
-                from: response['max_inbound_calls']
+            $('#inbound_calls_limit').data("ionRangeSlider").update({
+                from: response['inbound_calls_limit']
               });
 
             // console.log(response);
@@ -221,7 +216,7 @@ function copy_agent_skill(){
     });
 
   }else{
-    $('#max_inbound_calls').data("ionRangeSlider").update({
+    $('#inbound_calls_limit').data("ionRangeSlider").update({
         from: 1000
       });
 
@@ -313,9 +308,9 @@ function validateAndNext(){
 
     var organization_user = $("#organization_user").val();
     var user = $("#user").val();
-    var user_group = $("#user_group").val();
-    var full_name = $("#full_name").val();
-    var active = $("#active").val();
+    var agent_role = $("#agent_role").val();
+    var agent_name = $("#agent_name").val();
+    var status = $("#status").val();
 
     
     if (organization_user == '' || organization_user == null) {
@@ -333,27 +328,27 @@ function validateAndNext(){
         $("#user").css('border', '1px solid #EEEEEE');
     }
 
-    if (user_group == '' || user_group == null) {
-        $("#user_group").css('border', '1px solid red');
+    if (agent_role == '' || agent_role == null) {
+        $("#agent_role").css('border', '1px solid red');
         f = 1;
     }else{
-        $("#user_group").css('border', '1px solid #EEEEEE');
+        $("#agent_role").css('border', '1px solid #EEEEEE');
     }
 
 
 
-    if (full_name == '' || full_name == null) {
-        $("#full_name").css('border', '1px solid red');
+    if (agent_name == '' || agent_name == null) {
+        $("#agent_name").css('border', '1px solid red');
         f = 1;
     }else{
-        $("#full_name").css('border', '1px solid #EEEEEE');
+        $("#agent_name").css('border', '1px solid #EEEEEE');
     }
 
-    if (active == '' || active == null) {
-        $("#active").css('border', '1px solid red');
+    if (status == '' || status == null) {
+        $("#status").css('border', '1px solid red');
         f = 1;
     }else{
-        $("#active").css('border', '1px solid #EEEEEE');
+        $("#status").css('border', '1px solid #EEEEEE');
     }
 
 
@@ -368,9 +363,7 @@ function validateAndNext(){
 
 // Bulk adent add function 
 function bulk_agent_add(){
-
-
-
+ 
     var f = 0;
 
    var other_user = $("#other_user_bulk").val();
@@ -910,7 +903,7 @@ function update_skill_inbound(row_number){
     var organization_services_id = $("#model_organization_services_id").val();
     var extension = $("#model_User").val();
 
-    var group_id = $('#group_id_'+row_number).val();
+    var group_id = $('#inbound_id_'+row_number).val();
     var group_grade = $("#group_grade_"+row_number).val();
     var invited = 'NO';
     if ($('#invited_'+row_number).is(':checked')) {
@@ -1097,3 +1090,11 @@ function open_outbound_model(row_number)
 
     $("#Outbound-Skill").modal('show');
 }
+
+
+
+
+// function show_user_on_administrtion()
+// {
+//     alert('ok');
+// }

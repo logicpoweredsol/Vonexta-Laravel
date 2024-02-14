@@ -235,27 +235,6 @@
   <script src="{{ asset('plugins/bs-stepper/js/bs-stepper.min.js') }}"></script>
   <script src="{{ asset('views/services/dialler/campaigns/index.js') }}"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script> -->
 
-  <script>
-    // $(document).ready(function() {
-    //     // Initialize DataTable on page load
-    //     $('#Compaign-table').DataTable();
-    // });
-
-
-    function show_add_compaign_modal() {
-      $("#compaignn-modal").modal('show');
-    }
-
-
-    $(function() {
-        $('.select5').select2({
-          minimumResultsForSearch: Infinity,
-          width: "100%"
-        });
-        
-    });
-
-  </script>
   @endpush

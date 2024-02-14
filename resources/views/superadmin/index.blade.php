@@ -54,8 +54,10 @@
             <!-- <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
               <i class="fas fa-minus"></i>
             </button> -->
+            {{--  --}}
 
-            {{-- {{ route('accounts.new') }} --}}
+            <!-- {{ route('accounts.new') }} -->
+            
             <a href="javascript:;" class="btn btn-md btn-primary" onclick="add_superAdmin();"><i class="fas fa-plus"></i> Add SuperAdmin</a>
           </div>
         </div>
@@ -143,7 +145,7 @@
       <div class="modal-dialog modal-lg">
           <div class="modal-content">
               <div class="modal-header">
-                  <h4 class="modal-title">Add User</h4>
+                  <h4 class="modal-title">Add SuperAdmin</h4>
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                       <span aria-hidden="true">&times;</span>
                   </button>

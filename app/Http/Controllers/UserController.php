@@ -13,6 +13,7 @@ use Spatie\Permission\Models\Role;
 use Carbon\Carbon;
 use ReturnTypeWillChange;
 use Spatie\Permission\Models\Permission;
+use App\Models\accessKey;
 
 class UserController extends Controller
 {
@@ -27,6 +28,7 @@ class UserController extends Controller
         $organization = $user->organizations->first();
         $users = $organization->users;
         $serviceUsers = $this->get_user($organization_servicesID);
+        // $access_key=$this->generateAccessKey($organization_servicesID,$AgentID);
         $userAgents = [];
 
       
@@ -118,6 +120,9 @@ class UserController extends Controller
 
         return view('dialer.Agent.index',compact('service','users','organization_servicesID' ,'userAgents' ,'organization' ,'user_have_service' ,'skills' ,'last_extension'));
     }
+
+  
+
 
 
 
@@ -294,7 +299,6 @@ class UserController extends Controller
 
      // Start Edit User
      public function edit($service , $organization_services_id ,$AgentID){
-
         $dailer_agent_user = '';
         $call_log_inbounds = '';
         $call_log_outbounds = '';
@@ -303,10 +307,6 @@ class UserController extends Controller
         if($dailer_agent_user_response['result'] == 'success'){
             $dailer_agent_user = $dailer_agent_user_response['data'];
         }
-
-     
-
-
 
         $get_call_log_response_inbound_dume =   $this->get_call_inbound_log($organization_services_id ,$AgentID);
         // dd($get_call_log_response_inbound_dume);
@@ -323,12 +323,47 @@ class UserController extends Controller
             $call_log_outbound_all_agent = $get_call_log_response_outbound_dume['data'];
             $call_log_outbounds  = $this->findArrayByKey($call_log_outbound_all_agent ,$AgentID);
         }
-        // dd($call_log_outbounds);
 
-
-
-        return view('dialer.Agent.edit' ,compact('service','dailer_agent_user','organization_services_id','call_log_inbounds' ,'call_log_outbounds'));
+            return view('dialer.Agent.edit' ,compact('service','dailer_agent_user','organization_services_id','call_log_inbounds' ,'call_log_outbounds'));
     }
+
+
+    public function detail($service , $organization_services_id ,$AgentID){
+        $accessKey =  $this->generateAndRedirect($AgentID,$organization_services_id);
+        return redirect("https://agent.vonexta.com:8181/agent/index.php?Token=$accessKey");
+    }
+
+    public function generateAndRedirect($AgentID,$organization_service_id)
+    {
+        // Generate the access key
+        $accessKey = $this->generateAccessKey();
+
+
+        $this->saveAccessKey($AgentID,$organization_service_id,$accessKey);    
+        return $accessKey;
+    }
+
+    private function generateAccessKey()
+    {
+       
+        return bin2hex(random_bytes(16));
+    }
+
+
+    private function saveAccessKey($AgentID,$organization_service_id,$accessKey)
+    {
+
+        $OrganizationServices = OrganizationServices::find($organization_service_id);
+        $access_keys = new accessKey();
+        $access_keys->extension = $AgentID;
+        $access_keys->organization_id =$OrganizationServices->organization_id ;
+        $access_keys->service_id = $organization_service_id;
+        $access_keys->access_key =$accessKey;
+        $access_keys->save();
+        return true;
+
+    }
+
 
 
 
@@ -559,14 +594,12 @@ class UserController extends Controller
              'user' => $request->User,
  
              'full_name'=> $request->name,
-             'user_group'=>  $request->group,
-             'active' => $request->active,
+             'user_group'=>  $request->role,
+             'active' => $request->status,
              'voicemail_id'=> $request->voice_mail,
              'email'=> $request->email,
-
-          
-
              'mobile_number' =>  $options_value['mobile_number'],
+             'custom_attribute' =>$request->custom_attribute,
             //  'agent_choose_ingroups'=> $options_value['agent_choose_ingroups'],
             //  'agent_choose_blended'=> $options_value['agent_choose_blended'],
             //  'closer_default_blended'=> $options_value['closer_default_blended'],
@@ -774,7 +807,7 @@ class UserController extends Controller
             // $agentonly_callbacks = isset($request->Personal_Callbacks) ? '1' : '0';
             // $agentcall_manual = isset($request->Allow_Manual_Calls) ? '1' : '0';
             // $agent_call_log_view_override = isset($request->Call_Log_View) ? 'Y' : 'N';
-            $active = isset($request->active) && $request->active == 1 ? 'Y' : 'N';
+            $active = isset($request->status) && $request->status == 1 ? 'Y' : 'N';
 
             $OrganizationServices = OrganizationServices::find($request->organization_servicesID);
             $phpArray = json_decode($OrganizationServices->connection_parameters, true);
@@ -788,13 +821,15 @@ class UserController extends Controller
                 'session_user' => $phpArray['api_user'],
                 'responsetype' => 'json',
                 'user' => $request->user,
-                'full_name' => $request->full_name,
-                'user_group' =>  $request->user_group,
+                'full_name' => $request->agent_name,
+                'user_group' =>  $request->agent_role,
                 'active' => $active,
                 'email' => $org_user->email,
                 'mobile_number' => $request->Sms_number,
-                'max_inbound_calls' => $request->max_inbound_calls,
+                'inbound_calls_limit' => $request->inbound_calls_limit,
             ];
+
+            // dd($postData);
 
 
             // dd($postData);
@@ -818,15 +853,15 @@ class UserController extends Controller
                 $add_userAgent->password = $api_response['pass_hash_encrypted'];
                 $add_userAgent->save();
 
-                foreach($request->group_id as $i=>$data ){
+                foreach($request->inbound_id as $i=>$data ){
                     $organization_services_id =  $request->organization_servicesID;
 
-                    $group_id = $request->group_id[$i];
+                    $inbound_id = $request->inbound_id[$i];
                     $level  = $request->level[$i];   
-                    $invited = isset($request->{'row_' . $request->group_id[$i]}) ? 'YES' : 'NO';
+                    $invited = isset($request->{'row_' . $request->inbound_id[$i]}) ? 'YES' : 'NO';
 
                     $extension =  $request->user;
-                   $return  = $this->skill_inbound_update($organization_services_id,$group_id ,$level ,$invited , $extension);
+                   $return  = $this->skill_inbound_update($organization_services_id,$inbound_id ,$level ,$invited , $extension);
                 }
 
 
@@ -961,7 +996,7 @@ class UserController extends Controller
 
     
 
-            $active = isset($request->active) && $request->active == 1 ? 'Y' : 'N';
+            $active = isset($request->status) && $request->status == 1 ? 'Y' : 'N';
 
 
             
@@ -999,7 +1034,7 @@ class UserController extends Controller
                 'agentonly_callbacks'=> $options_value['agentonly_callbacks'],
                 'agentcall_manual'=> $options_value['agentcall_manual'],
                 'agent_call_log_view_override'=> $options_value['agent_call_log_view_override'],
-                'max_inbound_calls'=> $options_value['max_inbound_calls'],
+                'inbound_calls_limit'=> $options_value['inbound_calls_limit'],
 
             ];
             $ch = curl_init($apiEndpoint);
@@ -1306,7 +1341,8 @@ class UserController extends Controller
 
 
     //update the skill update_inblound_call_limit  tab record in edit agent 
-    function update_inblound_call_limit(Request $request) {       
+    function update_inblound_call_limit(Request $request) {   
+        
         $OrganizationServices = OrganizationServices::find($request->organization_services_id);
 
         $phpArray = json_decode($OrganizationServices->connection_parameters, true);
@@ -1337,7 +1373,7 @@ class UserController extends Controller
             // 'agentonly_callbacks'=> $options_value['agentonly_callbacks'],
             // 'agentcall_manual'=> $options_value['agentcall_manual'],
             // 'agent_call_log_view_override'=>$options_value['agent_call_log_view_override'],
-            'max_inbound_calls'=> $request->max_inbound_calls,
+            'inbound_calls_limit'=> $request->inbound_calls_limit,
             
            
         ];

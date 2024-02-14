@@ -306,9 +306,9 @@
                             @include('organizations/user/search')
                         </div>
                         
-                        <div id="add-org-user" @if(!session()->has('tab-action') || (session('tab-action') != 'add-org-user')) class='d-none' @endif>
+                        {{-- <div id="add-org-user" @if(!session()->has('tab-action') || (session('tab-action') != 'add-org-user')) class='d-none' @endif>
                             @include('organizations/user/add')
-                        </div>
+                        </div> --}}
                         
                         <div id="edit-org-user" @if(!session()->has('tab-action') || (session('tab-action') != 'edit-org-user')) class='d-none' @endif>
                             @include('organizations/user/edit')
@@ -316,19 +316,7 @@
 
                         
                         
-                        {{-- <div id="org-user" @if(session()->has('tab-action') && session('tab-action') != 'org-user') class='d-none'  @endif >
-                            @include('organizations/user/search')
-                        </div>
-
-                        <div id="add-org-user" @if(session()->has('tab-action') && session('tab-action') != 'add-org-user') class='d-none'  @endif >
-                            @include('organizations/user/add')
-                        </div>
-
-
-                        <div id="edit-org-user" @if(session()->has('tab-action') && session('tab-action') != 'edit-org-user') class='d-none'  @endif >
-                            @include('organizations/user/edit')
-                        </div> --}}
-
+                       
 
                        
 
@@ -449,5 +437,6 @@
     
     <script src="{{ asset('views/organizations/edit.js') }}"></script>
     <script src="{{ asset('views/organizations/users.js') }}"></script>
+    <script src="{{ asset('plugins/bootstrap-switch/js/bootstrap-switch.min.js') }}" ></script>
 @endpush
 

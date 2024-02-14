@@ -107,7 +107,7 @@
                                     // {{dd($detail)}};
                                     $service = 'Dialler';
                                 @endphp
-                                <a class="dropdown-item" href="{{ route('services.agents.edit', ['service' => strtolower($service), 'organization_services_id' => $userAgent->services_id ,'AgentID' => $detail['user']  ] ) }}">{{$detail['user']}} - {{$detail['full_name']}}</a>
+                                <a class="dropdown-item" href="{{ route('services.agents.detail', ['service' => strtolower($service), 'organization_services_id' => $userAgent->services_id ,'AgentID' => $detail['user']  ] ) }}">{{$detail['user']}} - {{$detail['full_name']}}</a>
                                 @endif
                               @endif
                             

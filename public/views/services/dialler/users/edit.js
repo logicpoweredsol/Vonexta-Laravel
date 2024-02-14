@@ -377,7 +377,7 @@ $('.inbound-checkbox').on('switchChange.bootstrapSwitch', function(event, state)
 
 
 function update_skill_inbound(row_number){
-    var group_id = $('#group_id_'+row_number).text();
+    var group_id = $('#inbound_id_'+row_number).text();
     var group_grade = $("#group_grade_"+row_number).val();
     var invited = 'NO';
     if ($('#invited_'+row_number).is(':checked')) {
@@ -446,7 +446,7 @@ function update_skill_outbound(row_number){
 
 function update_inblound_call_limit(id){
 
-    var max_inbound_calls = $("#max_inbound_calls").val();
+    var inbound_calls_limit = $("#inbound_calls_limit").val();
     var organization_services_id = $("#organization_services_id").val();
     var extension = $("#User").val();
 
@@ -457,11 +457,12 @@ function update_inblound_call_limit(id){
         method: 'POST',
         headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
         data: {
-            'max_inbound_calls':max_inbound_calls,
+            'inbound_calls_limit':inbound_calls_limit,
             'organization_services_id': organization_services_id,
             'extension':extension
         },
         success: function(response) {
+            console.log(response);
 
         },
         error: function(xhr, status, error) {
@@ -479,7 +480,7 @@ function update_inblound_call_limit(id){
 
 function open_inbound_model(row_number){
 
-    var group_id = $('#group_id_'+row_number).text();
+    var group_id = $('#inbound_id_'+row_number).text();
     var organization_services_id = $("#organization_services_id").val();
     var extension = $("#User").val();
 
@@ -627,42 +628,75 @@ function open_outbound_model(row_number) {
   }
 
 
-  var labelCounter = 1;
-    var placeholderCounter = 1;
+//   var labelCounter = 1;
+//   var placeholderCounter = 1;
+  
+  function add_row() {
 
-    function add_row() {
-        // Clone the original form group excluding the button
-        var originalFormGroup = $('.fromgroup').first();
-        var clonedFormGroup = originalFormGroup.clone();
+    var html = '';
+    var total_length =$(".customfield-wrap").length ;
 
-        // Increase the value of the label in the cloned form group
-        labelCounter++;
-        var currentLabel = clonedFormGroup.find('.form-label');
-        currentLabel.text('Custom Attribute ' + labelCounter);
-
-        // Clear the value of the cloned input
-        clonedFormGroup.find('.custom-attribute').val('');
-
-        // Increase the value of the placeholder in the cloned form group
-        placeholderCounter++;
-        clonedFormGroup.find('.custom-attribute').attr('placeholder', 'Custom attribute ' + placeholderCounter);
-
-        // Hide the button for the cloned form group
-        clonedFormGroup.find('.btn').hide();
-
-        // Move the button to the top of the cloned form group
-        clonedFormGroup.prepend(clonedFormGroup.find('.btn'));
-
-        // Append the cloned form group to the parent container
-        originalFormGroup.parent().append(clonedFormGroup);
-
-        // Show the button for the last inserted div
-        $('.container .form-group:last .btn').show();
+    if(total_length < 10){
+        html = ` <div class="customfield-wrap" id="row_${total_length+1}">
+        <div class="form-group fromgroup">
+            <label for="active" class="form-label">Custom Attribute ${total_length+1}</label>
+            <input type="text" class="form-control custom-attribute" name="custom_attribute[]" value="" placeholder="Custom attribute ${total_length+1}">
+        </div>
+        <div class="additionalfield-wrap">
+            <button type="button" onclick="add_row();" class="btn btn-success btn-sm mt-2"> + </button>
+            <button type="button" onclick="remove_row(${total_length+1});" class="btn btn-danger btn-sm mt-2"> - </button>
+        </div>
+    </div>`;
     }
 
+    $("#body_attribute").append(html);
 
-    function remove_row()
-    {
-        alert('ok');
+      // Check if the total number of rows is less than 10 before appending
+    //   if ($('.fromgroup').length < 10) {
+    //       // Clone the original form group excluding the button
+    //       var originalFormGroup = $('.fromgroup').first();
+    //       var clonedFormGroup = originalFormGroup.clone();
+  
+    //       // Increase the value of the label in the cloned form group
+    //       labelCounter++;
+    //       var currentLabel = clonedFormGroup.find('.form-label');
+    //       currentLabel.text('Custom Attribute ' + labelCounter);
+  
+    //       // Clear the value of the cloned input
+    //       clonedFormGroup.find('.custom-attribute').val('');
+  
+    //       // Increase the value of the placeholder in the cloned form group
+    //       placeholderCounter++;
+    //       clonedFormGroup.find('.custom-attribute').attr('placeholder', 'Custom attribute ' + placeholderCounter);
+  
+    //       // Hide the button for the cloned form group
+    //       clonedFormGroup.find('.btn').hide();
+  
+    //       // Move the button to the top of the cloned form group
+    //       clonedFormGroup.prepend(clonedFormGroup.find('.btn'));
+  
+    //       // Append the cloned form group to the parent container
+    //       originalFormGroup.parent().append(clonedFormGroup);
+  
+    //       // Show the button for the last inserted div
+    //       $('.container .form-group:last .btn').show();
+    //   }
+  }
+
+    function remove_row(action) {
+        if(action != "" || action != null){
+            $("#row_"+action).remove();
+        }
+        // // Get the total number of appended rows
+        // var totalRows = $('.fromgroup').length;
+    
+        // // Ensure there is at least one row (the original one) before removing
+        // if (totalRows > 1) {
+        //     // Remove the last inserted row
+        //     $('.fromgroup:last').remove();
+        // }
     }
+    
+    
+    
 

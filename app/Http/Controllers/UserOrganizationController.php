@@ -32,7 +32,7 @@ class UserOrganizationController extends Controller
             "name" => "required|string|max:50",
             "email" => "required|email|unique:App\Models\User,email",
             "password" => "required|string",
-            "role" => "required",
+            // "role" => "required",
             // "Services" => "required|array"
         ]);
 
@@ -139,7 +139,7 @@ class UserOrganizationController extends Controller
                 Rule::unique('users')->ignore($request->user_id),
             ],
             "role" => "required",
-            "Services" => "required|array"
+            // "Services" => "required|array"
         ]);
 
 

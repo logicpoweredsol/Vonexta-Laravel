@@ -179,7 +179,7 @@
                                                     $responses = get_group_user($organization_services_id);
                                                      
                                                     @endphp
-                                                    <select name="group" class="form-control select2 " id="group">
+                                                    <select name="role" class="form-control select2 " id="role">
                                                         @foreach ($responses as $response)
                                                         <option value="{{$response}}" {{ isset($dailer_agent_user['user_group']) && $dailer_agent_user['user_group'] == $response ? 'selected' : '' }}>{{ $response }}</option>
                                                         @endforeach
@@ -196,26 +196,29 @@
 
                                             <div class="col-sm-12 col-md-6 col-lg-6">
                                                 <div class="form-group">
-                                                    <label for="active" class="form-label">Active</label>
-                                                    <select name="status" class="form-control data select5" id="status" active="">
-                                                        <option value="Y" {{ (isset($dailer_agent_user['active']) && $dailer_agent_user['active'] == 'Y') ? 'selected' : '' }}>Yes</option>
-                                                        <option value="N" {{ (isset($dailer_agent_user['active']) && $dailer_agent_user['active'] == 'N') ? 'selected' : '' }}>No</option>
+                                                    <label for="Status" class="form-label">Status</label>
+                                                    <select name="status" class="form-control data select5" id="status">
+                                                        <option value="Y" {{ (isset($dailer_agent_user['active']) && $dailer_agent_user['active'] == 'Y') ? 'selected' : '' }}>Active</option>
+                                                        <option value="N" {{ (isset($dailer_agent_user['active']) && $dailer_agent_user['active'] == 'N') ? 'selected' : '' }}>Not Active</option>
                                                     </select>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-sm-12 col-md-6 col-lg-6">
-                                            <div class="customfield-wrap">
+                                        <div class="row">
+                                            <div class="col-sm-12 col-md-6 col-lg-6" id="body_attribute">
+                                            <div class="customfield-wrap" id="row_1">
                                                 <div class="form-group fromgroup">
                                                     <label for="active" class="form-label">Custom Attribute 1</label>
-                                                    <input type="text" class="form-control custom-attribute" name="custom_attribute" value="" placeholder="Custom attribute 1">
+                                                    <input type="text" class="form-control custom-attribute" name="custom_attribute[]" value="" placeholder="Custom attribute 1">
                                                 </div>
                                                 <div class="additionalfield-wrap">
                                                     <button type="button" onclick="add_row();" class="btn btn-success btn-sm mt-2"> + </button>
                                                     <button type="button" onclick="remove_row();" class="btn btn-danger btn-sm mt-2"> - </button>
                                                 </div>
                                             </div>
+                                            </div>
                                         </div>
+                                        
 
                                     </div>
                                     <!-- /.card-body -->
@@ -356,7 +359,7 @@
                                             @foreach($call_log_inbounds as $row=>$call_log_inbound)
 
                                             <tr>
-                                                <td id='group_id_{{$row}}'>{{$call_log_inbound['group_id']}} <span class="adminlet3" onclick='open_inbound_model({{$row}});'><i class="fas fa-list"></i> </span> </td>
+                                                <td id='inbound_id_{{$row}}'>{{$call_log_inbound['group_id']}} <span class="adminlet3" onclick='open_inbound_model({{$row}});'><i class="fas fa-list"></i> </span> </td>
                                                 <td>
                                                     <select id="group_grade_{{$row}}"  onchange='update_skill_inbound("{{$row}}");' style="border: none;">
                                                         <?php for ($i = 1; $i <= 9; $i++) { ?>
@@ -385,7 +388,7 @@
                                 <div class="row mb-3">
                                     <div class="col-md-4 mt-2">
                                         <label> Inbound Calls Limit: </label>
-                                        <input id="max_inbound_calls"    type="text" oninput="update_inblound_call_limit(this.id);" name="max_inbound_calls"  value="{{ isset($dailer_agent_user['max_inbound_calls']) ? $dailer_agent_user['max_inbound_calls'] : '' }}" >
+                                        <input id="inbound_calls_limit"    type="text" oninput="update_inblound_call_limit(this.id);" name="inbound_calls_limit"  value="{{ isset($dailer_agent_user['max_inbound_calls']) ? $dailer_agent_user['max_inbound_calls'] : '' }}" >
                                     </div>
                                 </div>
                             </div>
@@ -667,7 +670,7 @@ $(function(){
 <script>
     $(function () {
       // Initialize the ionRangeSlider
-      $('#max_inbound_calls').ionRangeSlider({
+      $('#inbound_calls_limit').ionRangeSlider({
         min     : 1,
         max     : 1000,
         // from    : 0,
@@ -678,8 +681,8 @@ $(function(){
       });
 
 
-         $('#max_inbound_calls').data("ionRangeSlider").update({
-        from: $('#max_inbound_calls').val()
+         $('#inbound_calls_limit').data("ionRangeSlider").update({
+        from: $('#inbound_calls_limit').val()
       });
 
     });

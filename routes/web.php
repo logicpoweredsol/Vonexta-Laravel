@@ -70,6 +70,7 @@ Route::middleware(['auth','checkUserStatus'])->group(function () {
         Route::prefix('agents')->group(function() {
             Route::get('/{organization_services_id}', [UserController::class, 'index'])->name('services.agents');
             Route::get('/edit/{organization_services_id}/{AgentID}', [UserController::class, 'edit'])->name('services.agents.edit');
+            Route::get('/detail/{organization_services_id}/{AgentID}', [UserController::class, 'detail'])->name('services.agents.detail');
             Route::post('/update-agent-details', [UserController::class, 'update_agent_in_db_detail'])->name('services.update-agent.details');
             Route::post('/update-agent-options', [UserController::class, 'update_agent_in_db_options'])->name('services.update-agent.options');
     

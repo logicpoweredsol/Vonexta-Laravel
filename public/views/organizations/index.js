@@ -16,3 +16,9 @@ $(document).ready(function(){
     });
     
 });
+
+
+function show_add_organsization()
+{
+    $("#add-organization").modal('show');
+}

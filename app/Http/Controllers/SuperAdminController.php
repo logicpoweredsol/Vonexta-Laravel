@@ -39,7 +39,7 @@ class SuperAdminController extends Controller
             $validator = Validator::make($request->all(), [
                 "name" => "required|string|max:50",
                 "email" => "required|email|unique:users,email",
-                "phone" => "required|unique",
+                "phone" => "required",
                 "password" => "required",
             ]);
     
@@ -100,6 +100,7 @@ class SuperAdminController extends Controller
             $update_user = User::where('id',$request->id)->first();
             $update_user->name = $request->name;
             $update_user->email  = $request->email;
+            $update_user->phone = $request -> phone;
             $update_user->active  = $request->active;
 
             if($request->password != "" && $request->password !=null){

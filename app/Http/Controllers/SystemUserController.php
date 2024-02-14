@@ -58,14 +58,14 @@ class SystemUserController extends Controller
                 array_push( $user_have_service , $ceck_service);
             }
         }
-        return view("administration.users.add", compact("organization",'user_have_service'));
+        return view("administration.users.index", compact("organization","user_have_service"));
     }
 
 
 
     public function store(Request $request){
 
-        // dd($request->all());
+        dd($request->all());
         $current_user = Auth::user();
         $organization = $current_user->organizations->first();
 

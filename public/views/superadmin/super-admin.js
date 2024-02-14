@@ -41,16 +41,7 @@ function success(message) {
   }
 });
 
-
-
-// function add_superAdmin()
-// {
-//   $("#add-superAdmin").modal('show');
-// }
-
-
-// function ()
-// {
-//   $("#Edit-superAdmin").modal('show');
-// }
-  
+function add_superAdmin()
+{
+  $("#add-superAdmin").modal('show');
+}
