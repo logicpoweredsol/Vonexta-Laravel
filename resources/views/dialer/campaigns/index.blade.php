@@ -45,13 +45,6 @@
         <h3 class="card-title">All compaigns</h3>
 
         <div class="card-tools">
-          <!-- <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
-  <i class="fas fa-minus"></i>
-</button> -->
-
-
-
-
 
           <a href="javascript:void(0);" type="button" class="btn btn-sm btn-primary" onclick="show_add_compaign_modal();"> <i class="fas fa-plus"></i> Add compaigns </a>
 
@@ -62,7 +55,7 @@
 
       <div class="acbz" style="position: absolute;width: 250px;right: 275px;top: 20px ;z-index:9;">
 
-        <div class="btn-group" style="margin-left:50px;">
+        {{-- <div class="btn-group" style="margin-left:50px;">
             <button type="button" class="btn btn-default">Status - <span id="cur_status">All</span> </button>
             <button type="button" class="btn btn-default dropdown-toggle dropdown-icon" data-toggle="dropdown">
                 <span class="sr-only">Toggle Dropdown</span>
@@ -72,7 +65,7 @@
                 <a class="dropdown-item" href="javascript:" onclick="search_filter('Active')" >Active</a>
                 <a class="dropdown-item" href="javascript:" onclick="search_filter('Not Active')" >Not Active</a>
             </div>
-        </div>
+        </div> --}}
       </div>
 
 
@@ -113,7 +106,7 @@
                     <span class="sr-only">Toggle Dropdown</span>
                   </button>
                   <div class="dropdown-menu" role="menu">
-                    <a class="dropdown-item" href="">Edit</a>
+                    <a class="dropdown-item" href="{{ route('services.campaigns.edit', ['service' => strtolower($service), 'organization_services_id' => $organization_servicesID , 'CampaignID' =>$get_compaignSkills['campaign_id'][$i] ] ) }}">Edit</a>
                     <a class="dropdown-item" href="">Leads Pool</a>
                     <a class="dropdown-item" href="">Lists</a>
                     <a class="dropdown-item" href="">Dispositions</a>
@@ -235,6 +228,7 @@
   <script src="{{ asset('plugins/bs-stepper/js/bs-stepper.min.js') }}"></script>
   <script src="{{ asset('views/services/dialler/campaigns/index.js') }}"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css">
-  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script> -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+  
 
   @endpush

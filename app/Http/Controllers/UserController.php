@@ -571,7 +571,7 @@ class UserController extends Controller
     //   Update Function Deaatil Tabk of Agent 
     public function update_agent_in_db_detail(Request $request){
 
-        // dd($request->all());
+        dd($request->all());
 
         $userAgent = userAgent::where('api_user',$request->User)->first();
 
@@ -828,8 +828,6 @@ class UserController extends Controller
                 'mobile_number' => $request->Sms_number,
                 'inbound_calls_limit' => $request->inbound_calls_limit,
             ];
-
-            // dd($postData);
 
 
             // dd($postData);
