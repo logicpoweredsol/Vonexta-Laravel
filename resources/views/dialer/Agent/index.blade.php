@@ -1,22 +1,5 @@
 @extends('layouts.app')
 @push('css')
-<!-- DataTables -->
-<link rel="stylesheet" href="{{ asset('plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
-<link rel="stylesheet" href="{{ asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
-<link rel="stylesheet" href="{{ asset('plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
-<link rel="stylesheet" href="{{ asset('plugins/bs-stepper/css/bs-stepper.min.css') }}">
-<link rel="stylesheet" href="{{ asset('css/custom.css') }}">
-
-
-<!-- Ion Slider -->
-<link rel="stylesheet" href="{{ asset('plugins/ion-rangeslider/css/ion.rangeSlider.min.css') }}">
-<!-- bootstrap slider -->
-<link rel="stylesheet" href="{{ asset('plugins/bootstrap-slider/css/bootstrap-slider.min.css') }}">
-
-
-<!-- Select2 -->
-<link rel="stylesheet" href="{{ asset('plugins/select2/css/select2.min.css') }}">
-
 
 <style>
     .bootstrap-switch{
@@ -32,9 +15,6 @@
     @else
     <div class="content-wrapper">
         @endif
-
-
-        {{-- <div class="content-wrapper"> --}}
 
         @if(session()->has('success'))
         <script>
@@ -113,13 +93,6 @@
 
                         <a href="javascript:void(0);" type="button" class="btn btn-sm btn-primary" onclick="add_agent_model();"> <i class="fas fa-plus"></i> Add Agent</a>
 
-
-                        {{-- <a href="javascript:void(0);" class="btn btn-sm btn-primary mr-2" id="btnAddUser">
-              <i class="fas fa-plus"></i> Add Agent
-            </a> --}}
-
-
-
                         <a href="javascript:void(0);" class="btn btn-sm btn-primary" id="Modal2">
                             <i class="fas fa-plus"></i> Add Bulk Agents
                         </a>
@@ -162,7 +135,6 @@
 
 
                             @foreach ($userAgents as $index => $userAgent)
-
                             <tr>
                                 <td> <input type="checkbox" style="width: 20px; height: 20px; margin-top: 7px;" value="{{$userAgent->user}}" id="{{$userAgent->user}}" class="form-control" onclick="bulk_button(this.id);"></td>
 
@@ -208,9 +180,6 @@
                                     </div>
                                 </td>
                             </tr>
-
-
-
                             @endforeach
                         </tbody>
 
@@ -335,9 +304,6 @@
                                                                     </option>
                                                                 @endforeach
                                                             </select>
-
-
-                                                            {{-- <input type="text" class="form-control" required name="user_group" id="user_group"> --}}
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
@@ -463,10 +429,10 @@
                                                             @if($skills['Campaigns']['result'] == 'success')
                                                                 @foreach($skills['Campaigns']['campaign_id'] as $row=>$call_log_Campaigns)
                                                                 <tr>
-                                                                    <td ><input id="model_campaign_id_{{$skills['Campaigns']['campaign_id'][$row]}}"  type='text' readonly value='{{$skills['Campaigns']['campaign_id'][$row]}}' name='campaign_id[]' style='border:none;background: transparent;' />
+                                                                    <td ><input id="model_profile_id_{{$skills['Campaigns']['campaign_id'][$row]}}"  type='text' readonly value='{{$skills['Campaigns']['campaign_id'][$row]}}' name='campaign_id[]' style='border:none;background: transparent;' />
                                                                     <span class="adminlet3" onclick="open_outbound_model('{{$skills['Campaigns']['campaign_id'][$row]}}');"><i class="fas fa-list"></i></span> </td>
                                                                     <td>
-                                                                        <select class="form-control select4"  style="border: none;" id="model_comp_level_{{$skills['Campaigns']['campaign_id'][$row]}}" name='campaign_id_level[]'>
+                                                                        <select class="form-control select4"  style="border: none;" id="model_prof_level_{{$skills['Campaigns']['campaign_id'][$row]}}" name='profile_id_level[]'>
                                                                             
                                                                             <?php for ($i = 1; $i <= 9; $i++) { ?>
                                                                                 <option  value="{{$i}}"> {{$i}} </option>
@@ -666,6 +632,17 @@
                                     <span class="error">
                                         @error('email')
                                         <label id="email-error" class="error invalid-feedback" for="email" style="display: inline-block;">{{ $message }}</label>
+                                        @enderror
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="email" class="col-sm-2 col-form-label">Phone</label>
+                                <div class="col-sm-10">
+                                <input type="text" class="form-control @error('Phone') is-invalid @enderror" id="Phone" name="Phone" placeholder="Phone" @error('Phone') aria-invalid="true" @enderror>
+                                    <span class="error">
+                                        @error('Phone')
+                                        <label id="Phone-error" class="error invalid-feedback" for="Phone" style="display: inline-block;">{{ $message }}</label>
                                         @enderror
                                     </span>
                                 </div>
@@ -879,7 +856,6 @@
 </div>
 
 
-
 <!-- Modal for outbound Skill -->
 <div class="modal fade" id="Outbound-Skill">
         <div class="modal-dialog">
@@ -917,99 +893,21 @@
         <!-- /.modal-dialog -->
 </div>
 
-
-
-
-
-
-
 </div>
+
 
 @endSection
 
 @push('scripts')
+
+
+
+
 <script>
     //Any constants to be used by this service/module...
     const service = "{{ $service }}";
 </script>
 
-<!-- Bootstrap Switch -->
-<script src="{{ asset('plugins/bootstrap-switch/js/bootstrap-switch.min.js') }}" ></script>
-
-<!-- DataTables  & Plugins -->
-
-<script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
-<script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
-<script src="{{ asset('plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
-<script src="{{ asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
-<script src="{{ asset('plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
-<script src="{{ asset('plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
-<script src="{{ asset('plugins/jszip/jszip.min.js') }}"></script>
-<script src="{{ asset('plugins/pdfmake/pdfmake.min.js') }}"></script>
-<script src="{{ asset('plugins/pdfmake/vfs_fonts.js') }}"></script>
-<script src="{{ asset('plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
-<script src="{{ asset('plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
-<script src="{{ asset('plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
-<!-- BS-Stepper -->
-
-<!-- Ion Slider -->
-<script src="{{ asset('plugins/ion-rangeslider/js/ion.rangeSlider.min.js') }}"></script>
-<!-- Bootstrap slider -->
-<script src="{{ asset('plugins/bootstrap-slider/bootstrap-slider.min.js') }}"></script>
-
-
-
-
-<!-- SweetAlert2 -->
-<script src="{{ asset('plugins/sweetalert2/sweetalert2.min.js') }}"></script>
-
-<script src="{{ asset('plugins/bs-stepper/js/bs-stepper.min.js') }}"></script>
-<script src="{{ asset('views/services/dialler/users/index.js') }}"></script>
-<script src="{{ asset('views/datatable/datatable.js') }}"></script>
-<script src="{{ asset('plugins/select2/js/select2.full.min.js') }}"></script>
-
-<script>
-    $(function() {
-        // Initialize the ionRangeSlider
-        $('#inbound_calls_limit').ionRangeSlider({
-            min: 1,
-            max: 1000,
-            // from    : 0,
-            type: 'single',
-            step: 1,
-            prettify: false,
-            hasGrid: true
-        });
-        $("#max_inbound_calls1").ionRangeSlider({
-            min: 1,
-            max: 1000,
-            // from    : 0,
-            type: 'single',
-            step: 1,
-            prettify: false,
-            hasGrid: true
-
-        });
-
-    });
-</script>
-
-
-<script>
-    $(function() {
-        $('.select3').select2({
-            width: "100%"
-        });
-        $('.select4').select2({
-            minimumResultsForSearch: Infinity,
-            width: "100%"
-        });
-    });
-
-    $(document).ready(function(){
-        $('#Campaigns-1,#Enbound-1').DataTable();
-    });
-</script>
 
 
 

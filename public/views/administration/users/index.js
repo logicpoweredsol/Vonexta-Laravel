@@ -77,3 +77,15 @@ function show_user_on_administrtion()
 {
     $("#administration_user_modal").modal('show');
 }
+
+function toggal_service(){
+    var role = $('#role').val();
+
+    if(role == 'user'){
+        $('#div_services').addClass('d-none');
+    }else{
+        $('#div_services').removeClass('d-none');
+    }
+
+
+}

@@ -4,6 +4,25 @@ $(function () {
     });
 });
 
+$(function () {
+    // Initialize the ionRangeSlider
+    $('#inbound_calls_limit').ionRangeSlider({
+      min     : 1,
+      max     : 1000,
+      // from    : 0,
+      type    : 'single',
+      step    : 1,
+      prettify: false,
+      hasGrid : true
+    });
+
+
+       $('#inbound_calls_limit').data("ionRangeSlider").update({
+      from: $('#inbound_calls_limit').val()
+    });
+
+  });
+
 
 
 
@@ -612,6 +631,8 @@ function open_outbound_model(row_number) {
     });
   }
 
+  
+
 
 
   
@@ -632,6 +653,8 @@ function open_outbound_model(row_number) {
 //   var placeholderCounter = 1;
   
   function add_row() {
+
+
 
     var html = '';
     var total_length =$(".customfield-wrap").length ;
@@ -696,6 +719,10 @@ function open_outbound_model(row_number) {
         //     $('.fromgroup:last').remove();
         // }
     }
+
+   
+
+  
     
     
     

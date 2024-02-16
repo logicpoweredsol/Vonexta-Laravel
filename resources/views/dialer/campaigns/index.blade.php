@@ -1,15 +1,5 @@
 @extends('layouts.app')
-@push('css')
-<!-- DataTables -->
-<link rel="stylesheet" href="{{ asset('plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
-<link rel="stylesheet" href="{{ asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
-<link rel="stylesheet" href="{{ asset('plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
-<link rel="stylesheet" href="{{ asset('plugins/bs-stepper/css/bs-stepper.min.css') }}">
-<link rel="stylesheet" href="{{ asset('css/custom.css') }}">
 
-<!-- Select2 -->
-<link rel="stylesheet" href="{{ asset('plugins/select2/css/select2.min.css') }}">
-@endpush
 @section('content')
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
@@ -36,6 +26,7 @@
     </div><!-- /.container-fluid -->
   </section>
 
+
   <!-- Main content -->
   <section class="content">
 
@@ -61,7 +52,7 @@
                 <span class="sr-only">Toggle Dropdown</span>
             </button>
             <div class="dropdown-menu" role="menu" >
-                <a class="dropdown-item" href="javascript:;" onclick="search_filter('all')">All</a>
+                <a class="dropdown-item" href="javascript:;" onclick="search_filter('All')">All</a>
                 <a class="dropdown-item" href="javascript:" onclick="search_filter('Active')" >Active</a>
                 <a class="dropdown-item" href="javascript:" onclick="search_filter('Not Active')" >Not Active</a>
             </div>
@@ -69,7 +60,7 @@
       </div>
 
 
-        <table id="Compaign-table" class="table table-striped table-hover vonexta-table">
+        <table id="Compaign-tableSS" class="table table-striped table-hover vonexta-table">
           <thead>
             <tr>
               <th>Profile ID</th>
@@ -131,7 +122,7 @@
       <!-- /.card-footer-->
     </div>
     <!-- /.card -->
-
+  
     <!-- add-compaign-modal -->
     <div class="modal fade" id="compaignn-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-xl" role="document">
@@ -209,26 +200,3 @@
   @include('dialer.campaigns.modals.add_campaign')
   @endSection
 
-  @push('scripts')
-
-  <!-- DataTables  & Plugins -->
-  <script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
-  <script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
-  <script src="{{ asset('plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
-  <script src="{{ asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
-  <script src="{{ asset('plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
-  <script src="{{ asset('plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
-  <script src="{{ asset('plugins/jszip/jszip.min.js') }}"></script>
-  <script src="{{ asset('plugins/pdfmake/pdfmake.min.js') }}"></script>
-  <script src="{{ asset('plugins/pdfmake/vfs_fonts.js') }}"></script>
-  <script src="{{ asset('plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
-  <script src="{{ asset('plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
-  <script src="{{ asset('plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
-  <!-- BS-Stepper -->
-  <script src="{{ asset('plugins/bs-stepper/js/bs-stepper.min.js') }}"></script>
-  <script src="{{ asset('views/services/dialler/campaigns/index.js') }}"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
-  
-
-  @endpush

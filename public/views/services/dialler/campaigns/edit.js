@@ -25,3 +25,30 @@ function speed_calculate(id){
     $("#speed").html(html);
 
 }
+
+$(document).ready(function()
+{
+
+    var showPagination =true;
+    var showPagination2 =true;
+
+    if ($('#Compaign-table').find('tbody tr').length <= 10) {
+        showPagination = false;  // If records are 10 or less, hide pagination
+    }
+
+    $('#Compaign-table').DataTable({
+        "paging": showPagination,
+        "lengthChange": true,
+        "searching": true,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false,
+        "responsive": true
+    });
+
+   
+
+});
+
+
+

@@ -254,15 +254,49 @@ body {
     font-size: 12px;
 }
 
-table.dataTable>thead>tr>th {
+table.dataTable>thead>tr>th,
+table#compaignnse>thead>tr>th,
+table#compaignns>thead>tr>th {
     font-size: 14px;
     color: #888;
 }
 
-table.dataTable>tbody>tr>td {
+table#compaignnse>thead>tr>th,
+table#compaignns>thead>tr>th {
+    padding: 6px 15px;
+}
+
+table.dataTable>tbody>tr>td,
+table#compaignnse>tbody>tr>td,
+table#compaignns>tbody>tr>td {
     font-size: 14px;
     color: #000000AA !important;
     padding: 6px 15px;
+}
+
+table#compaignnse>tbody>tr>td input,
+table#compaignns>tbody>tr>td input {
+    padding: 0;
+    font-size: 14px;
+}
+
+table#compaignnse span.select2-selection.select2-selection--single,
+table#compaignns span.select2-selection.select2-selection--single {
+    padding: 5px 10px;
+    height: 25px;
+    font-size: 14px;
+    line-height: 1;
+}
+
+table#compaignnse .select2-container--default .select2-selection--single .select2-selection__arrow,
+table#compaignns .select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 20px;
+    right: 3px;
+}
+
+table#compaignnse .select2-container--default .select2-selection--single .select2-selection__rendered,
+table#compaignns .select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 20px;
 }
 
 .table td,
@@ -486,7 +520,7 @@ div.dataTables_wrapper div.dataTables_info {
 }
 
 #add-agent-model .modal-body {
-    height: 80vh;
+    height: inherit;
     overflow: auto;
 }
 
@@ -636,4 +670,8 @@ div.dataTables_wrapper div.dataTables_info {
 
 .customfield-wrap .additionalfield-wrap button {
     width: 30px;
+}
+
+.bootstrap-switch-container span {
+    width: 24px !important;
 }

@@ -120,6 +120,7 @@ Route::middleware(['auth','checkUserStatus'])->group(function () {
         Route::middleware(['role_or_permission:admin|view campaigns'])->prefix('campaigns')->group(function() {
             Route::get('/{organization_services_id}',[CampaignController::class, 'index'])->name('services.campaigns');
             Route::get('/edit/{organization_services_id}/{CampaignID}',[CampaignController::class, 'edit'])->name('services.campaigns.edit');
+            Route::post('/update',[CampaignController::class, 'update'])->name('services.campaigns.update');
         });
     });
 

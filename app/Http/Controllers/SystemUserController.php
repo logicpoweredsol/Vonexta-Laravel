@@ -65,7 +65,7 @@ class SystemUserController extends Controller
 
     public function store(Request $request){
 
-        dd($request->all());
+        // dd($request->all());
         $current_user = Auth::user();
         $organization = $current_user->organizations->first();
 
@@ -84,6 +84,7 @@ class SystemUserController extends Controller
         $user = new User();
         $user->name = $request->name;
         $user->email = $request->email;
+        $user->phone =$request->Phone;
         $user->password = Hash::make($request->password);
         $user->email_verified_at = date("Y-m-d H:i:s");
         $user->created_by = Auth()->user()->id;
@@ -228,6 +229,7 @@ class SystemUserController extends Controller
         }
 
         $user->name = $request->name;
+        $user->phone =$request->Phone;
         $user->email = $request->email;
         if($request->password != null &&  $request->password != ''){
             $user->password = Hash::make($request->password);
@@ -337,6 +339,7 @@ class SystemUserController extends Controller
             $user = new User();
             $user->name = $request->name;
             $user->email = $request->email;
+            $user->phone =$request->Phone;
             $user->password = Hash::make($request->password);
             $user->email_verified_at = date("Y-m-d H:i:s");
             $user->created_by = Auth()->user()->id;

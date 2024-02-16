@@ -571,12 +571,10 @@ class UserController extends Controller
     //   Update Function Deaatil Tabk of Agent 
     public function update_agent_in_db_detail(Request $request){
 
-        dd($request->all());
-
         $userAgent = userAgent::where('api_user',$request->User)->first();
 
-         $OrganizationServices = OrganizationServices::find($userAgent->services_id);
-         $phpArray = json_decode($OrganizationServices->connection_parameters, true);
+        $OrganizationServices = OrganizationServices::find($userAgent->services_id);
+        $phpArray = json_decode($OrganizationServices->connection_parameters, true);
  
         $Agent_detail= $this->get_agent_detail($userAgent->services_id,$request->User);
 
@@ -829,6 +827,8 @@ class UserController extends Controller
                 'inbound_calls_limit' => $request->inbound_calls_limit,
             ];
 
+            // dd($postData);
+
 
             // dd($postData);
             $ch = curl_init($apiEndpoint);
@@ -867,7 +867,7 @@ class UserController extends Controller
                     $organization_services_id =  $request->organization_servicesID;
 
                     $campaign_id = $request->campaign_id[$i];
-                    $level  = $request->campaign_id_level[$i];             
+                    $level  = $request->profile_id_level[$i];             
                     $extension =  $request->user;
                    $return  = $this->skill_campaigns_update($organization_services_id,$campaign_id ,$level, $extension);
                 }

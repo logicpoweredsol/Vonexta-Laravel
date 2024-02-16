@@ -22,70 +22,79 @@
                 
             </div>
             <div class="card-body">
-                <div class="form-group row">
-                    <label for="name" class="col-sm-2 col-form-label">Name</label>
-                    <div class="col-sm-10">
-                        <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name') ?? $edit_data['user']->name }}" placeholder="Name of the user" @error('name') aria-invalid="true" @enderror>
-                        <span class="error">
-                        @error('name')
-                            <label id="name-error" class="error invalid-feedback" for="name" style="display: inline-block;">{{ $message }}</label>
-                        @enderror
-                    </span>
+
+                <div class="row">
+                    <div class="col-sm-12 col-md-6 col-lg-6">
+                        <div class="form-group">
+                            <label for="name" class="form-label">Name</label>
+                            <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name') ?? $edit_data['user']->name }}" placeholder="Name of the user" @error('name') aria-invalid="true" @enderror>
+                            <span class="error">
+                                @error('name')
+                                    <label id="name-error" class="error invalid-feedback" for="name" style="display: inline-block;">{{ $message }}</label>
+                                @enderror
+                            </span>
+                        </div>
                     </div>
-                </div>
-                <div class="form-group row">
-                    <label for="email" class="col-sm-2 col-form-label">Email</label>
-                    <div class="col-sm-10">
-                        <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email') ?? $edit_data['user']->email  }}"  placeholder="Email" @error('email') aria-invalid="true" @enderror>
+                    <div class="col-sm-12 col-md-6 col-lg-6">
+                        <div class="form-group">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email') ?? $edit_data['user']->email  }}"  placeholder="Email" @error('email') aria-invalid="true" @enderror>
                             @error('email')
                                 <label id="email-error" class="error invalid-feedback" for="email" style="display: inline-block;">{{ $message }}</label>
                             @enderror
-                        </span>
+                            </span>
+                        </div>
                     </div>
                 </div>
-                <div class="form-group row">
-                    <label for="email" class="col-sm-2 col-form-label">Phone</label>
-                    <div class="col-sm-10">
-                        <input type="text" class="form-control @error('Phone') is-invalid @enderror" id="Phone" name="Phone" value="{{$edit_data['user']->phone}}"  placeholder="Phone" @error('Phone') aria-invalid="true" @enderror>
+
+                <div class="row">
+                    <div class="col-sm-12 col-md-6 col-lg-6">
+                        <div class="form-group">
+                            <label for="phone" class="form-label">Phone</label>
+                            <input type="text" class="form-control @error('Phone') is-invalid @enderror" id="Phone" name="Phone" value="{{$edit_data['user']->phone}}"  placeholder="Phone" @error('Phone') aria-invalid="true" @enderror>
                             @error('email')
                                 <label id="Phone-error" class="error invalid-feedback" for="email" style="display: inline-block;">{{ $message }}</label>
                             @enderror
                         </span>
+                        </div>
                     </div>
-                </div>
-                <div class="form-group row">
-                    <label for="password" class="col-sm-2 col-form-label">Password</label>
-                    <div class="col-sm-10">
-                        <input type="password" class="form-control" id="password" name="password" value="{{ old('password')  }}" placeholder="Password">
-                        <span class="error"></span>
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label for="role" class="col-sm-2 col-form-label">Role</label>
-                    <div class="col-sm-10">
-                        <select class="form-control" id="role" name="role" value="{{ old('role')  }}">
-                            <option @if( $edit_data['userRoles'][0] == 'admin') {{ "selected" }} @endif  value="admin">Admin</option>
-                            <option @if($edit_data['userRoles'][0] == 'user' ) {{ "selected" }} @endif   value="user">User</option>
-                        </select>
-                        <span class="error"></span>
+                    <div class="col-sm-12 col-md-6 col-lg-6">
+                        <div class="form-group">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password" name="password" value="{{ old('password')  }}" placeholder="Password">
+                            <span class="error"></span>
+                        </div>
                     </div>
                 </div>
 
-                <div class="form-group row">
-                    <label for="active" class="col-sm-2 col-form-label">Active</label>
-                    <div class="col-sm-10">
-                        <select class="form-control" id="active" name="active">
-                            <option value="1" @if($edit_data['user']->active==1) {{ "selected" }} @endif>Yes</option>
-                            <option value="0" @if($edit_data['user']->active==0) {{ "selected" }} @endif>No</option>
-                        </select>
-                        <span class="error"></span>
+                <div class="row">
+                    <div class="col-sm-12 col-md-6 col-lg-6">
+                        <div class="form-group">
+                            <label for="role" class="form-label">Role</label>
+                            <select class="form-control" id="role" name="role" value="{{ old('role')  }}">
+                                <option @if( $edit_data['userRoles'][0] == 'admin') {{ "selected" }} @endif  value="admin">Admin</option>
+                                <option @if($edit_data['userRoles'][0] == 'user' ) {{ "selected" }} @endif   value="user">User</option>
+                            </select>
+                            <span class="error"></span>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-6">
+                        <div class="form-group">
+                            <label for="active" class="form-label">Active</label>
+                            <select class="form-control" id="active" name="active">
+                                <option value="1" @if($edit_data['user']->active==1) {{ "selected" }} @endif>Yes</option>
+                                <option value="0" @if($edit_data['user']->active==0) {{ "selected" }} @endif>No</option>
+                            </select>
+                            <span class="error"></span>
+                        </div>
                     </div>
                 </div>
 
-                <div class="form-group row">
-                    <label for="Services_row" class="col-sm-2 col-form-label">Services</label>
-                    <div class="col-sm-10">
-                        <div class="row" id="Services_row" @error('Services') aria-invalid="true" @enderror>
+                <div class="row">
+                    <div class="col-sm-12 col-md-6 col-lg-6">
+                        <div class="form-group">
+                            <label for="Services_row" class="form-label">Services</label>
+                            <div class="row" id="Services_row" @error('Services') aria-invalid="true" @enderror>
                             @foreach($edit_data['organizationServices'] as $Services)
 
                     
@@ -102,8 +111,8 @@
               
                          @if ($check_valied)
 
-                            <div class="col-sm-6 mb-3">
-                                <div class="form-check">
+                            <div class="col-sm-4 mb-3">
+                                <div class="form-check p-0">
                                     <input type="checkbox" class="form-check-input" id="{{ str_replace(" ", "_", $Services->pivot->id) }}" name="Services[]" data-bootstrap-switch data-off-color="danger" data-on-color="success"  @if (in_array($Services->pivot->id, $edit_data['user_have_service'])) checked @endif value="{{$Services->pivot->id }}">
                                     <label class="form-check-label" for="{{ str_replace(" ", "_", $Services->pivot->id) }}"> {{ ucwords($Services->pivot->service_nick_name)}}</label>
                                 </div>
@@ -118,7 +127,9 @@
                                 <label id="Services-error" class="error invalid-feedback" for="Services_row" style="display: inline-block;">{{ $message }}</label>
                             @enderror
                         </span>
+                        </div>
                     </div>
+                    
                 </div>
 
                 {{-- <input type="hidden" name="close_service[]" id="close_service"> --}}

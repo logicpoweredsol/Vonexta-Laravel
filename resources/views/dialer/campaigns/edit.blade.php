@@ -39,6 +39,7 @@
         </script>
         @endif
 
+       
         <section class="content-header">
             <div class="container-fluid">
               <div class="row ">
@@ -93,7 +94,7 @@
                     <div class="tab-content" id="campaigns-tabs Content">
 
                         <div class="tab-pane fade show @if( !session()->has('tab') && !session('tab')) show active @endif   " id="Organization-home" role="tabpanel" aria-labelledby="Organization-home-tab">
-                            <form method="POST" action="{{ route('services.update-agent.details', ['service' => strtolower('Dailer')]) }}" class="form-horizontal">
+                            <form method="POST" action="{{ route('services.campaigns.update', ['service' => strtolower('Dailer')]) }}" class="form-horizontal">
                                 {{-- <input type="hidden" class="form-control" id="User" name="User" value="{{ isset($dailer_agent_user['user']) ? $dailer_agent_user['user'] : '' }}"> --}}
                                 {{-- <input type="hidden" class="form-control" id="organization_services_id" name="organization_services_id" value="{{$organization_services_id}}"> --}}
 
@@ -122,7 +123,7 @@
                                                 <div class="form-group">
                                                     <label for="type" class="form-label">Type</label>
 
-                                                    <select name="dial_method" class="form-control" id="type" onchange="speed_calculate(this.id);">
+                                                    <select name="dial_method[]" class="form-control" id="type" onchange="speed_calculate(this.id);">
                                                         <option value="select" selected disabled >Select Type</option>
                                                         <option {{$edit_compaigns['data']['dial_method'] == 'RATIO' ? 'selected' : ''}} value="RATIO">Predictive</option>
                                                         <option {{$edit_compaigns['data']['dial_method'] == 'ADAPT_TAPERED' ? 'selected' : ''}} value="ADAPT_TAPERED">Smart Predictive</option>
@@ -142,7 +143,7 @@
                                             <div class="col-sm-12 col-md-6 col-lg-6">
                                                 <div class="form-group">
                                                     <label for="Sequence" class="form-label">Sequence</label>
-                                                    <select name="lead_order" class="form-control" id="Sequence">    
+                                                    <select name="lead_order[]" class="form-control" id="Sequence">    
                                                         <option {{$edit_compaigns['data']['lead_order'] == 'Up' ? 'selected' : ''}}  value="Up">Newest to Oldest</option>
                                                         <option {{$edit_compaigns['data']['lead_order'] == 'Down' ? 'selected' : ''}} value="Down">Oldest to Newest</option>
                                                         <option {{$edit_compaigns['data']['lead_order'] == 'Down Count' ? 'selected' : ''}} value="Down Count">Most Called First</option>
@@ -167,7 +168,7 @@
                                                 <div class="form-group">
                                                     <label for="Call Guide" class="form-label">Call Guide</label>
                                                     {{-- <input type="text" class="form-control" id="group" name="group" value="{{ isset($dailer_agent_user['user_group']) ? $dailer_agent_user['user_group'] : '' }}" placeholder="Group .."> --}}
-                                                    <select name="compaign_script" class="form-control" id="call_guide">
+                                                    <select name="compaign_script[]" class="form-control" id="call_guide">
 
                                                         @if ($get_Scripts != "" && $get_Scripts !=NULL)
                                                             @foreach ($get_Scripts['script_id'] as $i=>$scrip)
@@ -181,10 +182,7 @@
                                                         @else
                                                         <option value="">None</option>
                                                         @endif
-                                                       
-                                                        
-                                                      
-                                                    
+
 
                                                     </select>
                                                 </div>
@@ -192,26 +190,17 @@
 
                                             <div class="col-sm-12 col-md-6 col-lg-6">
                                                 <div class="form-group">
-                                                    <label for="name" class="form-label">Status</label>
+                                                    <label for="status" class="form-label">status</label>
 
-                                                    <select name="Status" class="form-control select2 " id="status">    
-                                                        <option value="">Active</option>
-                                                        <option value="">Not Active</option>
+                                                    <select name="status[]" class="form-control select2 " id="status">    
+                                                        <option value="Y">Active</option>
+                                                        <option value="N">Not Active</option>
                                                     </select>
                                                     
                                                 </div>
-                                            </div>
-
-
-
-
-                                            
+                                            </div>                  
                                         </div>
 
-
-                              
-
-                                        
 
                                     </div>
                                     <!-- /.card-body -->
@@ -428,80 +417,47 @@
 @push('scripts')
 
 
-<!-- Select2 -->
-<script src="{{ asset('plugins/select2/js/select2.full.min.js') }}"></script>
-
-<!-- Bootstrap Switch -->
-<script src="{{ asset('plugins/bootstrap-switch/js/bootstrap-switch.min.js') }}"></script>
-<!-- jquery-validation -->
-
-<!-- DataTables  & Plugins -->
-<script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
-<script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
-<script src="{{ asset('plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
-<script src="{{ asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
-<script src="{{ asset('plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
-<script src="{{ asset('plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
-<script src="{{ asset('plugins/jszip/jszip.min.js') }}"></script>
-<script src="{{ asset('plugins/pdfmake/pdfmake.min.js') }}"></script>
-<script src="{{ asset('plugins/pdfmake/vfs_fonts.js') }}"></script>
-<script src="{{ asset('plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
-<script src="{{ asset('plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
-<script src="{{ asset('plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
-<script src="{{asset('plugins/daterangepicker/daterangepicker.js')}}"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
-<script src="{{ asset('views/services/dialler/campaigns/edit.js') }}"></script>
-<!-- Ion Slider -->
-<script src="{{ asset('plugins/ion-rangeslider/js/ion.rangeSlider.min.js') }}"></script>
-<!-- Bootstrap slider -->
-<script src="{{ asset('plugins/bootstrap-slider/bootstrap-slider.min.js') }}"></script>
-
-
-<!-- SweetAlert2 -->
-<script src="{{ asset('plugins/sweetalert2/sweetalert2.min.js') }}"></script>
-
-<script src="{{ asset('plugins/bs-stepper/js/bs-stepper.min.js') }}"></script>
 
 
 <script>
-    $(document).ready(function() {
-      $('#Sequence').select2({
-        minimumResultsForSearch: -1
-      });
-      $('#type').select2({
-        minimumResultsForSearch: -1
-      });
-      $('#status').select2({
-        minimumResultsForSearch: -1
-      });
-      $('#speed').select2({
-        minimumResultsForSearch: -1
-      });
-      $('#call_guide').select2({
-        minimumResultsForSearch: -1
-      });
-    });
+    // $(document).ready(function() {
+    //   $('#Sequence').select2({
+    //     minimumResultsForSearch: -1
+    //   });
+    //   $('#type').select2({
+    //     minimumResultsForSearch: -1
+    //   });
+    //   $('#status').select2({
+    //     minimumResultsForSearch: -1
+    //   });
+    //   $('#speed').select2({
+    //     minimumResultsForSearch: -1
+    //   });
+    //   $('#call_guide').select2({
+    //     minimumResultsForSearch: -1
+    //   });
+    // });
 
 
-    $(document).ready(function()
-    {
-    var showPagination =true;
-    var showPagination2 =true;
+    // $(document).ready(function()
+    // {
+    // var showPagination =true;
+    // var showPagination2 =true;
 
-    if ($('#Compaign-table').find('tbody tr').length <= 10) {
-        showPagination = false;  // If records are 10 or less, hide pagination
-    }
+    // if ($('#Compaign-table').find('tbody tr').length <= 10) {
+    //     showPagination = false;  // If records are 10 or less, hide pagination
+    // }
 
-    $('#Compaign-table').DataTable({
-        "paging": showPagination,
-        "lengthChange": true,
-        "searching": true,
-        "ordering": true,
-        "info": true,
-        "autoWidth": false,
-        "responsive": true
-    });
-    });
+    // $('#Compaign-table').DataTable({
+    //     "paging": showPagination,
+    //     "lengthChange": true,
+    //     "searching": true,
+    //     "ordering": true,
+    //     "info": true,
+    //     "autoWidth": false,
+    //     "responsive": true
+    // });
+    // });
   </script>
 
 

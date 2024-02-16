@@ -1,19 +1,6 @@
-@push('css')
-<!-- DataTables -->
-<link rel="stylesheet" href="{{ asset('plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
-<link rel="stylesheet" href="{{ asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
-<link rel="stylesheet" href="{{ asset('plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
-<link rel="stylesheet" href="{{ asset('plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }}">
-
-
-<!-- Select2 -->
-<link rel="stylesheet" href="{{ asset('plugins/select2/css/select2.min.css') }}">
-
-
-@endpush
-
 @extends('layouts.app')
 @section('content')
+
 
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
@@ -67,7 +54,7 @@
                     <div class="row mb-3">
                         <div class="col-sm-12 col-md-6 col-lg-6">
                             <label for="Allowed Campaigns">Allowed Profiles :</label>
-                            <select class="form-control select3" id="all_comp_select" multiple name="allowed_campaigns[]" {{ ($agent_edit_data['allowed_campaigns']=='-ALL-CAMPAIGNS-') ? 'disabled' : ''}} required>
+                            <select class="form-control select3" id="all_comp_select" multiple name="allowed_profiles[]" {{ ($agent_edit_data['allowed_campaigns']=='-ALL-CAMPAIGNS-') ? 'disabled' : ''}} required>
                                 <!-- <option value="" selected disabled>Allowed Campaigns</option> -->
                                 @foreach($all_compaign['campaign_id'] as $p => $compan)
                                 @php
@@ -82,8 +69,8 @@
                             </select>
                         </div>
                         <div class="form-check mt-4">
-                                <input type="checkbox"  class="form-check-input" {{(isset($agent_edit_data['allowed_campaigns']) && $agent_edit_data['allowed_campaigns']=='-ALL-CAMPAIGNS-' ) ? 'checked' : '' }} id="allowed_compaigns" name="all_allowed_compaigns" data-bootstrap-switch data-off-color="danger" data-on-color="success">
-                                <label class="form-check-label" for="compaigns"> <b>Allow All Profiles</b> </label>
+                                <input type="checkbox"  class="form-check-input" {{(isset($agent_edit_data['allowed_campaigns']) && $agent_edit_data['allowed_campaigns']=='-ALL-CAMPAIGNS-' ) ? 'checked' : '' }} id="allowe_compaigns" name="all_allowed_profiles" data-bootstrap-switch data-off-color="danger" data-on-color="success">
+                                <label class="form-check-label" for="Profiles"> <b>Allow All Profiles</b> </label>
                             </div>
 
                     </div>
@@ -178,14 +165,14 @@
 
                         <div class="col-sm-12 col-md-6 col-lg-6">
                             <div class="form-check">
-                                <input type="checkbox" class="form-check-input" {{(isset($agent_edit_data['allow_alter_contact']) && $agent_edit_data['allow_alter_contact']=='Y' ) ? 'checked' : '' }} id="toggle7" name="allow_alter_contact" data-bootstrap-switch data-off-color="danger" data-on-color="success">
+                                <input type="checkbox" class="form-check-input" {{(isset($agent_edit_data['allow_alter_contact']) && $agent_edit_data['allow_alter_contact']=='Y' ) ? 'checked' : '' }} id="toggle7" name="allow_edit_contact_info" data-bootstrap-switch data-off-color="danger" data-on-color="success">
                                 <label class="form-check-label" for=""><b> Edit Contact Info</b></label>
                             </div>
                         </div>
 
                         <div class="col-sm-12 col-md-6 col-lg-6">
                             <div class="form-check">
-                                <input type="checkbox" class="form-check-input" {{(isset($agent_edit_data['allow_alter_phone_number']) && $agent_edit_data['allow_alter_phone_number']=='Y' ) ? 'checked' : '' }} id="toggle8" name="allow_alter_phone_number" data-bootstrap-switch data-off-color="danger" data-on-color="success">
+                                <input type="checkbox" class="form-check-input" {{(isset($agent_edit_data['allow_alter_phone_number']) && $agent_edit_data['allow_alter_phone_number']=='Y' ) ? 'checked' : '' }} id="toggle8" name="allow_edit_contact_phone_number" data-bootstrap-switch data-off-color="danger" data-on-color="success">
                                 <label class="form-check-label" for=""><b>Edit Contact Phone Number</b></label>
                             </div>
                         </div>
@@ -216,15 +203,15 @@
 
                         <div class="col-sm-12 col-md-6 col-lg-6">
                             <div class="form-check">
-                                <input type="checkbox" class="form-check-input" {{(isset($agent_edit_data['agent_call_log_view']) && $agent_edit_data['agent_call_log_view']=='Y' ) ? 'checked' : '' }} id="toggle11" name="agent_call_log_view" data-bootstrap-switch data-off-color="danger" data-on-color="success">
+                                <input type="checkbox" class="form-check-input" {{(isset($agent_edit_data['agent_call_log_view']) && $agent_edit_data['agent_call_log_view']=='Y' ) ? 'checked' : '' }} id="toggle11" name="show_call_log" data-bootstrap-switch data-off-color="danger" data-on-color="success">
                                 <label class="form-check-label" for=""><b> Show Call Log</b></label>
                             </div>
                         </div>
 
                         <div class="col-sm-12 col-md-6 col-lg-6">
                             <div class="form-check">
-                                <input type="checkbox" class="form-check-input" {{(isset($agent_edit_data['agent_xfer_consultative']) && $agent_edit_data['agent_xfer_consultative']=='Y' ) ? 'checked' : '' }} id="toggle12" name="agent_xfer_consultative" data-bootstrap-switch data-off-color="danger" data-on-color="success">
-                                <label class="form-check-label" for=""><b>Allow Internal Transfers</b></label>
+                                <input type="checkbox" class="form-check-input" {{(isset($agent_edit_data['agent_xfer_consultative']) && $agent_edit_data['agent_xfer_consultative']=='Y' ) ? 'checked' : '' }} id="toggle12" name="allow_transfer_to_agent" data-bootstrap-switch data-off-color="danger" data-on-color="success">
+                                <label class="form-check-label" for=""><b>Allow Transfer To Agent</b></label>
                             </div>
                         </div>
 
@@ -235,18 +222,51 @@
                         <div class="col-sm-12 col-md-6 col-lg-6">
                             <div class="form-check">
                                 <input type="checkbox" class="form-check-input" {{(isset($agent_edit_data['agent_xfer_blind_transfer']) && $agent_edit_data['agent_xfer_blind_transfer']=='Y' ) ? 'checked' : '' }} id="toggle13" name="agent_xfer_blind_transfer" data-bootstrap-switch data-off-color="danger" data-on-color="success">
-                                <label class="form-check-label" for=""><b> Allow Blind Transfers</b></label>
+                                <label class="form-check-label" for=""><b> Allow Blind Transfer</b></label>
                             </div>
                         </div>
 
                         <div class="col-sm-12 col-md-6 col-lg-6">
                             <div class="form-check">
-                                <input type="checkbox" class="form-check-input" {{(isset($agent_edit_data['agent_xfer_dial_with_customer']) && $agent_edit_data['agent_xfer_dial_with_customer']=='Y' ) ? 'checked' : '' }} id="toggle14" name="agent_xfer_dial_with_customer" data-bootstrap-switch data-off-color="danger" data-on-color="success">
+                                <input type="checkbox" class="form-check-input" {{(isset($agent_edit_data['agent_xfer_dial_with_customer']) && $agent_edit_data['agent_xfer_dial_with_customer']=='Y' ) ? 'checked' : '' }} id="toggle14" name="allow_conference_call" data-bootstrap-switch data-off-color="danger" data-on-color="success">
                                 <label class="form-check-label" for=""><b>Allow Conference Call</b></label>
                             </div>
                         </div>
 
                     </div>
+
+                    <div class="row mb-3">
+
+                        <div class="col-sm-12 col-md-6 col-lg-6">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" {{(isset($agent_edit_data['allow_direct_extension_inbounds']) && $agent_edit_data['allow_direct_extension_inbounds']=='Y' ) ? 'checked' : '' }} id="toggle13" name="allow_direct_extension_inbounds" data-bootstrap-switch data-off-color="danger" data-on-color="success">
+                                <label class="form-check-label" for=""><b> Allow Receive Direct Calls</b></label>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12 col-md-6 col-lg-6">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" {{(isset($agent_edit_data['allow_transfers_to_number']) && $agent_edit_data['allow_transfers_to_number']=='Y' ) ? 'checked' : '' }} id="toggle14" name="allow_transfers_to_number" data-bootstrap-switch data-off-color="danger" data-on-color="success">
+                                <label class="form-check-label" for=""><b>Allow Transfer To Phone Number</b></label>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="row mb-3">
+
+                        <div class="col-sm-12 col-md-6 col-lg-6">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" {{(isset($agent_edit_data['allow_transfers_to_queue']) && $agent_edit_data['allow_transfers_to_queue']=='Y' ) ? 'checked' : '' }} id="toggle13" name="allow_transfers_to_queue" data-bootstrap-switch data-off-color="danger" data-on-color="success">
+                                <label class="form-check-label" for=""><b> Allow Transfer To Queue</b></label>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+
 
                     <!-- /.card-body -->
                     <div class="card-footer">
@@ -276,22 +296,14 @@
 
 
 @push('scripts')
-<!-- Bootstrap Switch -->
-<script src="{{ asset('plugins/bootstrap-switch/js/bootstrap-switch.min.js') }}"></script>
-<!-- jquery-validation -->
-<script src="{{ asset('plugins/jquery-validation/jquery.validate.min.js') }}"></script>
-<script src="{{ asset('plugins/jquery-validation/additional-methods.min.js') }}"></script>
-<script src="{{ asset('views/agentrole/edit.js') }}"></script>
-<script src="{{ asset('plugins/select2/js/select2.full.min.js') }}"></script>
 
-
-<script>
+<!-- <script>
     $(function() {
         $('.select3').select2({
             placeholder: "Select the option"
         });
     });
-</script>
+</script> -->
 
 
 @endpush

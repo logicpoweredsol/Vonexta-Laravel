@@ -1,16 +1,9 @@
 $(document).ready(function () {
-    var service_name_text = "";
 
-    // var dtConfig = {
-    //     "paging": true,
-    //     "lengthChange": true,
-    //     "searching": true,
-    //     "ordering": true,
-    //     "info": true,
-    //     "autoWidth": false,
-    //     "responsive": true,
-    // };
-    
+    $("[data-bootstrap-switch]").bootstrapSwitch();
+
+
+    var service_name_text = "";
 
     // let ogServicesDT = $('#servicesTable').DataTable(dtConfig);
     if ($('#servicesTable').find('tbody tr').length <= 10) {
@@ -26,6 +19,10 @@ $(document).ready(function () {
         "autoWidth": false,
         "responsive": true
     });
+
+
+
+    
 
 
     $(document).on('click', '.btnRemoveService', function () {
@@ -76,6 +73,9 @@ $(document).ready(function () {
             }
         });
     });
+
+ 
+
 
 
    
@@ -236,43 +236,7 @@ $(document).ready(function () {
                 $("#btnAddConnectionParameters").prop('disabled', false);
             }
 
-            // $.ajax({
-            //     url:  url,
-            //     method: 'POST',
-            //     headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
-            //     data: {
-            //         'formData': formData,
-            //         'serive_name': serive_name,
-            //         'add_service_type': add_service_type,
-            //         'org_id': org_id,
-            //         'serviceNiceName':serviceNiceName
-            //     },
-            //     success: function (response) {
-            //         if(response.status){
-            //             Swal.fire({
-            //                 icon: 'success',
-            //                 title: 'Service added',
-            //                 text: 'Service added successfully',
-            //             }).then((result) => {
-            //                 if (result.isConfirmed) {
-            //                     $('#formConnectionParameters')[0].reset();
-            //                     $('#modalConnectionParameters').modal('hide');
-            //                     window.location.reload();
-            //                 }
-            //             });
-            //         } else {
-            //             Swal.fire({
-            //                 icon: 'error',
-            //                 title: 'Error',
-            //                 text: 'Something went wrong. Please try again.',
-            //             });
-            //         }
-            //     },
-            //     error: function (xhr, status, error) {
-            //         // Handle error
-            //     },
-            // });
-
+          
         } else {
             $("#btnAddConnectionParameters").prop('disabled', false);
         }
@@ -402,32 +366,6 @@ $(document).ready(function () {
             $("#btnUpdateOgService").prop('disabled', false);
         }
     });
-
-
-
-
-    
-
-    
-
-
-
-   
-    // $(document).on('click', '.btnRemoveParameter', function () {
-    //     // Remove the current parameter row
-    //     let thisParam = $(this).closest('.newParam');
-    //     thisParam.remove();
-    //     updateButtonVisibility();
-    // });
-
-
-
-
-   
-    
-    // Function to validate the form fields
-   
-
 
     
 
@@ -625,6 +563,19 @@ function impersonate_modal(id)
     $("#user_idd").val(id);
     $("#Impersonate-Modal").modal('show');
 }
+
+function change_tab(id) {
+    var id_array = ['org-user', 'add-org-user', 'edit-org-user'];
+    id_array.forEach(element => {
+        if (element == id) {
+            $("#" + element).removeClass('d-none');
+        } else {
+            $("#" + element).addClass('d-none');
+        }
+    });
+}
+
+
 
 
 

@@ -1,11 +1,5 @@
 @extends('layouts.app')
-@push('css')
-    <!-- DataTables -->
-    <link rel="stylesheet" href="{{ asset('plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }}">
-@endpush
+
 @section('content')
 
 @if(session()->has('success'))
@@ -34,8 +28,9 @@
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
-              <li class="breadcrumb-item"><a href="#">System Settings</a></li>
-              <li class="breadcrumb-item active">Users</li>
+              <li class="breadcrumb-item"><a href="#">Administration</a></li>
+              <li class="breadcrumb-item active"><a href="{{route('administration.users')}}">Users</li></a>
+              
             </ol>
           </div>
         </div>
@@ -87,6 +82,7 @@
                     <tr>
                         <th>Name</th>
                         <th>Email</th>
+                        <th>Phone</th>
                         <th>User Type</th>
                         <th>Status</th>
                         <th>Actions</th>
@@ -101,6 +97,9 @@
                             </td>
                             <td>
                                 {{ $user->email }}
+                            </td>
+                            <td>
+                                {{ $user->phone }}
                             </td>
                             <td>
 
@@ -174,7 +173,7 @@
                     <form id="systemUsersForm" action="{{ route("administration.users.store") }}" method="post" class="form-horizontal">
                     @csrf
                 <!-- Default box -->
-                <div class="card">
+                
                     
                     <div class="card-body">
                         @if(null!==session('msg'))
@@ -218,6 +217,19 @@
                                     @enderror
                                 </span>
                             </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="Phone" class="col-sm-2 col-form-label">Phone</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control @error('Phone') is-invalid @enderror" id="Phone" name="Phone" value="{{ old('Phone')  }}" placeholder="Phone" @error('Phone') aria-invalid="true" @enderror>
+                                    <span class="error">
+                                    @error('Phone')
+                                    <label id="Phone-error" class="error invalid-feedback" for="Phone" style="display: inline-block;">{{ $message }}</label>
+                                    @enderror
+                                    </span>
+                            </div>
+
+                           
                         </div>
                         <div class="form-group row">
                             <label for="password" class="col-sm-2 col-form-label">Password</label>
@@ -283,12 +295,13 @@
                         </div> --}}
                     </div>
                     <!-- /.card-body -->
+                
+                <!-- /.card-footer-->
+            `  
                 <div class="card-footer">
                     <button type="submit" class="btn btn-primary float-right">Save</button>
                     <a href="{{ route("administration.users")  }}" class="btn btn-default">Cancel</a>
                 </div>
-                <!-- /.card-footer-->
-            `   </div>
                 <!-- /.card -->
             </form>
 
@@ -301,27 +314,4 @@
   <!-- /.content-wrapper -->
 @endSection
 
-@push('scripts')
 
-    <script src="{{ asset('plugins/bootstrap-switch/js/bootstrap-switch.min.js') }}"></script>
-    <!-- DataTables  & Plugins -->
-    <script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
-    <script src="{{ asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
-    <script src="{{ asset('plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('plugins/jszip/jszip.min.js') }}"></script>
-    <script src="{{ asset('plugins/pdfmake/pdfmake.min.js') }}"></script>
-    <script src="{{ asset('plugins/pdfmake/vfs_fonts.js') }}"></script>
-    <script src="{{ asset('plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
-    <script src="{{ asset('plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
-    <script src="{{ asset('plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
-    <!-- SweetAlert2 -->
-    <script src="{{ asset('plugins/sweetalert2/sweetalert2.min.js') }}"></script>
-    <script>
-        const csrfToken = $('meta[name="csrf-token"]').attr('content');
-    </script>
-    <script src="{{ asset('views/administration/users/index.js') }}"></script>
-    <script src="{{ asset('views/administration/users/common.js') }}"></script>
-@endpush

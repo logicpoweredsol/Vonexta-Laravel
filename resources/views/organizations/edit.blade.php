@@ -25,6 +25,8 @@
             });
         </script>
     @endif
+
+    
     
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -46,7 +48,6 @@
 
     <!-- Main content -->
     <section class="content">
-
 
         <div class="card">
             <div class="card-body">
@@ -368,7 +369,7 @@
     </div>
 
 <!-- Modal to get connection parameters from the super admin to connect to the service... -->
-<div class="modal fade" id="modalEditOgService" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="modalTitleEditOgService" aria-hidden="true">
+<!-- <div class="modal fade" id="modalEditOgService" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="modalTitleEditOgService" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
       
             <div class="modal-content">
@@ -402,7 +403,7 @@
                         <div  id="editOgServiceBody" >
 
                         </div>
-                    </form>
+                        </form>
                    
                 </div>
                 <div class="modal-footer">
@@ -412,31 +413,9 @@
             </div>
         {{-- </form> --}}
     </div>
-</div>
+</div> -->
 @endSection
 
-@push('scripts')
-    <!-- DataTables  & Plugins -->
-    <script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
-    <script src="{{ asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
-    <script src="{{ asset('plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('plugins/jszip/jszip.min.js') }}"></script>
-    <script src="{{ asset('plugins/pdfmake/pdfmake.min.js') }}"></script>
-    <script src="{{ asset('plugins/pdfmake/vfs_fonts.js') }}"></script>
-    <script src="{{ asset('plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
-    <script src="{{ asset('plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
-    <script src="{{ asset('plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
-    <!-- SweetAlert2 -->
-    <script src="{{ asset('plugins/sweetalert2/sweetalert2.min.js') }}"></script>
-    <script>
-        const csrfToken = $('meta[name="csrf-token"]').attr('content');
-    </script>
-    
-    <script src="{{ asset('views/organizations/edit.js') }}"></script>
-    <script src="{{ asset('views/organizations/users.js') }}"></script>
-    <script src="{{ asset('plugins/bootstrap-switch/js/bootstrap-switch.min.js') }}" ></script>
-@endpush
+
+
 

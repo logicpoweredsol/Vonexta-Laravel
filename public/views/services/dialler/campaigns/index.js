@@ -201,7 +201,7 @@
 //         // Check if data[5] is defined and not null before accessing its properties
 //         let rowStatus = (data[4] || '').trim().toLowerCase();
 //         let valueToSearch = statusEl.trim().toLowerCase();
-//         if (valueToSearch !== 'all') {
+//         if (valueToSearch !== 'All') {
 //             return valueToSearch === rowStatus;
 //         } else {
 //             return true;
@@ -225,17 +225,17 @@
 //     var showPagination =true;
 //     var showPagination2 =true;
 
-//     if ($('#Compaign-table').find('tbody tr').length <= 10) {
+//     if ($('#Compaign-tableSS').find('tbody tr').length <= 10) {
 //         showPagination = false;  // If records are 10 or less, hide pagination
 //     }
 
-//     $('#Compaign-table').DataTable({
+//     $('#Compaign-tableSS').DataTable({
 //         "paging": showPagination,
 //         "lengthChange": true,
 //         "searching": true,
 //         "ordering": true,
 //         "info": true,
-//         "autoWidth": false,
+//         "autoWidth": true,
 //         "responsive": true
 //     });
 

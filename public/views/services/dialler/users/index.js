@@ -4,6 +4,30 @@ $(document).ready(function(){
     
 
 });
+$(function() {
+    // Initialize the ionRangeSlider
+    $('#inbound_calls_limit').ionRangeSlider({
+        min: 1,
+        max: 1000,
+        // from    : 0,
+        type: 'single',
+        step: 1,
+        prettify: false,
+        hasGrid: true
+    });
+    $("#max_inbound_calls1").ionRangeSlider({
+        min: 1,
+        max: 1000,
+        // from    : 0,
+        type: 'single',
+        step: 1,
+        prettify: false,
+        hasGrid: true
+
+    });
+
+});
+
 
   // BS-Stepper Init
   document.addEventListener('DOMContentLoaded', function () {
@@ -191,9 +215,9 @@ function copy_agent_skill(){
 
 
             for(var q=0; q < response['call_log_outbounds'].length; q++){
-                var model_campaign_id = $("#model_campaign_id_"+response['call_log_outbounds'][q]['campaign_id']).val();
+                var model_campaign_id = $("#model_profile_id_"+response['call_log_outbounds'][q]['campaign_id']).val();
                 if(model_campaign_id == response['call_log_outbounds'][q]['campaign_id'] ){
-                    $("#model_comp_level_"+response['call_log_outbounds'][q]['campaign_id']).val(response['call_log_outbounds'][q]['campaign_grade']).trigger('change');
+                    $("#model_prof_level_"+response['call_log_outbounds'][q]['campaign_id']).val(response['call_log_outbounds'][q]['campaign_grade']).trigger('change');
                     
 
                 }
@@ -792,7 +816,6 @@ function toggal_service(){
         $('#div_services').removeClass('d-none');
     }
 
-
 }
 
 
@@ -1048,7 +1071,7 @@ function open_inbound_model(row_number ) {
 function open_outbound_model(row_number)
 {
 
-    var campaign_id_ = $('#model_campaign_id_'+row_number).val();
+    var campaign_id_ = $('#model_profile_id_'+row_number).val();
     var organization_servicesID = $("#organization_ser_id").val();
     var extension = $("#other_user").val();
 

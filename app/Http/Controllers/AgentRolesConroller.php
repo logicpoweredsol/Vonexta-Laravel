@@ -77,23 +77,26 @@ class AgentRolesConroller extends Controller
         $allow_manual_calls = isset($request->allow_manual_calls) ? 'Y' : 'N';
         $allow_schedule_callbacks = isset($request->allow_schedule_callbacks) ? 'Y' : 'N';
         $allow_personal_callbacks = isset($request->allow_personal_callbacks) ? 'Y' : 'N';
-        $allow_alter_contact = isset($request->allow_alter_contact) ? 'Y' : 'N';
-        $allow_alter_phone_number = isset($request->allow_alter_phone_number) ? 'Y' : 'N';
+        $allow_edit_contact_info = isset($request->allow_edit_contact_info) ? 'Y' : 'N';
+        $allow_edit_contact_phone_number = isset($request->allow_edit_contact_phone_number) ? 'Y' : 'N';
         $display_dialable_contacts = isset($request->display_dialable_contacts) ? 'Y' : 'N';
         $allow_waiting_calls_view = isset($request->allow_waiting_calls_view) ? 'Y' : 'N';
-        $agent_call_log_view = isset($request->agent_call_log_view) ? 'Y' : 'N';
-        $agent_xfer_consultative = isset($request->agent_xfer_consultative) ? 'Y' : 'N';
+        $show_call_log = isset($request->show_call_log) ? 'Y' : 'N';
+        $allow_transfer_to_agent = isset($request->allow_transfer_to_agent) ? 'Y' : 'N';
         $agent_xfer_blind_transfer = isset($request->agent_xfer_blind_transfer) ? 'Y' : 'N';
-        $agent_xfer_dial_with_customer = isset($request->agent_xfer_dial_with_customer) ? 'Y' : 'N';
+        $allow_conference_call = isset($request->allow_conference_call) ? 'Y' : 'N';
+        $allow_direct_extension_inbounds = isset($request->allow_direct_extension_inbounds) ? 'Y' : 'N';
+        $allow_transfers_to_number = isset($request->allow_transfers_to_number) ? 'Y' : 'N';
+        $allow_transfers_to_queue = isset($request->allow_transfers_to_queue) ? 'Y' : 'N';
 
 
         $compaign = "";
         $transfer_caller_id = "";
         $manual_dial_caller_id = "";
-        if(isset($request->all_allowed_compaigns) ){
+        if(isset($request->all_allowed_profiles) ){
             $compaign = '-ALL-CAMPAIGNS-';
         }else{
-            $compaign = implode('-', $request->allowed_campaigns);
+            $compaign = implode('-', $request->allowed_profiles);
         }
 
         if(isset($request->transfer_caller_id) ){
@@ -119,11 +122,11 @@ class AgentRolesConroller extends Controller
             'apiPass' =>  $phpArray['api_pass'],
             'session_user' =>  auth()->user()->email,
             'responsetype' => 'json',
-            'user_group'=> $request->user_group,
+            'user_group'=> $request->role,
             'group_name'=> $request->user_group,
             'group_level'=> 9,
 
-            'allowed_campaigns' => $compaign,
+            'allowed_profiles' => $compaign,
             'transfer_caller_id'=> $transfer_caller_id,
             'manual_dial_caller_id'=> $manual_dial_caller_id,
         
@@ -133,14 +136,17 @@ class AgentRolesConroller extends Controller
             "allow_manual_calls" => $allow_manual_calls,
             "allow_schedule_callbacks" => $allow_schedule_callbacks,
             "allow_personal_callbacks" => $allow_personal_callbacks,
-            "allow_alter_contact" => $allow_alter_contact,
-            "allow_alter_phone_number" => $allow_alter_phone_number,
+            "allow_edit_contact_info" => $allow_edit_contact_info,
+            "allow_edit_contact_phone_number" => $allow_edit_contact_phone_number,
             "display_dialable_contacts" => $display_dialable_contacts,
             "allow_waiting_calls_view" => $allow_waiting_calls_view,
-            "agent_call_log_view" => $agent_call_log_view,
-            "agent_xfer_consultative" => $agent_xfer_consultative,
+            "show_call_log" => $show_call_log,
+            "allow_transfer_to_agent" => $allow_transfer_to_agent,
             "agent_xfer_blind_transfer" => $agent_xfer_blind_transfer,
-            "agent_xfer_dial_with_customer" => $agent_xfer_dial_with_customer,
+            "allow_conference_call" => $allow_conference_call,
+            "allow_direct_extension_inbounds" => $allow_direct_extension_inbounds,
+            "allow_transfers_to_number" => $allow_transfers_to_number,
+            "allow_transfers_to_queue" => $allow_transfers_to_queue
             
         ];
 
@@ -262,23 +268,26 @@ class AgentRolesConroller extends Controller
         $allow_manual_calls = isset($request->allow_manual_calls) ? 'Y' : 'N';
         $allow_schedule_callbacks = isset($request->allow_schedule_callbacks) ? 'Y' : 'N';
         $allow_personal_callbacks = isset($request->allow_personal_callbacks) ? 'Y' : 'N';
-        $allow_alter_contact = isset($request->allow_alter_contact) ? 'Y' : 'N';
-        $allow_alter_phone_number = isset($request->allow_alter_phone_number) ? 'Y' : 'N';
+        $allow_edit_contact_info = isset($request->allow_edit_contact_info) ? 'Y' : 'N';
+        $allow_edit_contact_phone_number = isset($request->allow_edit_contact_phone_number) ? 'Y' : 'N';
         $display_dialable_contacts = isset($request->display_dialable_contacts) ? 'Y' : 'N';
         $allow_waiting_calls_view = isset($request->allow_waiting_calls_view) ? 'Y' : 'N';
-        $agent_call_log_view = isset($request->agent_call_log_view) ? 'Y' : 'N';
-        $agent_xfer_consultative = isset($request->agent_xfer_consultative) ? 'Y' : 'N';
+        $show_call_log = isset($request->show_call_log) ? 'Y' : 'N';
+        $allow_transfer_to_agent = isset($request->allow_transfer_to_agent) ? 'Y' : 'N';
         $agent_xfer_blind_transfer = isset($request->agent_xfer_blind_transfer) ? 'Y' : 'N';
-        $agent_xfer_dial_with_customer = isset($request->agent_xfer_dial_with_customer) ? 'Y' : 'N';
+        $allow_conference_call = isset($request->allow_conference_call) ? 'Y' : 'N';
+        $allow_direct_extension_inbounds = isset($request->allow_direct_extension_inbounds) ? 'Y' : 'N';
+        $allow_transfers_to_number = isset($request->allow_transfers_to_number) ? 'Y' : 'N';
+        $allow_transfers_to_queue = isset($request->allow_transfers_to_queue) ? 'Y' : 'N';
         
 
         $compaign = "";
         $transfer_caller_id = "";
         $manual_dial_caller_id = "";
-        if(isset($request->all_allowed_compaigns) ){
+        if(isset($request->all_allowed_profiles) ){
             $compaign = '-ALL-CAMPAIGNS-';
         }else{
-            $compaign = implode('-', $request->allowed_campaigns);
+            $compaign = implode('-', $request->allowed_profiles);
         }
 
         if(isset($request->transfer_caller_id) ){
@@ -304,24 +313,27 @@ class AgentRolesConroller extends Controller
             'apiPass' =>  $phpArray['api_pass'],
             'session_user' =>  auth()->user()->email,
             'responsetype' => 'json',
-            'allowed_campaigns' => $compaign,
+            'allowed_profiles' => $compaign,
             'transfer_caller_id'=> $transfer_caller_id,
             'manual_dial_caller_id'=> $manual_dial_caller_id,
-            'user_group'=> $request->user_group,
+            'user_group'=> $request->role,
             "select_inbound_upon_login" => $select_inbound_upon_login,
             "select_auto_outbound_upon_login" => $select_auto_outbound_upon_login,
             "allow_auto_outbound" => $allow_auto_outbound,
             "allow_manual_calls" => $allow_manual_calls,
             "allow_schedule_callbacks" => $allow_schedule_callbacks,
             "allow_personal_callbacks" => $allow_personal_callbacks,
-            "allow_alter_contact" => $allow_alter_contact,
-            "allow_alter_phone_number" => $allow_alter_phone_number,
+            "allow_edit_contact_info" => $allow_edit_contact_info,
+            "allow_edit_contact_phone_number" => $allow_edit_contact_phone_number,
             "display_dialable_contacts" => $display_dialable_contacts,
             "allow_waiting_calls_view" => $allow_waiting_calls_view,
-            "agent_call_log_view" => $agent_call_log_view,
-            "agent_xfer_consultative" => $agent_xfer_consultative,
+            "show_call_log" => $show_call_log,
+            "allow_transfer_to_agent" => $allow_transfer_to_agent,
             "agent_xfer_blind_transfer" => $agent_xfer_blind_transfer,
-            "agent_xfer_dial_with_customer" => $agent_xfer_dial_with_customer,
+            "allow_conference_call" => $allow_conference_call,
+            "allow_direct_extension_inbounds" => $allow_direct_extension_inbounds,
+            "allow_transfers_to_number" => $allow_transfers_to_number,
+            "allow_transfers_to_queue" => $allow_transfers_to_queue
             
         ];
         $ch = curl_init($apiEndpoint);
@@ -343,7 +355,7 @@ class AgentRolesConroller extends Controller
         if($api_responce['result'] == 'success'){
             return redirect('services/dialer/agents/agent-role/'.$request->organization_service_id)->with('success', 'Agent Role  Updated successfully');
            }else{
-            return redirect('services/dialer/agents/agent-role/'.$request->organization_service_id)->with('error', 'Some thing Went Wrong ');
+            return redirect('services/dialer/agents/agent-role/'.$request->organization_service_id)->with('error', 'Something Went Wrong ');
            }
 
 

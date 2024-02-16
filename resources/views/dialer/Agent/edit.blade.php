@@ -1,23 +1,5 @@
 @extends('layouts.app')
-@push('css')
-<!-- DataTables -->
-<link rel="stylesheet" href="{{ asset('plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
-<link rel="stylesheet" href="{{ asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
-<link rel="stylesheet" href="{{ asset('plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
-<link rel="stylesheet" href="{{ asset('plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }}">
 
-
-<!-- Select2 -->
-<link rel="stylesheet" href="{{ asset('plugins/select2/css/select2.min.css') }}">
-
-
-<!-- Ion Slider -->
-<link rel="stylesheet" href="{{ asset('plugins/ion-rangeslider/css/ion.rangeSlider.min.css') }}">
-<!-- bootstrap slider -->
-<link rel="stylesheet" href="{{ asset('plugins/bootstrap-slider/css/bootstrap-slider.min.css') }}">
-
-
-@endpush
 @section('content')
 <!-- Content Wrapper. Contains page content -->
 
@@ -65,7 +47,7 @@
                             @php $nick_name  =service_name($organization_services_id); @endphp
                             <li class="breadcrumb-item"><a href="{{ route('services.agents', ['service' => strtolower('dailer'), 'organization_services_id' => $organization_services_id]) }}">{{$nick_name}} </a></li>
                             <li class="breadcrumb-item active"><a href="{{ route('services.agents', ['service' => strtolower($service), 'organization_services_id' => $organization_services_id]) }}">Agents</a></li>
-                            <li class="breadcrumb-item active">Edit Agents</li>
+                            <li class="breadcrumb-item active">Edit Agent</li>
                         </ol>
                     </div>
                 </div>
@@ -271,7 +253,7 @@
                                                 <label class="form-check-label" for="toggle2"> <b>Select Auto-Outbound Upon Login</b> </label>
                                             </div>
                                         </div>
-
+                                      
 
 
                                         <div class="row mb-3">
@@ -388,7 +370,7 @@
                                 <div class="row mb-3">
                                     <div class="col-md-4 mt-2">
                                         <label> Inbound Calls Limit: </label>
-                                        <input id="inbound_calls_limit"    type="text" oninput="update_inblound_call_limit(this.id);" name="inbound_calls_limit"  value="{{ isset($dailer_agent_user['max_inbound_calls']) ? $dailer_agent_user['max_inbound_calls'] : '' }}" >
+                                        <input id="inbound_calls_limit" type="text" oninput="update_inblound_call_limit(this.id);" name="inbound_calls_limit"  value="{{ isset($dailer_agent_user['max_inbound_calls']) ? $dailer_agent_user['max_inbound_calls'] : '' }}" >
                                     </div>
                                 </div>
                             </div>
@@ -505,7 +487,7 @@
                                                 <th>Time</th>
                                                 <th>Activity</th>
                                                 <th>Session Length</th>
-                                                <th>Campaign</th>
+                                                <th>Profile</th>
                                             </tr>
                                         </thead>
                                         <tbody id="activity-tbody">
@@ -613,91 +595,17 @@
     </div>
 @endSection
 
-@push('scripts')
 
 
-<!-- Select2 -->
-<script src="{{ asset('plugins/select2/js/select2.full.min.js') }}"></script>
-
-<!-- Bootstrap Switch -->
-<script src="{{ asset('plugins/bootstrap-switch/js/bootstrap-switch.min.js') }}"></script>
-<!-- jquery-validation -->
-
-<!-- DataTables  & Plugins -->
-<script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
-<script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
-<script src="{{ asset('plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
-<script src="{{ asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
-<script src="{{ asset('plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
-<script src="{{ asset('plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
-<script src="{{ asset('plugins/jszip/jszip.min.js') }}"></script>
-<script src="{{ asset('plugins/pdfmake/pdfmake.min.js') }}"></script>
-<script src="{{ asset('plugins/pdfmake/vfs_fonts.js') }}"></script>
-<script src="{{ asset('plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
-<script src="{{ asset('plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
-<script src="{{ asset('plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
-<script src="{{asset('plugins/daterangepicker/daterangepicker.js')}}"></script>
-
-<!-- Ion Slider -->
-<script src="{{ asset('plugins/ion-rangeslider/js/ion.rangeSlider.min.js') }}"></script>
-<!-- Bootstrap slider -->
-<script src="{{ asset('plugins/bootstrap-slider/bootstrap-slider.min.js') }}"></script>
 
 
-<!-- SweetAlert2 -->
-<script src="{{ asset('plugins/sweetalert2/sweetalert2.min.js') }}"></script>
 
-<script src="{{ asset('plugins/bs-stepper/js/bs-stepper.min.js') }}"></script>
-<script src="{{ asset('views/services/dialler/users/edit.js') }}"></script>
 
 
 
 
 <script>
-$(function () {
-    $('.select2').select2();
-});
-
-$(function(){
-    $('.select5').select2({
-        minimumResultsForSearch: Infinity
-    });
-});
-  </script>
-
-
-
-<script>
-    $(function () {
-      // Initialize the ionRangeSlider
-      $('#inbound_calls_limit').ionRangeSlider({
-        min     : 1,
-        max     : 1000,
-        // from    : 0,
-        type    : 'single',
-        step    : 1,
-        prettify: false,
-        hasGrid : true
-      });
-
-
-         $('#inbound_calls_limit').data("ionRangeSlider").update({
-        from: $('#inbound_calls_limit').val()
-      });
-
-    });
- 
-
-
-
-
-</script>
-
-
-
-
-@endpush
-<script>
+    
     function update_input_value(id) {
         var range = $("#" + id).val();
         var input_filed = id.replace("-range", "");

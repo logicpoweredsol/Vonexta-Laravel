@@ -1,5 +1,3 @@
-
-
 $(function () {
   $("input[data-bootstrap-switch]").each(function(){
       $(this).bootstrapSwitch('state', $(this).prop('checked'));
@@ -21,21 +19,21 @@ function add_agent_role() {
   var user_group = $("#user_group").val().trim(); // Trim whitespace
 
 
-  var allowed_campaigns = $("#allowed_campaigns").val();
+  var allowed_profiles = $("#allowed_profiles").val();
   var transfer_caller_id = $("#transfer_caller_id").val();
   var manual_dial_caller_id = $("#manual_dial_caller_id").val();
 
   // Reset error message
-  $("#user_group_error").html('');
+  $("#role_error").html('');
 
   if (user_group === "") {
-      $("#user_group_error").html('Agent Role is required');
+      $("#role_error").html('Agent Role is required');
       f = 1;
   } else {
       var check = checkString(user_group);
 
       if (!check) {
-          $("#user_group_error").html('Agent Role should contain only letters, not numbers');
+          $("#role_error").html('Agent Role should contain only letters, not numbers');
           f = 1;
       }
 
@@ -43,7 +41,7 @@ function add_agent_role() {
 
         var check2 =  calculateStringLength(user_group);
         if(!check2){
-          $("#user_group_error").html('Agent Role should greater then 3 letters');
+          $("#role_error").html('Agent Role should greater then 3 letters');
           f = 1;
         }
 
@@ -51,11 +49,11 @@ function add_agent_role() {
   }
 
 
-  if(allowed_campaigns == "" || allowed_campaigns == null){
-    $("#allowed_campaigns").css('border', '1px solid red');
+  if(allowed_profiles == "" || allowed_profiles == null){
+    $("#allowed_profiles").css('border', '1px solid red');
     f=1;
   }else{
-    $("#allowed_campaigns").css('border', '1px solid #DEE2E6');
+    $("#allowed_profiles").css('border', '1px solid #DEE2E6');
     f =0;
   }
 
@@ -150,11 +148,11 @@ function error(message) {
 
 
 
-$('#allowed_compaigns').on('switchChange.bootstrapSwitch', function(event, state) {
+$('#allowe_compaigns').on('switchChange.bootstrapSwitch', function(event, state) {
   if (this.checked) { 
-      $("#allowed_campaigns").prop('disabled',  true );
+      $("#allowed_profiles").prop('disabled',  true );
   } else {
-      $("#allowed_campaigns").prop('disabled', false);
+      $("#allowed_profiles").prop('disabled', false);
   }
 });
 

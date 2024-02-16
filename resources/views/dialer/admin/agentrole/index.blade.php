@@ -1,24 +1,8 @@
 @extends('layouts.app')
-@push('css')
-<!-- DataTables -->
-<link rel="stylesheet" href="{{ asset('plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
-<link rel="stylesheet" href="{{ asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
-<link rel="stylesheet" href="{{ asset('plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
-<link rel="stylesheet" href="{{ asset('plugins/bs-stepper/css/bs-stepper.min.css') }}">
-<link rel="stylesheet" href="{{ asset('css/custom.css') }}">
-
-<!-- Select2 -->
-<link rel="stylesheet" href="{{ asset('plugins/select2/css/select2.min.css') }}">
-
-
-<!-- Ion Slider -->
-<link rel="stylesheet" href="{{ asset('plugins/ion-rangeslider/css/ion.rangeSlider.min.css') }}">
-<!-- bootstrap slider -->
-<link rel="stylesheet" href="{{ asset('plugins/bootstrap-slider/css/bootstrap-slider.min.css') }}">
-
-@endpush
 
 @section('content')
+
+
 
 <!-- Content Wrapper. Contains page content -->
 @if (auth()->user()->hasRole('user'))
@@ -151,8 +135,8 @@
               <div class="col-sm-12 col-md-6 col-lg-6">
                 <div class="form-group">
                   <label for="name" class="form-label">Agent Role<span class="text-danger">*</span></label>
-                  <input type="text" class="form-control " id="user_group" name="user_group"   placeholder="Role name">
-                  <span class="text-danger" id="user_group_error"></span>
+                  <input type="text" class="form-control " id="role" name="role"   placeholder="Role name">
+                  <span class="text-danger" id="role_error"></span>
                 </div>
 
               </div>
@@ -161,8 +145,8 @@
 
             <div class="row mb-3">
               <div class="col-sm-12 col-md-6 col-lg-6">
-                <label for="Allowed Campaigns">Allowed Campaigns <span class="text-danger">*</span></label>
-                <select class="form-control select3" multiple name="allowed_campaigns[]" id="allowed_campaigns">
+                <label for="Allowed profiles">Allowed profiles <span class="text-danger">*</span></label>
+                <select class="form-control select3" multiple name="allowed_profiles[]" id="allowed_profiles">
                     @foreach($all_compaign['campaign_id'] as $p=>$compan)
                     <option value="{{$all_compaign['campaign_id'][$p]}}">{{$all_compaign['campaign_name'][$p]}}</option>
                     @endforeach
@@ -171,8 +155,8 @@
 
               <div class="col-sm-12 col-md-6 col-lg-6" style="margin-top: 2rem;">
                   <div class="form-check">
-                      <input type="checkbox" class="form-check-input"   id="allowed_compaigns" name="all_allowed_compaigns" data-bootstrap-switch data-off-color="danger" data-on-color="success">
-                      <label class="form-check-label" for="compaigns"> <b>Allow all compaigns</b> </label>
+                      <input type="checkbox" class="form-check-input"   id="allowe_compaigns" name="all_allowed_compaigns" data-bootstrap-switch data-off-color="danger" data-on-color="success">
+                      <label class="form-check-label" for="profiles"> <b>Allow all profiles</b> </label>
                   </div>
               </div>
             </div>
@@ -258,14 +242,14 @@
 
               <div class="col-sm-12 col-md-6 col-lg-6">
                 <div class="form-check">
-                  <input type="checkbox" class="form-check-input" id="toggle7" name="allow_alter_contact" data-bootstrap-switch data-off-color="danger" data-on-color="success">
+                  <input type="checkbox" class="form-check-input" id="toggle7" name="allow_edit_contact_info" data-bootstrap-switch data-off-color="danger" data-on-color="success">
                   <label class="form-check-label" for="toggle7"><b> Edit Contact Info</b></label>
                 </div>
               </div>
 
               <div class="col-sm-12 col-md-6 col-lg-6">
                 <div class="form-check">
-                  <input type="checkbox" class="form-check-input" id="toggle8" name="allow_alter_phone_number" data-bootstrap-switch data-off-color="danger" data-on-color="success">
+                  <input type="checkbox" class="form-check-input" id="toggle8" name="allow_edit_contact_phone_number" data-bootstrap-switch data-off-color="danger" data-on-color="success">
                   <label class="form-check-label" for="toggle5"><b>Edit Contact Phone Number</b></label>
                 </div>
               </div>
@@ -294,15 +278,15 @@
 
               <div class="col-sm-12 col-md-6 col-lg-6">
                 <div class="form-check">
-                  <input type="checkbox" class="form-check-input" id="toggle11" name="agent_call_log_view" data-bootstrap-switch data-off-color="danger" data-on-color="success">
+                  <input type="checkbox" class="form-check-input" id="toggle11" name="show_call_log" data-bootstrap-switch data-off-color="danger" data-on-color="success">
                   <label class="form-check-label" for="toggle7"><b> Show Call Log</b></label>
                 </div>
               </div>
 
               <div class="col-sm-12 col-md-6 col-lg-6">
                 <div class="form-check">
-                  <input type="checkbox" class="form-check-input" id="toggle12" name="agent_xfer_consultative" data-bootstrap-switch data-off-color="danger" data-on-color="success">
-                  <label class="form-check-label" for="toggle5"><b>Allow Internal Transfers</b></label>
+                  <input type="checkbox" class="form-check-input" id="toggle12" name="allow_transfer_to_agent" data-bootstrap-switch data-off-color="danger" data-on-color="success">
+                  <label class="form-check-label" for="toggle5"><b>Allow Transfer To Agent</b></label>
                 </div>
               </div>
 
@@ -313,18 +297,51 @@
               <div class="col-sm-12 col-md-6 col-lg-6">
                 <div class="form-check">
                   <input type="checkbox" class="form-check-input" id="toggle13" name="agent_xfer_blind_transfer" data-bootstrap-switch data-off-color="danger" data-on-color="success">
-                  <label class="form-check-label" for="toggle7"><b> Allow Blind Transfers</b></label>
+                  <label class="form-check-label" for="toggle7"><b> Allow Blind Transfer</b></label>
                 </div>
               </div>
 
               <div class="col-sm-12 col-md-6 col-lg-6">
                 <div class="form-check">
-                  <input type="checkbox" class="form-check-input" id="toggle14" name="agent_xfer_dial_with_customer" data-bootstrap-switch data-off-color="danger" data-on-color="success">
+                  <input type="checkbox" class="form-check-input" id="toggle14" name="allow_conference_call" data-bootstrap-switch data-off-color="danger" data-on-color="success">
                   <label class="form-check-label" for="toggle5"><b>Allow Conference Call</b></label>
                 </div>
               </div>
 
             </div>
+
+            <div class="row mb-3">
+
+              <div class="col-sm-12 col-md-6 col-lg-6">
+                <div class="form-check">
+                  <input type="checkbox" class="form-check-input" id="toggle13" name="allow_direct_extension_inbounds" data-bootstrap-switch data-off-color="danger" data-on-color="success">
+                  <label class="form-check-label" for="toggle7"><b> Allow Receive Direct Calls</b></label>
+                </div>
+              </div>
+
+              <div class="col-sm-12 col-md-6 col-lg-6">
+                <div class="form-check">
+                  <input type="checkbox" class="form-check-input" id="toggle14" name="allow_transfers_to_number" data-bootstrap-switch data-off-color="danger" data-on-color="success">
+                  <label class="form-check-label" for="toggle5"><b>Allow Transfer To Phone Number</b></label>
+                </div>
+              </div>
+
+            </div>
+
+
+
+            <div class="row mb-3">
+
+              <div class="col-sm-12 col-md-6 col-lg-6">
+                <div class="form-check">
+                  <input type="checkbox" class="form-check-input" id="toggle13" name="allow_transfers_to_queue" data-bootstrap-switch data-off-color="danger" data-on-color="success">
+                  <label class="form-check-label" for="toggle7"><b> Allow Transfer To Queue</b></label>
+                </div>
+              </div>
+
+            </div>
+
+
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -348,43 +365,7 @@
     const service = "{{ $service }}";
   </script>
 
-  <!-- Bootstrap Switch -->
-  <script src="{{ asset('plugins/bootstrap-switch/js/bootstrap-switch.min.js') }}"></script>
-
-  <!-- DataTables  & Plugins -->
-
-  <script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
-  <script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
-  <script src="{{ asset('plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
-  <script src="{{ asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
-  <script src="{{ asset('plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
-  <script src="{{ asset('plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
-  <script src="{{ asset('plugins/jszip/jszip.min.js') }}"></script>
-  <script src="{{ asset('plugins/pdfmake/pdfmake.min.js') }}"></script>
-  <script src="{{ asset('plugins/pdfmake/vfs_fonts.js') }}"></script>
-  <script src="{{ asset('plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
-  <script src="{{ asset('plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
-  <script src="{{ asset('plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
-  <!-- BS-Stepper -->
-
-  <!-- Ion Slider -->
-  <script src="{{ asset('plugins/ion-rangeslider/js/ion.rangeSlider.min.js') }}"></script>
-  <!-- Bootstrap slider -->
-  <script src="{{ asset('plugins/bootstrap-slider/bootstrap-slider.min.js') }}"></script>
-
-
-
-
-
-  <!-- SweetAlert2 -->
-  <script src="{{ asset('plugins/sweetalert2/sweetalert2.min.js') }}"></script>
-  <script src="{{ asset('plugins/bs-stepper/js/bs-stepper.min.js') }}"></script>
-  <script src="{{ asset('views/agentrole/index.js') }}"></script>
-  <script src="{{ asset('views/datatable/datatable.js') }}"></script>
-
-  <script src="{{ asset('plugins/select2/js/select2.full.min.js') }}"></script>
-
-
+<!-- 
 <script>
    $(function() {
     $('.select3').select2({
@@ -393,7 +374,7 @@
     });
 });
 
-</script>
+</script> -->
 
 
   @endpush
