@@ -19,6 +19,7 @@ class HomeController extends Controller
             }else{
                 $userAgents = userAgent::where('org_user_id',auth()->user()->id)->with('user_detail')->get();
             }
+
            
         }
 

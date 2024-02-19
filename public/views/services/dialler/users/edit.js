@@ -28,6 +28,12 @@ $(function () {
 
 $(document).ready(function(){
 
+
+    $(".select2").select2({
+
+        minimumResultsForSearch: Infinity
+    });
+
     // $('.adminlet3').tooltip();
     var showPagination =true;
     var showPagination2 =true;
@@ -719,6 +725,11 @@ function open_outbound_model(row_number) {
         //     $('.fromgroup:last').remove();
         // }
     }
+
+
+
+
+    
 
    
 

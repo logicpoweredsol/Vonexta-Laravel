@@ -1,7 +1,6 @@
 $(document).ready(function(){
  
-    $("[data-bootstrap-switch]").bootstrapSwitch();
-    
+    $("[data-bootstrap-switch]").bootstrapSwitch();   
 
 });
 $(function() {
@@ -830,6 +829,7 @@ function update_skill_modal(service, organization_servicesID, extension) {
             "extension": extension
         },
         success: function (response) {
+
             $("#modell_user").text(extension);
             $("#model_organization_services_id").val(organization_servicesID);
             $("#model_User").val(extension);
@@ -926,7 +926,8 @@ function update_skill_inbound(row_number){
     var organization_services_id = $("#model_organization_services_id").val();
     var extension = $("#model_User").val();
 
-    var group_id = $('#inbound_id_'+row_number).val();
+    var group_id = $('#group_id_'+row_number).val();
+
     var group_grade = $("#group_grade_"+row_number).val();
     var invited = 'NO';
     if ($('#invited_'+row_number).is(':checked')) {
@@ -988,7 +989,7 @@ function update_skill_outbound(row_number) {
 
 function update_inblound_call_limit(id){
 
-    var max_inbound_calls = $("#max_inbound_calls1").val();
+    var max_inbound_calls = $("#max_inbound_calls").val();
 
     var organization_services_id = $("#model_organization_services_id").val();
     var extension = $("#model_User").val();

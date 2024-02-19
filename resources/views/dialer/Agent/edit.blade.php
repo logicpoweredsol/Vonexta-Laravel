@@ -177,6 +177,8 @@
                                             </div>
 
                                             <div class="col-sm-12 col-md-6 col-lg-6">
+
+                                            
                                                 <div class="form-group">
                                                     <label for="Status" class="form-label">Status</label>
                                                     <select name="status" class="form-control data select5" id="status">

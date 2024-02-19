@@ -795,7 +795,7 @@ class UserController extends Controller
 
     function save_agents(Request $request)
     {
-        // dd($request->all());
+       
         try {
             $org_user = User::where('id', $request->organization_user)->first();
             // $agent_choose_ingroups = isset($request->Inbound_Upon_Login) ? '1' : '0';
@@ -849,6 +849,8 @@ class UserController extends Controller
                 $add_userAgent->services_id = $request->organization_servicesID;
                 $add_userAgent->api_user = $request->user;
                 $add_userAgent->password = $api_response['pass_hash_encrypted'];
+                $add_userAgent->name =$request->agent_name;
+                $add_userAgent->status =$request->status;
                 $add_userAgent->save();
 
                 foreach($request->inbound_id as $i=>$data ){
@@ -875,8 +877,6 @@ class UserController extends Controller
             } else {
                 return redirect()->back()->with('error', 'Something Went Wrong');
             }
-
-        
 
         return redirect()->back()->with('add_more_agent', 'New agent added successfully.');
         } catch (\Exception $e) {
@@ -1055,6 +1055,8 @@ class UserController extends Controller
                 $add_userAgent->services_id = $request->organization_servicesID;
                 $add_userAgent->api_user = $request->extension[$i];
                 $add_userAgent->password = $api_response['pass_hash_encrypted'];
+                $add_userAgent->name =$request->agent_name;
+                $add_userAgent->status =$request->status;
                 $add_userAgent->save();
             } else {
                 return redirect()->back()->with('error', 'Something Went Wrong');
@@ -1282,9 +1284,11 @@ class UserController extends Controller
             'apiUser' =>  $phpArray['api_user'],
             'apiPass' =>  $phpArray['api_pass'],
             'session_user' =>auth()->user()->email,
-            'group_id'=> $request->group_id,
+            'inbound_id'=> $request->inbound_id,
             'itemrank'=>$itemrank
         ];
+
+
 
         $ch = curl_init($apiEndpoint);
 
@@ -1340,6 +1344,8 @@ class UserController extends Controller
 
     //update the skill update_inblound_call_limit  tab record in edit agent 
     function update_inblound_call_limit(Request $request) {   
+
+        // dd($request->all());
         
         $OrganizationServices = OrganizationServices::find($request->organization_services_id);
 
@@ -1371,7 +1377,7 @@ class UserController extends Controller
             // 'agentonly_callbacks'=> $options_value['agentonly_callbacks'],
             // 'agentcall_manual'=> $options_value['agentcall_manual'],
             // 'agent_call_log_view_override'=>$options_value['agent_call_log_view_override'],
-            'inbound_calls_limit'=> $request->inbound_calls_limit,
+            'max_inbound_calls1'=> $request->max_inbound_calls1,
             
            
         ];

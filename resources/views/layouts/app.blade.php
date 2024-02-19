@@ -221,7 +221,7 @@
     
          @if (Request::route()->getName() == 'services.agents')
             <script src="{{ asset('views/services/dialler/users/index.js') }}"></script>
-            <script src="{{ asset('views/administration/users/common.js') }}"></script>
+            <script src="{{ asset('views/Common.js') }}"></script>
          @endif
          @if (Request::route()->getName() == 'services.agents.edit')
             <script src="{{ asset('views/services/dialler/users/edit.js') }}"></script>

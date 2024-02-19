@@ -93,11 +93,12 @@ class AgentRolesConroller extends Controller
         $compaign = "";
         $transfer_caller_id = "";
         $manual_dial_caller_id = "";
-        if(isset($request->all_allowed_profiles) ){
+        if(isset($request->all_allowed_compaigns)) {
             $compaign = '-ALL-CAMPAIGNS-';
-        }else{
+        } else {
             $compaign = implode('-', $request->allowed_profiles);
         }
+        
 
         if(isset($request->transfer_caller_id) ){
             $transfer_caller_id = implode('-', $request->transfer_caller_id);

@@ -2,6 +2,9 @@ $(function () {
   $("input[data-bootstrap-switch]").each(function(){
       $(this).bootstrapSwitch('state', $(this).prop('checked'));
   });
+  $(".select3").select2({
+    minimumResultsForSearch: Infinity
+  });
 });
 
 
@@ -16,7 +19,7 @@ function add_agent_role() {
 
 
   var f = 0;
-  var user_group = $("#user_group").val().trim(); // Trim whitespace
+  var user_group = $("#role").val().trim(); // Trim whitespace
 
 
   var allowed_profiles = $("#allowed_profiles").val();
@@ -79,6 +82,8 @@ function add_agent_role() {
       $("#form_add_agent_role").submit();
   }
 }
+
+
 
 // Example usage:
 // Ensure you have the checkString function defined as mentioned in a previous response.
