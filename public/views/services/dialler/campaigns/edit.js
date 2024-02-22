@@ -22,7 +22,7 @@ function speed_calculate(id){
             html += '<option value="' + i + '">' + i + '</option>';
         }
     }
-    $("#speed").html(html);
+    $("#Velocity").html(html);
 
 }
 

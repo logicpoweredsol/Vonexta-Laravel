@@ -10,12 +10,15 @@ class HomeController extends Controller
 
     
     function index(){
+        $service = "Dialler";
         if(auth()->user()->hasRole('superadmin')){
             return redirect('/dashboard');
         }else{
 
             if(auth()->user()->hasRole('admin')){
-                $userAgents = userAgent::with('user_detail')->get();
+                $userAgents = userAgent::with('user_detail')->orderBy('id','DESC')->get();
+
+
             }else{
                 $userAgents = userAgent::where('org_user_id',auth()->user()->id)->with('user_detail')->get();
             }
@@ -24,7 +27,7 @@ class HomeController extends Controller
         }
 
         // dd( $userAgents);
-        return view('home' ,compact('userAgents'));
+        return view('home' ,compact('userAgents','service'));
         
     }
 }

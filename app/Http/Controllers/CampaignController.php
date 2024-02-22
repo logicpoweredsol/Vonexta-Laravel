@@ -21,12 +21,17 @@ class CampaignController extends Controller
         }
        $get_compaignSkills =$this->get_compaigns($organization_servicesID);
        
+
+
         return view('dialer.campaigns.index',compact('service' ,'organization_servicesID','get_compaignSkills'));
     }
 
-    public function add(){
+    // public function save(Request $request)
+    // {
 
-    }
+
+
+    // }
 
 
 
@@ -58,6 +63,7 @@ class CampaignController extends Controller
         return json_decode($response, true);
 
     }
+
     public function get_contact($organization_service_id,$CampaignID)
     {
         $OrganizationServices = OrganizationServices::find($organization_service_id);
@@ -96,6 +102,8 @@ class CampaignController extends Controller
         $get_Scripts = "";
         $get_lists = "";
         $edit_compaigns  =  $this->fetch_compaigns_detail($organization_service_id,$CampaignID);
+
+
         $get_Scripts_responce = $this->get_Scripts($organization_service_id);
         $lists = $this->get_contact($organization_service_id ,$CampaignID);
 
@@ -111,7 +119,7 @@ class CampaignController extends Controller
 
 
 
-        return view('dialer.campaigns.edit' ,compact('edit_compaigns','get_Scripts','get_lists'));
+        return view('dialer.campaigns.edit' ,compact('edit_compaigns','get_Scripts','get_lists' ,'organization_service_id'));
     }
 
 
@@ -178,11 +186,118 @@ class CampaignController extends Controller
 
     public function update(Request $request)
     {
-        dd($request->all());
+
+        $organization_service_id = $request->organization_service_id;
+        $profile_id = $request->profile_id;
+
+        $profile_name = $request->profile_name;
+        $type = $request->type;
+        $sequence = $request->sequence;
+
+        $speed = 0;
+        if(isset($request->field_55)){
+            $speed =  $request->field_55;
+        }
+      
+        $profile_script = $request->profile_script;
+        $status = $request->status;
+
+  
+
+        
+        $OrganizationServices = OrganizationServices::find($organization_service_id);
+        $phpArray = json_decode($OrganizationServices->connection_parameters, true);
+        $apiEndpoint = 'https://' . $phpArray['server_url'] . '/APIv2/Campaigns/API.php';
+        // POST data
+        $postData = [
+            'Action' => 'EditCampaign',
+            'apiUser' =>  $phpArray['api_user'],
+            'apiPass' =>  $phpArray['api_pass'],
+            'session_user' =>  auth()->user()->email,
+            'responsetype' => 'json',
+            'campaign_id'=> $profile_id,
+            "campaign_name" =>$profile_name,
+            "lead_order" =>$sequence,
+            "dial_method" =>$type,
+            "campaign_script" =>$profile_script,
+            "active" => $status,            
+        ];
+
+        if($type == 'RATIO'){
+            $postData["auto_dial_level"] = $speed; // Adjusted index here
+            $postData["adaptive_maximum_level"] = '1';
+            $postData["manual_auto_next"] = '0';
+
+        }elseif($type == 'ADAPT_TAPERED'){
+
+            $postData["manual_auto_next"] = $speed; // Adjusted index here
+            $postData["auto_dial_level"] = '1';
+            $postData["manual_auto_next"] = '0';
+
+        }elseif($type == 'INBOUND_MAN'){
+            if($speed == 0){
+                $postData["auto_dial_level"] = $speed; // Adjusted index here
+                $postData["adaptive_maximum_level"] = '1';
+                $postData["manual_auto_next"] = '1';
+            }else{
+                $postData["auto_dial_level"] = $speed; // Adjusted index here
+                $postData["adaptive_maximum_level"] = '1';
+                $postData["manual_auto_next"] = '1';
+            }
+        }
+
+        $ch = curl_init($apiEndpoint);
+    
+        // Set cURL options
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
+        // Execute cURL session and get the response
+        $response = curl_exec($ch);
+    
+        // Close cURL session
+        curl_close($ch);
+        
+        return json_decode($response, true);
+
+        if($response['result'] == 'success'){
+            return redirect()->back()->with('success', 'Updated successfully');
+        }else{
+
+            return redirect()->back()->with('error', 'Some thing Went Wrong ');
+        }
+
+
+
+
     }
 
-
-
-
-
 }
+
+
+  // // Determine the fields to update based on the type
+    // switch ($type) {
+    //     case 'Predictive':
+    //         $auto_dial_level = 1;
+    //         $adaptive_maximum_level = 0;
+    //         $manual_auto_next = 0;
+    //         break;
+    //     case 'Smart_Predictive':
+    //         $adaptive_maximum_level = 1;
+    //         $auto_dial_level = 0;
+    //         $manual_auto_next = 0;
+    //         break;
+    //     case 'Agent_Dial_Next':
+    //         $manual_auto_next = 1;
+    //         $auto_dial_level = 0;
+    //         $adaptive_maximum_level = 0;
+    //         break;
+    //     case 'Auto_Dial_Next':
+    //         $manual_auto_next = 0;
+    //         $auto_dial_level = 1;
+    //         $adaptive_maximum_level = 0;
+    //         break;
+    //     default:
+    //         // Handle unexpected or missing $type here
+    //         break;
+    // }

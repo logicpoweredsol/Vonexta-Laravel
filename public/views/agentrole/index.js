@@ -18,75 +18,73 @@ function showmodal()
 function add_agent_role() {
 
 
-  var f = 0;
-  var user_group = $("#role").val().trim(); // Trim whitespace
+//   var f = 0;
+//   var user_group = $("#role").val().trim(); // Trim whitespace
 
 
-  var allowed_profiles = $("#allowed_profiles").val();
-  var transfer_caller_id = $("#transfer_caller_id").val();
-  var manual_dial_caller_id = $("#manual_dial_caller_id").val();
+//   var allowed_profiles = $("#allowed_profiles").val();
+//   var transfer_caller_id = $("#transfer_caller_id").val();
+//   var manual_dial_caller_id = $("#manual_dial_caller_id").val();
 
-  // Reset error message
-  $("#role_error").html('');
+//   // Reset error message
+//   $("#role_error").html('');
 
-  if (user_group === "") {
-      $("#role_error").html('Agent Role is required');
-      f = 1;
-  } else {
-      var check = checkString(user_group);
+//   if (user_group === "") {
+//       $("#role_error").html('Agent Role is required');
+//       f = 1;
+//   } else {
+//       var check = checkString(user_group);
 
-      if (!check) {
-          $("#role_error").html('Agent Role should contain only letters, not numbers');
-          f = 1;
-      }
+//       if (!check) {
+//           $("#role_error").html('Agent Role should contain only letters, not numbers');
+//           f = 1;
+//       }
 
-      if(check){
+//       if(check){
 
-        var check2 =  calculateStringLength(user_group);
-        if(!check2){
-          $("#role_error").html('Agent Role should greater then 3 letters');
-          f = 1;
-        }
+//         var check2 =  calculateStringLength(user_group);
+//         if(!check2){
+//           $("#role_error").html('Agent Role should greater then 3 letters');
+//           f = 1;
+//         }
 
-      }
-  }
-
-
-  if(allowed_profiles == "" || allowed_profiles == null){
-    $("#allowed_profiles").css('border', '1px solid red');
-    f=1;
-  }else{
-    $("#allowed_profiles").css('border', '1px solid #DEE2E6');
-    f =0;
-  }
-
-  if(transfer_caller_id == "" || transfer_caller_id == null){
-    $("#transfer_caller_id").css('border', '1px solid red');
-    f=1;
-  }else{
-    $("#transfer_caller_id").css('border', '1px solid #DEE2E6');
-    f =0;
-  }
-
-  if(manual_dial_caller_id == "" || manual_dial_caller_id == null){
-    $("#manual_dial_caller_id").css('border', '1px solid red');
-    f=1;
-  }else{
-    $("#manual_dial_caller_id").css('border', '1px solid #DEE2E6');
-    f =0;
-  }
+//       }
+//   }
 
 
+//   if(allowed_profiles == "" || allowed_profiles == null){
+//     $("#allowed_profiles").css('border', '1px solid red');
+//     f=1;
+//   }else{
+//     $("#allowed_profiles").css('border', '1px solid #DEE2E6');
+//     f =0;
+//   }
 
-  if (f == 0) {
+//   if(transfer_caller_id == "" || transfer_caller_id == null){
+//     $("#transfer_caller_id").css('border', '1px solid red');
+//     f=1;
+//   }else{
+//     $("#transfer_caller_id").css('border', '1px solid #DEE2E6');
+//     f =0;
+//   }
+
+//   if(manual_dial_caller_id == "" || manual_dial_caller_id == null){
+//     $("#manual_dial_caller_id").css('border', '1px solid red');
+//     f=1;
+//   }else{
+//     $("#manual_dial_caller_id").css('border', '1px solid #DEE2E6');
+//     f =0;
+//   }
+
+
+
+//   if (f == 0) {
       $("#form_add_agent_role").submit();
-  }
+//   }
 }
 
 
 
-// Example usage:
-// Ensure you have the checkString function defined as mentioned in a previous response.
 
 
 
@@ -160,5 +158,37 @@ $('#allowe_compaigns').on('switchChange.bootstrapSwitch', function(event, state)
       $("#allowed_profiles").prop('disabled', false);
   }
 });
+
+
+$('#toggle5').on('switchChange.bootstrapSwitch', function(event, state) {
+  if (this.checked) { 
+      $("#Outbound_profile").prop('disabled',  true );
+  } else {
+      $("#Outbound_profile").prop('disabled', false);
+  }
+});
+
+
+// $(document).ready(function(){
+//   // Hide the transferredd div initially
+//   $("#transferredd").hide();
+
+//   // Add change event listener to the external_transfers select element
+//   $("#external_transfers").change(function(){
+//     // Check if the selected option is "Allow external transfers"
+//     if($(this).val() === "transfer_external") {
+//       // If yes, show the transferredd div
+//       $("#transferredd").show();
+//     } else {
+//       // If not, hide the transferredd div
+//       $("#transferredd").hide();
+//     }
+//   });
+// });
+
+
+
+
+
 
 

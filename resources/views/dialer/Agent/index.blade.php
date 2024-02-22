@@ -316,8 +316,8 @@
                                                         <label for="active" class="col-sm-2 col-form-label">Status <span class="text-danger">*</span></label>
                                                         <div class="col-sm-10">
                                                             <select class="form-control select4" required name="status" id="status">
-                                                                <option value="1">Active</option>
-                                                                <option value="0">No Active</option>
+                                                                <option value="Y">Active</option>
+                                                                <option value="N">No Active</option>
                                                             </select>
                                                         </div>
                                                     </div>

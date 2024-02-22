@@ -626,3 +626,25 @@ function verifoy(){
 
 
 
+function send_sms()
+{
+    $.ajax({
+        url: `${baseUrl}/organizations/user/send-sms`,
+        method: 'POST',
+        headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+        data: {
+            "user":org_user_id,
+            'type':type
+        },
+        success: function(response) {
+           console.log(response);
+        },
+        error: function(xhr, status, error) {
+           
+        }
+    });
+
+}
+
+
+

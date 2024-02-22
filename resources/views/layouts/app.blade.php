@@ -50,6 +50,10 @@
         <link rel="stylesheet" href="{{ asset('plugins/bootstrap-slider/css/bootstrap-slider.min.css') }}">
         <!-- Select2 -->
         <link rel="stylesheet" href="{{ asset('plugins/select2/css/select2.min.css') }}">
+        
+
+        <!-- sweetalert -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
     </head>
@@ -225,7 +229,7 @@
          @endif
          @if (Request::route()->getName() == 'services.agents.edit')
             <script src="{{ asset('views/services/dialler/users/edit.js') }}"></script>
-            <link rel="stylesheet" href="{{ asset('plugins/daterangepicker/daterangepicker.css') }}">
+            <script src="{{ asset('views/Common.js') }}"></script>
          @endif
 
          @if (Request::route()->getName() == 'services.campaigns')

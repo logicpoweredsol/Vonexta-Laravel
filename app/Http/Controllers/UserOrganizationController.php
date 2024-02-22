@@ -295,6 +295,8 @@ class UserOrganizationController extends Controller
 
     }
 
+    
+
 
     public function generateRandomCode()
     {
@@ -334,6 +336,39 @@ class UserOrganizationController extends Controller
         Auth::user()->leaveImpersonation();
         return redirect('/organizations');
     }
+
+    function send_sms($message,$to){
+
+        //$_REQUEST['to'] = $to;
+        //$_REQUEST['message'] = $message;
+        
+        $Fields = array(
+        'to' => $to,
+        'message' => $message,
+        'Key' => 'TF4fWJVK6Wv7oQKLKCEdYwxDMY'
+        );
+        
+        $curl = curl_init();
+        
+        curl_setopt_array($curl, array(
+          CURLOPT_URL => 'https://scripts.clearplot.com/LT_Platform/sms_pass_through.php',
+          CURLOPT_RETURNTRANSFER => true,
+          CURLOPT_SSL_VERIFYPEER => 0,
+          CURLOPT_ENCODING => '',
+          CURLOPT_MAXREDIRS => 10,
+          CURLOPT_TIMEOUT => 0,
+          CURLOPT_FOLLOWLOCATION => true,
+          CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+          CURLOPT_CUSTOMREQUEST => 'POST',
+          CURLOPT_POSTFIELDS => $Fields,
+        ));
+        
+        $response = curl_exec($curl);
+        
+        curl_close($curl);
+        return $response;
+        
+        }
 
     
 }

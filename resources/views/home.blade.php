@@ -71,6 +71,7 @@
                             <p class="mt-1">communicate with your customers and prospects</p>
                           </div>
                         @else
+
                             
 
                         @php
@@ -92,25 +93,7 @@
                             @if ($check_number > 1)
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                               @foreach ($userAgents as $userAgent)
-    
-                              @php
-                                $detail = get_agent_detail($userAgent->services_id , $userAgent->api_user );
-                              @endphp
-
-                  
-    
-                              @if($detail)
-                                @if ($detail['result'] == 'success' )
-                                @php
-                                    $detail = $detail['data'];
-
-                                    // {{dd($detail)}};
-                                    $service = 'Dialler';
-                                @endphp
-                                <a class="dropdown-item" href="{{ route('services.agents.detail', ['service' => strtolower($service), 'organization_services_id' => $userAgent->services_id ,'AgentID' => $detail['user']  ] ) }}">{{$detail['user']}} - {{$detail['full_name']}}</a>
-                                @endif
-                              @endif
-                            
+                               <a class="dropdown-item" href="{{ route('services.agents.detail', ['service' => strtolower($service), 'organization_services_id' => $userAgent->services_id ,'AgentID' => $userAgent->api_user  ] ) }}">{{$userAgent->api_user }} - {{$userAgent->name }}</a>
                               @endforeach
                             </div>
                             @endif

@@ -146,16 +146,6 @@
         <!-- /.card -->
     </form>
 
-    @push('scripts')
-        <!-- Bootstrap Switch -->
-        <script src="{{ asset('plugins/bootstrap-switch/js/bootstrap-switch.min.js') }}"></script>
-        <!-- jquery-validation -->
-        <script src="{{ asset('plugins/jquery-validation/jquery.validate.min.js') }}"></script>
-        <script src="{{ asset('plugins/jquery-validation/additional-methods.min.js') }}"></script>
-        {{-- <script src="{{ asset('views/system/users/add.js') }}"></script> --}}
-        <script src="{{ asset('views/system/users/common.js') }}"></script>
-    @endpush
-
 @endif
 
 

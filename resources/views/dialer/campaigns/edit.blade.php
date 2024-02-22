@@ -1,19 +1,5 @@
 @extends('layouts.app')
-@push('css')
-<!-- DataTables -->
-<link rel="stylesheet" href="{{ asset('plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
-<link rel="stylesheet" href="{{ asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
-<link rel="stylesheet" href="{{ asset('plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
-<link rel="stylesheet" href="{{ asset('plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }}">
 
-
-<!-- Select2 -->
-<link rel="stylesheet" href="{{ asset('plugins/select2/css/select2.min.css') }}">
-<!-- bootstrap slider -->
-<link rel="stylesheet" href="{{ asset('plugins/bootstrap-slider/css/bootstrap-slider.min.css') }}">
-
-
-@endpush
 @section('content')
 <!-- Content Wrapper. Contains page content -->
 
@@ -93,14 +79,12 @@
 
                     <div class="tab-content" id="campaigns-tabs Content">
 
+                    
                         <div class="tab-pane fade show @if( !session()->has('tab') && !session('tab')) show active @endif   " id="Organization-home" role="tabpanel" aria-labelledby="Organization-home-tab">
                             <form method="POST" action="{{ route('services.campaigns.update', ['service' => strtolower('Dailer')]) }}" class="form-horizontal">
-                                {{-- <input type="hidden" class="form-control" id="User" name="User" value="{{ isset($dailer_agent_user['user']) ? $dailer_agent_user['user'] : '' }}"> --}}
-                                {{-- <input type="hidden" class="form-control" id="organization_services_id" name="organization_services_id" value="{{$organization_services_id}}"> --}}
 
-
-                           
-
+                            <input type="hidden" name="organization_service_id" value="{{$organization_service_id}}" readonly>
+                            <input type="hidden" name="profile_id" value="{{$edit_compaigns['data']['campaign_id']}}" readonly>
                                 @csrf
                                 <div class="card">
                                     <div class="card-header">
@@ -111,19 +95,18 @@
                                             <div class="col-sm-12 col-md-6 col-lg-6">
                                                 <div class="form-group">
                                                     <label for="name" class="form-label">Name</label>
-                                                    <input type="text" class="form-control @error('name') is-invalid @enderror" id="campaign_name" name="campaign_name" value="{{$edit_compaigns['data']['campaign_name']}}">
+                                                    <input type="text" class="form-control @error('name') is-invalid @enderror" id="profile_name" name="profile_name" value="{{$edit_compaigns['data']['campaign_name']}}">
                                                 </div>
                                                 <span>
                                                     @error('name')
                                                     <div class="text-danger">{{ $message }}</div>
                                                     @enderror
-                                                </span>
+                                                </span>    
                                             </div>
                                             <div class="col-sm-12 col-md-6 col-lg-6">
                                                 <div class="form-group">
                                                     <label for="type" class="form-label">Type</label>
-
-                                                    <select name="dial_method[]" class="form-control" id="type" onchange="speed_calculate(this.id);">
+                                                    <select name="type" class="form-control" id="type" onchange="speed_calculate(this.id);">
                                                         <option value="select" selected disabled >Select Type</option>
                                                         <option {{$edit_compaigns['data']['dial_method'] == 'RATIO' ? 'selected' : ''}} value="RATIO">Predictive</option>
                                                         <option {{$edit_compaigns['data']['dial_method'] == 'ADAPT_TAPERED' ? 'selected' : ''}} value="ADAPT_TAPERED">Smart Predictive</option>
@@ -132,18 +115,12 @@
                                                     </select>
                                                 </div>
                                             </div>
-
-
                                         </div>
-
                                         <div class="row">
-
-              
-
                                             <div class="col-sm-12 col-md-6 col-lg-6">
                                                 <div class="form-group">
                                                     <label for="Sequence" class="form-label">Sequence</label>
-                                                    <select name="lead_order[]" class="form-control" id="Sequence">    
+                                                    <select name="sequence" class="form-control" id="Sequence">    
                                                         <option {{$edit_compaigns['data']['lead_order'] == 'Up' ? 'selected' : ''}}  value="Up">Newest to Oldest</option>
                                                         <option {{$edit_compaigns['data']['lead_order'] == 'Down' ? 'selected' : ''}} value="Down">Oldest to Newest</option>
                                                         <option {{$edit_compaigns['data']['lead_order'] == 'Down Count' ? 'selected' : ''}} value="Down Count">Most Called First</option>
@@ -151,13 +128,12 @@
                                                         <option {{$edit_compaigns['data']['lead_order'] == 'Random' ? 'selected' : ''}} value="Random">Shuffled</option>
                                                     </select>
                                                 </div>
-
                                             </div>
 
                                             <div class="col-sm-12 col-md-6 col-lg-6" id="speed_div">
                                                 <div class="form-group">
-                                                    <label for="Speed" class="form-label">Speed</label>
-                                                    <select name="speed" class="form-control" id="speed">
+                                                    <label for="Velocity" class="form-label">Velocity</label>
+                                                    <select name="field_55" class="form-control" id="Velocity" value="">
                                                     </select>
                                                 </div>
                                             </div>
@@ -168,7 +144,7 @@
                                                 <div class="form-group">
                                                     <label for="Call Guide" class="form-label">Call Guide</label>
                                                     {{-- <input type="text" class="form-control" id="group" name="group" value="{{ isset($dailer_agent_user['user_group']) ? $dailer_agent_user['user_group'] : '' }}" placeholder="Group .."> --}}
-                                                    <select name="compaign_script[]" class="form-control" id="call_guide">
+                                                    <select name="profile_script" class="form-control" id="call_guide">
 
                                                         @if ($get_Scripts != "" && $get_Scripts !=NULL)
                                                             @foreach ($get_Scripts['script_id'] as $i=>$scrip)
@@ -182,8 +158,6 @@
                                                         @else
                                                         <option value="">None</option>
                                                         @endif
-
-
                                                     </select>
                                                 </div>
                                             </div>
@@ -192,16 +166,13 @@
                                                 <div class="form-group">
                                                     <label for="status" class="form-label">status</label>
 
-                                                    <select name="status[]" class="form-control select2 " id="status">    
+                                                    <select name="status" class="form-control select2 " id="status">    
                                                         <option value="Y">Active</option>
                                                         <option value="N">Not Active</option>
                                                     </select>
-                                                    
                                                 </div>
                                             </div>                  
                                         </div>
-
-
                                     </div>
                                     <!-- /.card-body -->
                                     <div class="card-footer">
@@ -413,56 +384,4 @@
 
     </div>
 @endSection
-
-@push('scripts')
-
-
-
-
-<script>
-    // $(document).ready(function() {
-    //   $('#Sequence').select2({
-    //     minimumResultsForSearch: -1
-    //   });
-    //   $('#type').select2({
-    //     minimumResultsForSearch: -1
-    //   });
-    //   $('#status').select2({
-    //     minimumResultsForSearch: -1
-    //   });
-    //   $('#speed').select2({
-    //     minimumResultsForSearch: -1
-    //   });
-    //   $('#call_guide').select2({
-    //     minimumResultsForSearch: -1
-    //   });
-    // });
-
-
-    // $(document).ready(function()
-    // {
-    // var showPagination =true;
-    // var showPagination2 =true;
-
-    // if ($('#Compaign-table').find('tbody tr').length <= 10) {
-    //     showPagination = false;  // If records are 10 or less, hide pagination
-    // }
-
-    // $('#Compaign-table').DataTable({
-    //     "paging": showPagination,
-    //     "lengthChange": true,
-    //     "searching": true,
-    //     "ordering": true,
-    //     "info": true,
-    //     "autoWidth": false,
-    //     "responsive": true
-    // });
-    // });
-  </script>
-
-
-
-
-@endpush
-
     

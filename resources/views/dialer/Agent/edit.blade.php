@@ -39,7 +39,6 @@
                         <h1>Edit {{ $email_address}} - {{$dailer_agent_user['user']}} </h1>
                     </div>
 
-
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
 
@@ -87,7 +86,6 @@
                                 <input type="hidden" class="form-control" id="User" name="User" value="{{ isset($dailer_agent_user['user']) ? $dailer_agent_user['user'] : '' }}">
                                 <input type="hidden" class="form-control" id="organization_services_id" name="organization_services_id" value="{{$organization_services_id}}">
 
-
                            
 
                                 @csrf
@@ -123,6 +121,10 @@
                                                     <input type="text" class="form-control" id="extension" name="extension" disabled value="{{ isset($dailer_agent_user['user']) ? $dailer_agent_user['user'] : '' }}" placeholder="User">
                                                 </div>
 
+                                              
+                         
+                                             
+
                                             </div>
                                             <div class="col-sm-12 col-md-6 col-lg-6">
                                                 <div class="form-group">
@@ -139,12 +141,18 @@
                                                         <option value="" @if(!isset($dailer_agent_user['voicemail_id'])) selected @endif>No Voicemail</option>
                                                         <option value="{{$integerPart}}" @if(isset($dailer_agent_user['voicemail_id']) && $dailer_agent_user['voicemail_id'] == $integerPart) selected @endif>Agent's Voicemail ({{$integerPart}})</option>
                                                         
-                                                        @foreach ($responds['voicemail_id'] as $i=>$respond)
-                                                            <option value="{{ $responds['voicemail_id'][$i] }}" @if(isset($dailer_agent_user['voicemail_id']) && $dailer_agent_user['voicemail_id'] == $responds['voicemail_id'][$i]) selected @endif>
-                                                                {{ $responds['voicemail_id'][$i] }} - {{ $responds['fullname'][$i] }}
-                                                            </option>
+                                                        @foreach ($responds['voicemail_id'] ?? [] as $i => $respond)
+                                                            @if(is_array($responds['voicemail_id']) && is_array($responds['fullname']) && isset($responds['voicemail_id'][$i]) && isset($responds['fullname'][$i]))
+                                                                <option value="{{ $responds['voicemail_id'][$i] }}" @if(isset($dailer_agent_user['voicemail_id']) && $dailer_agent_user['voicemail_id'] == $responds['voicemail_id'][$i]) selected @endif>
+                                                                    {{ $responds['voicemail_id'][$i] }} - {{ $responds['fullname'][$i] }}
+                                                                </option>
+                                                            @endif
                                                         @endforeach
+
                                                     </select>
+                                                   
+
+                                                    
 
                                                     {{-- <input type="text" class="form-control" id="Voice_Mail" name="Voice_Mail" value="{{ isset($dailer_agent_user['voicemail_id']) ? $dailer_agent_user['voicemail_id'] : '' }}" placeholder="Voice Mail.."> --}}
                                                 </div>
@@ -176,6 +184,10 @@
                                                 </div>
                                             </div>
 
+
+                                            
+                                          
+
                                             <div class="col-sm-12 col-md-6 col-lg-6">
 
                                             
@@ -188,115 +200,137 @@
                                                 </div>
                                             </div>
                                         </div>
+
+                                       
                                         <div class="row">
                                             <div class="col-sm-12 col-md-6 col-lg-6" id="body_attribute">
-                                            <div class="customfield-wrap" id="row_1">
-                                                <div class="form-group fromgroup">
-                                                    <label for="active" class="form-label">Custom Attribute 1</label>
-                                                    <input type="text" class="form-control custom-attribute" name="custom_attribute[]" value="" placeholder="Custom attribute 1">
+                                                <div class="customfield-wrap" id="row_1">
+                                                    <div class="form-group fromgroup">
+                                                        <label for="active" class="form-label">Custom Attribute 1</label>
+                                                        <input type="text" class="form-control custom-attribute" name="custom_attribute[]" value="{{$dailer_agent_user['custom_one']}}" placeholder="Custom attribute 1">
+                                                    </div>
+                                                    <div class="additionalfield-wrap">
+                                                        <button type="button" onclick="add_row();" class="btn btn-success btn-sm mt-2"> + </button>
+                                                        <button type="button" onclick="remove_row();" class="btn btn-danger btn-sm mt-2"> - </button>
+                                                    </div>
                                                 </div>
-                                                <div class="additionalfield-wrap">
-                                                    <button type="button" onclick="add_row();" class="btn btn-success btn-sm mt-2"> + </button>
-                                                    <button type="button" onclick="remove_row();" class="btn btn-danger btn-sm mt-2"> - </button>
+
+                                                @if($dailer_agent_user['custom_two'] != "")
+                                                <div class="customfield-wrap" id="row_2">
+                                                    <div class="form-group fromgroup">
+                                                        <label for="active" class="form-label">Custom Attribute 2</label>
+                                                        <input type="text" class="form-control custom-attribute" name="custom_attribute[]" value="{{$dailer_agent_user['custom_two']}}" placeholder="Custom attribute 1">
+                                                    </div>
+                                                    <div class="additionalfield-wrap">
+                                                        <button type="button" onclick="add_row();" class="btn btn-success btn-sm mt-2"> + </button>
+                                                        <button type="button" onclick="remove_row(2);" class="btn btn-danger btn-sm mt-2"> - </button>
+                                                    </div>
+                                                    
                                                 </div>
-                                            </div>
+                                                @endif
+                                                @if($dailer_agent_user['custom_three'] != "")
+                                                <div class="customfield-wrap" id="row_3">
+                                                    <div class="form-group fromgroup">
+                                                        <label for="active" class="form-label">Custom Attribute 3</label>
+                                                        <input type="text" class="form-control custom-attribute" name="custom_attribute[]" value="{{$dailer_agent_user['custom_three']}}" placeholder="Custom attribute 1">
+                                                    </div>
+                                                    <div class="additionalfield-wrap">
+                                                        <button type="button" onclick="add_row();" class="btn btn-success btn-sm mt-2"> + </button>
+                                                        <button type="button" onclick="remove_row(3);" class="btn btn-danger btn-sm mt-2"> - </button>
+                                                    </div>
+                                                </div>
+                                                @endif
+                                                @if($dailer_agent_user['custom_four'] != "")
+                                                <div class="customfield-wrap" id="row_4">
+                                                    <div class="form-group fromgroup">
+                                                        <label for="active" class="form-label">Custom Attribute 4</label>
+                                                        <input type="text" class="form-control custom-attribute" name="custom_attribute[]" value="{{$dailer_agent_user['custom_four']}}" placeholder="Custom attribute 1">
+                                                    </div>
+                                                    <div class="additionalfield-wrap">
+                                                        <button type="button" onclick="add_row();" class="btn btn-success btn-sm mt-2"> + </button>
+                                                        <button type="button" onclick="remove_row(4);" class="btn btn-danger btn-sm mt-2"> - </button>
+                                                    </div>
+                                                </div>
+                                                @endif
+                                                @if($dailer_agent_user['custom_five'] != "")
+                                                <div class="customfield-wrap" id="row_5">
+                                                    <div class="form-group fromgroup">
+                                                        <label for="active" class="form-label">Custom Attribute 5</label>
+                                                        <input type="text" class="form-control custom-attribute" name="custom_attribute[]" value="{{$dailer_agent_user['custom_five']}}" placeholder="Custom attribute 1">
+                                                    </div>
+                                                    <div class="additionalfield-wrap">
+                                                        <button type="button" onclick="add_row();" class="btn btn-success btn-sm mt-2"> + </button>
+                                                        <button type="button" onclick="remove_row(5);" class="btn btn-danger btn-sm mt-2"> - </button>
+                                                    </div>
+                                                </div>
+                                                @endif
+                                                @if($dailer_agent_user['custom_six'] != "")
+                                                <div class="customfield-wrap" id="row_6">
+                                                    <div class="form-group fromgroup">
+                                                        <label for="active" class="form-label">Custom Attribute 6</label>
+                                                        <input type="text" class="form-control custom-attribute" name="custom_attribute[]" value="{{$dailer_agent_user['custom_six']}}" placeholder="Custom attribute 1">
+                                                    </div>
+                                                    <div class="additionalfield-wrap">
+                                                        <button type="button" onclick="add_row();" class="btn btn-success btn-sm mt-2"> + </button>
+                                                        <button type="button" onclick="remove_row(6);" class="btn btn-danger btn-sm mt-2"> - </button>
+                                                    </div>
+                                                </div>
+                                                @endif
+                                                @if($dailer_agent_user['custom_seven'] != "")
+                                                <div class="customfield-wrap" id="row_7">
+                                                    <div class="form-group fromgroup">
+                                                        <label for="active" class="form-label">Custom Attribute 7</label>
+                                                        <input type="text" class="form-control custom-attribute" name="custom_attribute[]" value="{{$dailer_agent_user['custom_seven']}}" placeholder="Custom attribute 1">
+                                                    </div>
+                                                    <div class="additionalfield-wrap">
+                                                        <button type="button" onclick="add_row();" class="btn btn-success btn-sm mt-2"> + </button>
+                                                        <button type="button" onclick="remove_row(7);" class="btn btn-danger btn-sm mt-2"> - </button>
+                                                    </div>
+                                                </div>
+                                                @endif
+                                                @if($dailer_agent_user['custom_eight'] != "")
+                                                <div class="customfield-wrap" id="row_8">
+                                                    <div class="form-group fromgroup">
+                                                        <label for="active" class="form-label">Custom Attribute 8</label>
+                                                        <input type="text" class="form-control custom-attribute" name="custom_attribute[]" value="{{$dailer_agent_user['custom_eight']}}" placeholder="Custom attribute 1">
+                                                    </div>
+                                                    <div class="additionalfield-wrap">
+                                                        <button type="button" onclick="add_row();" class="btn btn-success btn-sm mt-2"> + </button>
+                                                        <button type="button" onclick="remove_row(8);" class="btn btn-danger btn-sm mt-2"> - </button>
+                                                    </div>
+                                                </div>
+                                                @endif
+                                                @if($dailer_agent_user['custom_nine'] != "")
+                                                <div class="customfield-wrap" id="row_9">
+                                                    <div class="form-group fromgroup">
+                                                        <label for="active" class="form-label">Custom Attribute 9</label>
+                                                        <input type="text" class="form-control custom-attribute" name="custom_attribute[]" value="{{$dailer_agent_user['custom_nine']}}" placeholder="Custom attribute 1">
+                                                    </div>
+                                                    <div class="additionalfield-wrap">
+                                                        <button type="button" onclick="add_row();" class="btn btn-success btn-sm mt-2"> + </button>
+                                                        <button type="button" onclick="remove_row(9);" class="btn btn-danger btn-sm mt-2"> - </button>
+                                                    </div>
+                                                </div>
+                                                @endif
+                                                @if($dailer_agent_user['custom_ten'] != "")
+                                                <div class="customfield-wrap" id="row_10">
+                                                    <div class="form-group fromgroup">
+                                                        <label for="active" class="form-label">Custom Attribute 10</label>
+                                                        <input type="text" class="form-control custom-attribute" name="custom_attribute[]" value="{{$dailer_agent_user['custom_ten']}}" placeholder="Custom attribute 1">
+                                                    </div>
+                                                    <div class="additionalfield-wrap">
+                                                        <button type="button" onclick="add_row();" class="btn btn-success btn-sm mt-2"> + </button>
+                                                        <button type="button" onclick="remove_row(10);" class="btn btn-danger btn-sm mt-2"> - </button>
+                                                    </div>
+                                                </div>
+                                                @endif
+
                                             </div>
                                         </div>
                                         
-
-                                    </div>
-                                    <!-- /.card-body -->
-                                    <div class="card-footer">
-                                        <div class="row">
-                                            <div class="col-sm-12 col-md-2 col-lg-2 mb-3">
-                                                <a class="btn btn-default btn-md btn-block" href="#">Cancel</a>
-                                            </div>
-                                            <div class="col-sm-12 col-md-8 col-lg-8"></div>
-                                            <div class="col-sm-12 col-md-2 col-lg-2 mb-3">
-                                                <button class="btn btn-success btn-md btn-block" type="submit">Save</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- /.card-footer-->
-                                </div>
-                                <!-- /.card -->
-                            </form>
-                        </div>
-
-                        <div class="tab-pane fade" id="options" role="tabpanel" aria-labelledby="options-tab">
-                            <form method="POST" action="{{ route('services.update-agent.options', ['service' => strtolower('Dailer')]) }}" class="form-horizontal">
-                                <input type="hidden" class="form-control" id="User" name="User" value="{{ isset($dailer_agent_user['user']) ? $dailer_agent_user['user'] : '' }}" placeholder="User">
-                                @csrf
-                                <div class="card">
-                                    <div class="card-header">
-                                        {{-- <h3 class="card-title">Edit Agent</h3> --}}
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-sm-12 col-md-6 col-lg-6">
-                                                <div class="form-group">
-                                                    <label for="name" class="form-label">SMS Number</label>
-                                                    <input type="text" class="form-control" id="Sms_number" name="Sms_number" value="{{ isset($dailer_agent_user['mobile_number']) ? $dailer_agent_user['mobile_number'] : '' }}" placeholder="Mobile number"><br>
-                                                </div>
-                                            </div>
-
-                                        </div>
-
-                                        <div class="row mb-3">
-                                            <div class="col-sm-12 col-md-6 col-lg-6">
-                                                <div class="form-check">
-                                                    <input type="checkbox" class="form-check-input" {{(isset($dailer_agent_user['agent_choose_ingroups']) && $dailer_agent_user['agent_choose_ingroups']=='1' ) ? 'checked' : '' }} id="toggle1" name="Inbound_Upon_Login" data-bootstrap-switch data-off-color="danger" data-on-color="success">
-                                                    <label class="form-check-label" for="toggle1"> <b>Select Inbound Upon Login</b> </label>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-sm-12 col-md-6 col-lg-6">
-                                                <input type="checkbox" class="form-check-input" {{(isset($dailer_agent_user['agent_choose_blended']) && $dailer_agent_user['agent_choose_blended']=='1' ) ? 'checked' : '' }} id="toggle2" name="Auto_Outbound_Upon_Login" data-bootstrap-switch data-off-color="danger" data-on-color="success">
-                                                <label class="form-check-label" for="toggle2"> <b>Select Auto-Outbound Upon Login</b> </label>
-                                            </div>
-                                        </div>
-                                      
-
-
-                                        <div class="row mb-3">
-                                            <div class="col-sm-12 col-md-6 col-lg-6">
-                                                <div class="form-check">
-                                                    <input type="checkbox" class="form-check-input" {{(isset($dailer_agent_user['closer_default_blended']) && $dailer_agent_user['closer_default_blended']=='1' ) ? 'checked' : '' }} id="toggle3" name="Allow_Outbound" data-bootstrap-switch data-off-color="danger" data-on-color="success">
-                                                    <label class="form-check-label" for="toggle3"><b>Allow Outbound</b></label>
-                                                </div>
-                                            </div>
-                                            <!-- add here -->
-                                            <div class="col-sm-12 col-md-6 col-lg-6">
-                                                <input type="checkbox" class="form-check-input" {{(isset($dailer_agent_user['agentcall_manual']) && $dailer_agent_user['agentcall_manual']=='1' ) ? 'checked' : '' }} id="toggle6" name="Allow_Manual_Calls" data-bootstrap-switch data-off-color="danger" data-on-color="success">
-                                                <label class="form-check-label" for="toggle6"><b>Allow Manual Calls</b></label>
-                                            </div>
-                                        </div>
-
-                                        <div class="row mb-3">
-                                            <div class="col-sm-12 col-md-6 col-lg-6">
-                                                <div class="form-check">
-                                                    <input type="checkbox" class="form-check-input" {{(isset($dailer_agent_user['scheduled_callbacks']) && $dailer_agent_user['scheduled_callbacks']=='1' ) ? 'checked' : '' }} id="toggle4" name="scheduled_callbacks" data-bootstrap-switch data-off-color="danger" data-on-color="success">
-                                                    <label class="form-check-label" for="toggle4"><b>Allow Schedule Callbacks</b></label>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-12 col-md-6 col-lg-6">
-                                                <input type="checkbox" class="form-check-input" {{(isset($dailer_agent_user['agent_call_log_view_override']) && $dailer_agent_user['agent_call_log_view_override']=='Y' ) ? 'checked' : '' }} id="toggle6" name="Call_Log_View" data-bootstrap-switch data-off-color="danger" data-on-color="success">
-                                                <label class="form-check-label" for="toggle7"><b> Allow Call Log View</b></label>
-                                            </div>
-
-                                        </div>
-
-                                        <div class="row mb-3">
-                                            <div class="col-sm-12 col-md-6 col-lg-6">
-                                                <div class="form-check">
-                                                    <input type="checkbox" class="form-check-input" {{(isset($dailer_agent_user['agentonly_callbacks']) && $dailer_agent_user['agentonly_callbacks']=='1' ) ? 'checked' : '' }} id="toggle5" name="Personal_Callbacks" data-bootstrap-switch data-off-color="danger" data-on-color="success">
-                                                    <label class="form-check-label" for="toggle5"><b>Allow Personal Callbacks</b></label>
-                                                </div>
-                                               
-                                            </div>
-                                        </div>
-
-
+                                        
+                                        
+                                        
 
                                     </div>
                                     <!-- /.card-body -->
@@ -338,6 +372,8 @@
                                         </thead>
                                         <tbody>
 
+                                        
+
 
                                             @if(isset($call_log_inbounds))
                                             @foreach($call_log_inbounds as $row=>$call_log_inbound)
@@ -353,6 +389,9 @@
                                                 </td>
                                                 <td>
                                                     <input type="checkbox"  {{$call_log_inbound['selected']=='1'  ? 'checked' : '' }} id='invited_{{$row}}'  class="form-check-input inbound-checkbox" data-bootstrap-switch data-off-color="danger" data-on-color="success">
+                                                    @php echo in_array($call_log_inbound['group_id'], $varaibles) ? "<div id='circle'></div>" : ""; @endphp
+
+
                                                 </td>
                                                 <td>{{$call_log_inbound['calls_today']}}</td>
                                             </tr>

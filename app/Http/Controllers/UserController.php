@@ -69,23 +69,7 @@ class UserController extends Controller
                 array_push( $user_have_service , $ceck_service);
             }
         }
-        // $service_Users =  $this->get_user($organization_servicesID);
-        
-        // // dd( $service_Users);
-        // $userAgent_inDB = userAgent::count();
-        // if($userAgent_inDB !=  count($service_Users['user_id'])){
-        //     foreach($service_Users['user_id'] as $i=>$api_agent){
-        //         $user = $service_Users['user'][$i];
-        //         $user_id = $service_Users['user_id'][$i];
-        //         $organization_servicesID = $organization_servicesID;
-        //         $orgID = $organization->id;
-        //         $orgUserID = $users[0]->id;
-        //         $this->store_agent_into_db($user ,$user_id,$organization_servicesID, $orgID, $orgUserID);
-        //     }
-        // }
-
-        // $userAgent = userAgent::where('orgid',$organization->id)->with('user_detail')->get();
-
+       
 
         $get_Inbound_skill_resppnce = $this->get_Inbound_skill($organization_servicesID);
         $get_Campaigns_skill_resppnce = $this->get_Campaigns_skill($organization_servicesID);
@@ -269,39 +253,17 @@ class UserController extends Controller
         return  $data;
     }
 
-    // function store_agent_into_db($user ,$user_id,$organization_servicesID, $orgID, $orgUserID){
-    //     $add_userAgent = userAgent::where('api_user',$user)->first();
-
-    //     if($add_userAgent == '' || $add_userAgent == null){
-    //         $add_userAgent = new userAgent();
-    //         $add_userAgent->orgid = $orgID;
-    //         $add_userAgent->org_user_id = $orgUserID;
-    //         $add_userAgent->services_id = $organization_servicesID;
-    //         // $add_userAgent->api_user_id =$user_id;
-    //         $add_userAgent->api_user = $user;
-    //         $add_userAgent->password = base64_encode($this->generateRandomString());
-    //         $add_userAgent->save();
-    //     }
-
-       
-    // }
-
-    // function generateRandomString() {
-    //     $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    //     $randomString = '';
-    //     for ($i = 0; $i < 10; $i++) {
-    //         $randomString .= $characters[rand(0, strlen($characters) - 1)];
-    //     }
-    //     return $randomString;
-    // }
-     // End Randing the Data Function
-
+    
 
      // Start Edit User
      public function edit($service , $organization_services_id ,$AgentID){
+
+      
         $dailer_agent_user = '';
         $call_log_inbounds = '';
         $call_log_outbounds = '';
+        $varaibles = [];
+
 
         $dailer_agent_user_response =   $this->get_agent_detail($organization_services_id ,$AgentID);
         if($dailer_agent_user_response['result'] == 'success'){
@@ -309,6 +271,7 @@ class UserController extends Controller
         }
 
         $get_call_log_response_inbound_dume =   $this->get_call_inbound_log($organization_services_id ,$AgentID);
+       
         // dd($get_call_log_response_inbound_dume);
         // $other_inbound_call  = $get_call_log_response_inbound_dume['data'];
         if($get_call_log_response_inbound_dume['result'] == 'success'){
@@ -319,12 +282,28 @@ class UserController extends Controller
         }
 
         $get_call_log_response_outbound_dume =   $this->get_call_outbound_log($organization_services_id ,$AgentID);
+
+        // dd($get_call_log_response_outbound_dume);
         if($get_call_log_response_outbound_dume['result'] == 'success'){
             $call_log_outbound_all_agent = $get_call_log_response_outbound_dume['data'];
             $call_log_outbounds  = $this->findArrayByKey($call_log_outbound_all_agent ,$AgentID);
         }
+        $GetMissingLoginInboundGroups = $this->GetMissingLoginInboundGroups($organization_services_id,$AgentID);
+       
 
-            return view('dialer.Agent.edit' ,compact('service','dailer_agent_user','organization_services_id','call_log_inbounds' ,'call_log_outbounds'));
+        if($GetMissingLoginInboundGroups['result'] == 'success')
+        {
+            $varaibles = $GetMissingLoginInboundGroups['data']['missed_inbound_groups'];
+
+        }
+
+
+
+       
+
+        
+
+            return view('dialer.Agent.edit' ,compact('service','dailer_agent_user','organization_services_id','call_log_inbounds' ,'call_log_outbounds','varaibles'));
     }
 
 
@@ -524,6 +503,37 @@ class UserController extends Controller
         return json_decode($response, true);
     }
 
+    public function GetMissingLoginInboundGroups($organization_services_id,$AgentID)
+    {
+        $OrganizationServices = OrganizationServices::find($organization_services_id);
+        $phpArray = json_decode($OrganizationServices->connection_parameters, true);
+        $apiEndpoint = 'https://' . $phpArray['server_url'] . '/APIv2/Inbound/API.php';
+        // POST data
+        $postData = [
+            'Action' => 'GetMissingLoginInboundGroups',
+            'apiUser' =>  $phpArray['api_user'],
+            'apiPass' =>  $phpArray['api_pass'],
+            'session_user' =>  auth()->user()->email,
+            'responsetype' => 'json',
+            'user'=>$AgentID
+        ];
+        $ch = curl_init($apiEndpoint);
+    
+        // Set cURL options
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
+    
+        // Execute cURL session and get the response
+        $response = curl_exec($ch);
+    
+        // Close cURL session
+        curl_close($ch);
+        
+        return json_decode($response, true);
+
+    }
+
     public function get_call_outbound_log($organization_services_id ,$AgentID) {
         $OrganizationServices = OrganizationServices::find($organization_services_id);
         $phpArray = json_decode($OrganizationServices->connection_parameters, true);
@@ -571,7 +581,16 @@ class UserController extends Controller
     //   Update Function Deaatil Tabk of Agent 
     public function update_agent_in_db_detail(Request $request){
 
+        // $world = [];
+        // $length = count($request->custom_attribute);
+
+        // dd($request->all());
+
+
         $userAgent = userAgent::where('api_user',$request->User)->first();
+        $userAgent->name=$request->name;
+        $userAgent->status=$request->status;
+        $userAgent->save();
 
         $OrganizationServices = OrganizationServices::find($userAgent->services_id);
         $phpArray = json_decode($OrganizationServices->connection_parameters, true);
@@ -597,27 +616,28 @@ class UserController extends Controller
              'voicemail_id'=> $request->voice_mail,
              'email'=> $request->email,
              'mobile_number' =>  $options_value['mobile_number'],
-             'custom_attribute' =>$request->custom_attribute,
-            //  'agent_choose_ingroups'=> $options_value['agent_choose_ingroups'],
-            //  'agent_choose_blended'=> $options_value['agent_choose_blended'],
-            //  'closer_default_blended'=> $options_value['closer_default_blended'],
-            //  'scheduled_callbacks'=> $options_value['scheduled_callbacks'],
-            //  'agentonly_callbacks'=> $options_value['agentonly_callbacks'],
-            //  'agentcall_manual'=> $options_value['agentcall_manual'],
-            //  'agent_call_log_view_override'=> $options_value['agent_call_log_view_override'],
-            //  'max_inbound_calls'=> $options_value['max_inbound_calls'],
-
-
              'hotkeys_active' => 0,
              'user_level' => 1,
              'vicidial_recording_override' => "DISABLED",
              'agent_lead_search_override' => "DISABLED",
              'vdc_agent_api_access' =>1,
              'modify_same_user_level' =>'',
-
-
- 
          ];
+
+         if(is_array($request->custom_attribute)) {
+                $count = count($request->custom_attribute);
+                for ($i = 0; $i < $count; $i++) {
+                    $attribute = $this->numberToString($i + 1);
+                    $postData["custom_$attribute"] = $request->custom_attribute[$i]; // Adjusted index here
+                }
+            } else {
+                // Handle the case where $request->custom_attribute is not an array
+                // You might want to log an error, throw an exception, or handle it in another way based on your requirements.
+            }
+
+         
+
+
          $ch = curl_init($apiEndpoint);
      
          // Set cURL options
@@ -641,82 +661,25 @@ class UserController extends Controller
 
             return redirect()->back()->with('error', 'Some thing Went Wrong ');
         }
+
+   
     }
 
-     //   Update Function Option Tabk of Agent 
-    // function update_agent_in_db_options(Request $request) {
-
-    //     // dd($request->all());
-    //     $agent_choose_ingroups = isset($request->Inbound_Upon_Login) ? '1' : '0';
-    //     $agent_choose_blended = isset($request->Auto_Outbound_Upon_Login) ? '1' : '0';
-    //     $closer_default_blended = isset($request->Allow_Outbound) ? '1' : '0';
-    //     $scheduled_callbacks = isset($request->scheduled_callbacks) ? '1' : '0';
-    //     $agentonly_callbacks = isset($request->Personal_Callbacks) ? '1' : '0';
-    //     $agentcall_manual = isset($request->allow_manual_calls) ? '1' : '0';
-    //     $agent_call_log_view_override = isset($request->Call_Log_View) ? 'Y' : 'N';
-
-
-
-    //     $userAgent = userAgent::where('api_user',$request->User)->first();
-
+    function numberToString($number) {
        
-    //     $OrganizationServices = OrganizationServices::find($userAgent->services_id);
-
-    //     $phpArray = json_decode($OrganizationServices->connection_parameters, true);
-
-    //     $Agent_detail= $this->get_agent_detail($userAgent->services_id,$request->User);
-    //     $options_value = $Agent_detail['data'];
-    //     $apiEndpoint = 'https://' . $phpArray['server_url'] . '/APIv2/Users/API.php';
-    //     // POST data
-    //     $postData = [
-            
-    //         'Action' => 'EditUser',
-    //         'apiUser' =>  $phpArray['api_user'],
-    //         'apiPass' =>  $phpArray['api_pass'],
-    //         'session_user' =>  auth()->user()->email,
-    //         'responsetype' => 'json',
-    //         'user' => $request->User,
-
-    //         'full_name'=> $options_value['full_name'],
-    //         'user_group'=> $options_value['user_group'],
-    //         'active' =>$options_value['active'],
-    //         'voicemail_id'=>  $options_value['voicemail_id'],
-    //         'email'=> $options_value['email'],
-
-    //         'mobile_number' => $request->Sms_number,
-    //         'agent_choose_ingroups'=> $agent_choose_ingroups,
-    //         'agent_choose_blended'=> $agent_choose_blended,
-    //         'closer_default_blended'=> $closer_default_blended,
-    //         'scheduled_callbacks'=> $scheduled_callbacks,
-    //         'agentonly_callbacks'=> $agentonly_callbacks,
-    //         'agentcall_manual'=> $agentcall_manual,
-    //         'agent_call_log_view_override'=> $agent_call_log_view_override,
-    //         'max_inbound_calls'=> $request->max_inbound_calls,
-    //     ];
-    //     $ch = curl_init($apiEndpoint);
-    
-    //     // Set cURL options
-    //     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    //     curl_setopt($ch, CURLOPT_POST, true);
-    //     curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
-    
-    //     // Execute cURL session and get the response
-    //     $response = curl_exec($ch);
-    
-    //     // Close cURL session
-    //     curl_close($ch);
+        $numbers = [
+            1 => 'one',
+            2 => 'two',
+            3 => 'three',
+            4 => 'four',
+            5 => 'five',
         
-    //     $api_responce =  json_decode($response, true);
-
-    //     if($api_responce['result'] == 'success'){
-    //         return redirect()->back()->with('success', 'Agent Updated successfully');
-    //        }else{
-    //         return redirect()->back()->with('error', 'Some thing Went Wrong ');
-    //        }
+        ];
+        return isset($numbers[$number]) ? $numbers[$number] : (string)$number;
+    }
 
 
-
-    // }
+   
 
 
 
@@ -798,13 +761,6 @@ class UserController extends Controller
        
         try {
             $org_user = User::where('id', $request->organization_user)->first();
-            // $agent_choose_ingroups = isset($request->Inbound_Upon_Login) ? '1' : '0';
-            // $agent_choose_blended = isset($request->Auto_Outbound_Upon_Login) ? '1' : '0';
-            // $closer_default_blended = isset($request->Allow_Outbound) ? '1' : '0';
-            // $scheduled_callbacks = isset($request->scheduled_callbacks) ? '1' : '0';
-            // $agentonly_callbacks = isset($request->Personal_Callbacks) ? '1' : '0';
-            // $agentcall_manual = isset($request->Allow_Manual_Calls) ? '1' : '0';
-            // $agent_call_log_view_override = isset($request->Call_Log_View) ? 'Y' : 'N';
             $active = isset($request->status) && $request->status == 1 ? 'Y' : 'N';
 
             $OrganizationServices = OrganizationServices::find($request->organization_servicesID);
@@ -917,35 +873,6 @@ class UserController extends Controller
 
         return  $api_response;
 
-
-        // $itemrank = "agent_rank_table_length=10&CHECK_{$extension}={$invited}&RANK_{$extension}={$level}&GRADE_{$extension}={$level}";
-        // $OrganizationServices = OrganizationServices::find($organization_services_id);
-        // $phpArray = json_decode($OrganizationServices->connection_parameters, true);
-
-        // $apiEndpoint = 'https://' . $phpArray['server_url'] . '/APIv2/Inbound/API.php';
-        // // POST data
-        // $postData = [
-        //     'Action' => 'EditAgentRank',
-        //     'apiUser' =>  $phpArray['api_user'],
-        //     'apiPass' =>  $phpArray['api_pass'],
-        //     'session_user' =>auth()->user()->email,
-        //     'group_id'=> $group_id,
-        //     'itemrank'=>$itemrank
-        // ];
-
-        // // dd($postData);
-
-        // $ch = curl_init($apiEndpoint);
-
-        // // Set cURL options
-        // curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        // curl_setopt($ch, CURLOPT_POST, true);
-        // curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
-        // $response = curl_exec($ch);
-        // curl_close($ch);
-
-        // $api_response = json_decode($response, true);
-        // return  $api_response;
 
     }
 
@@ -1403,9 +1330,6 @@ class UserController extends Controller
             return 'error';
         }
           
-
-
-
     }
 
    

@@ -69,7 +69,7 @@ class AgentRolesConroller extends Controller
 
     function addAgentRole(Request $request) {
 
-        // dd($request->all());
+        dd($request->all());
 
         $select_inbound_upon_login = isset($request->select_inbound_upon_login) ? 'Y' : 'N';
         $select_auto_outbound_upon_login = isset($request->select_auto_outbound_upon_login) ? 'Y' : 'N';

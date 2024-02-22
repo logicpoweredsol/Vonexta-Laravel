@@ -625,42 +625,12 @@ function open_outbound_model(row_number) {
 
 
 
- // Successful Swal.fire example with auto close
- function success(message) {
-    Swal.fire({
-      icon: 'success',
-      title: 'Success!',
-      text: message,
-      confirmButtonText: 'OK',
-      timer: 10000, // Auto close after 10 seconds (in milliseconds)
-      timerProgressBar: true // Display a progress bar
-    });
-  }
 
-  
 
 
 
   
-  // Failed Swal.fire example with auto close
-  function error(message) {
-    Swal.fire({
-      icon: 'error',
-      title: 'Error!',
-      text: message,
-      confirmButtonText: 'OK',
-      timer: 10000, // Auto close after 10 seconds (in milliseconds)
-      timerProgressBar: true // Display a progress bar
-    });
-  }
-
-
-//   var labelCounter = 1;
-//   var placeholderCounter = 1;
-  
-  function add_row() {
-
-
+function add_row() {
 
     var html = '';
     var total_length =$(".customfield-wrap").length ;
@@ -669,7 +639,7 @@ function open_outbound_model(row_number) {
         html = ` <div class="customfield-wrap" id="row_${total_length+1}">
         <div class="form-group fromgroup">
             <label for="active" class="form-label">Custom Attribute ${total_length+1}</label>
-            <input type="text" class="form-control custom-attribute" name="custom_attribute[]" value="" placeholder="Custom attribute ${total_length+1}">
+            <input type="text" class="form-control custom-attribute" name="custom_attribute[]"  placeholder="Custom attribute ${total_length+1}">
         </div>
         <div class="additionalfield-wrap">
             <button type="button" onclick="add_row();" class="btn btn-success btn-sm mt-2"> + </button>
@@ -679,51 +649,15 @@ function open_outbound_model(row_number) {
     }
 
     $("#body_attribute").append(html);
-
-      // Check if the total number of rows is less than 10 before appending
-    //   if ($('.fromgroup').length < 10) {
-    //       // Clone the original form group excluding the button
-    //       var originalFormGroup = $('.fromgroup').first();
-    //       var clonedFormGroup = originalFormGroup.clone();
   
-    //       // Increase the value of the label in the cloned form group
-    //       labelCounter++;
-    //       var currentLabel = clonedFormGroup.find('.form-label');
-    //       currentLabel.text('Custom Attribute ' + labelCounter);
-  
-    //       // Clear the value of the cloned input
-    //       clonedFormGroup.find('.custom-attribute').val('');
-  
-    //       // Increase the value of the placeholder in the cloned form group
-    //       placeholderCounter++;
-    //       clonedFormGroup.find('.custom-attribute').attr('placeholder', 'Custom attribute ' + placeholderCounter);
-  
-    //       // Hide the button for the cloned form group
-    //       clonedFormGroup.find('.btn').hide();
-  
-    //       // Move the button to the top of the cloned form group
-    //       clonedFormGroup.prepend(clonedFormGroup.find('.btn'));
-  
-    //       // Append the cloned form group to the parent container
-    //       originalFormGroup.parent().append(clonedFormGroup);
-  
-    //       // Show the button for the last inserted div
-    //       $('.container .form-group:last .btn').show();
-    //   }
+ 
   }
 
     function remove_row(action) {
         if(action != "" || action != null){
             $("#row_"+action).remove();
         }
-        // // Get the total number of appended rows
-        // var totalRows = $('.fromgroup').length;
-    
-        // // Ensure there is at least one row (the original one) before removing
-        // if (totalRows > 1) {
-        //     // Remove the last inserted row
-        //     $('.fromgroup:last').remove();
-        // }
+       
     }
 
 
