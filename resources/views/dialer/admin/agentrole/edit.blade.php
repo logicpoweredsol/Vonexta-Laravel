@@ -65,7 +65,7 @@
       <div class="row">
         <div class="col-sm-6">
           <div class="radiobtn-wrapper mb-2">
-            <input type="checkbox" class="form-check-input" id="allowe_compaigns" name="all_allowed_compaigns" data-bootstrap-switch data-off-color="danger" data-on-color="success">
+            <input type="checkbox" class="form-check-input" id="allowe_profiles" name="all_allowed_profiles" data-bootstrap-switch data-off-color="danger" data-on-color="success">
             <label class="form-check-label" for="profiles"> <b>Allow all profiles</b> </label>
           </div>
           <select class="form-control select3" multiple name="allowed_profiles[]" id="allowed_profiles">

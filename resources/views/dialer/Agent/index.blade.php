@@ -783,7 +783,7 @@
 
 
                 <!-- outbound -->
-                <div class="card compaigns">
+                <div class="card profile">
                     <div class="card-header">
                         <h3 class="card-title"><b>Outbound</b></h3>
                     </div>

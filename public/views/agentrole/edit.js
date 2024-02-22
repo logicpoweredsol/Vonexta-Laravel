@@ -11,7 +11,7 @@ $(function () {
 
 
 
-$('#allowe_compaigns').on('switchChange.bootstrapSwitch', function(event, state) {
+$('#allowe_profiles').on('switchChange.bootstrapSwitch', function(event, state) {
     if (this.checked) { 
         $("#all_comp_select").prop('disabled',  true );
     } else {

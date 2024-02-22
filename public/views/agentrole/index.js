@@ -151,7 +151,7 @@ function error(message) {
 
 
 
-$('#allowe_compaigns').on('switchChange.bootstrapSwitch', function(event, state) {
+$('#allowe_profiles').on('switchChange.bootstrapSwitch', function(event, state) {
   if (this.checked) { 
       $("#allowed_profiles").prop('disabled',  true );
   } else {
