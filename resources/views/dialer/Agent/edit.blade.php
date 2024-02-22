@@ -436,11 +436,11 @@
                                             @if(isset($call_log_outbounds))
                                                 @foreach($call_log_outbounds as $row2=>$call_log_outbound)
                                                 <tr>
-                                                    <td id='campaign_id_{{$row2}}'>{{$call_log_outbound['campaign_id']}} <span class="adminlet3" onclick='open_outbound_model({{$row2}});'><i class="fas fa-list"></i> </span> </td>
+                                                    <td id='profile_id_{{$row2}}'>{{$call_log_outbound['campaign_id']}} <span class="adminlet3" onclick='open_outbound_model({{$row2}});'><i class="fas fa-list"></i> </span> </td>
 
 
                                                     <td>
-                                                        <select id="campaign_grade_{{$row2}}" onchange='update_skill_outbound("{{$row2}}");' style="border: none;">
+                                                        <select id="profile_grade_{{$row2}}" onchange='update_skill_outbound("{{$row2}}");' style="border: none;">
                                                             <?php for ($i = 1; $i <= 9; $i++) { ?>
                                                                 <option {{ $call_log_outbound['campaign_grade'] == $i  ? 'selected' : '' }} value="{{$i}}"> {{$i}} </option>
                                                             <?php } ?>

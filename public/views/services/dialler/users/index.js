@@ -873,11 +873,11 @@ function update_skill_modal(service, organization_servicesID, extension) {
                 html1 += `
                 <tr> 
                     <td>
-                        <input type='text' id='campaign_id_${index}' readonly value='${response['call_log_outbounds'][index]['campaign_id']}' style='border:none;background: transparent;' />
+                        <input type='text' id='profile_id_${index}' readonly value='${response['call_log_outbounds'][index]['campaign_id']}' style='border:none;background: transparent;' />
                         <span class="adminlet3" onclick="open_outbound_model('${response['call_log_outbounds'][index]['campaign_id']}');"><i class="fas fa-list"></i></span>
                     </td>
                     <td>
-                        <select id="campaign_grade_${index}" class="form-control select2" onchange='update_skill_outbound(${index});' name='level[]'>`;
+                        <select id="profile_grade_${index}" class="form-control select2" onchange='update_skill_outbound(${index});' name='level[]'>`;
                         for (var q = 1; q <= 9; q++) {
                             if (q == response['call_log_outbounds'][index]['campaign_grade']) {
                                 html1 += `<option selected value='${q}'>${q}</option>`;
@@ -960,8 +960,8 @@ function update_skill_inbound(row_number){
 function update_skill_outbound(row_number) {
     var organization_services_id = $("#model_organization_services_id").val();
     var extension = $("#model_User").val();
-    var campaign_id = $('#campaign_id_' + row_number).val();
-    var campaign_grade = $("#campaign_grade_" + row_number).val();
+    var campaign_id = $('#profile_id_' + row_number).val();
+    var profile_grade = $("#profile_grade_" + row_number).val();
 
     $.ajax({
         url: `${baseUrl}/services/dialer/agents/update_skill_outbound`,
@@ -969,7 +969,7 @@ function update_skill_outbound(row_number) {
         headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
         data: {
             'campaign_id': campaign_id, // Corrected key name
-            'campaign_grade': campaign_grade,
+            'profile_grade': profile_grade,
             'organization_services_id': organization_services_id,
             'extension': extension
         },
@@ -1072,7 +1072,7 @@ function open_inbound_model(row_number ) {
 function open_outbound_model(row_number)
 {
 
-    var campaign_id_ = $('#model_profile_id_'+row_number).val();
+    var profile_id_ = $('#model_profile_id_'+row_number).val();
     var organization_servicesID = $("#organization_ser_id").val();
     var extension = $("#other_user").val();
 
@@ -1082,13 +1082,13 @@ function open_outbound_model(row_number)
         method: 'POST',
         headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
         data: {
-            'campaign_id':campaign_id_,
+            'profile_id_':profile_id_,
             'organization_services_id': organization_servicesID,
             'extension':extension
         },
         success: function(response) {
 
-            $("#skill_name").text(campaign_id_);
+            $("#skill_name").text(profile_id_);
 
             var html = '';
 

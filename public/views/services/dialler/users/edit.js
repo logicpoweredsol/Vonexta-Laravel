@@ -439,7 +439,7 @@ function update_skill_inbound(row_number){
 
 function update_skill_outbound(row_number){
 
-    var campaign_id = $('#campaign_id_'+row_number).text();
+    var profile_id_ = $('#profile_id_'+row_number).text();
     var campaign_grade = $("#campaign_grade_"+row_number).val();
 
     var organization_services_id = $("#organization_services_id").val();
@@ -583,7 +583,7 @@ function open_inbound_model(row_number){
 
 
 function open_outbound_model(row_number) {
-    var campaign_id_ = $('#campaign_id_' + row_number).text();
+    var profile_id_ = $('#profile_id_' + row_number).text();
     var organization_services_id = $("#organization_services_id").val();
     var extension = $("#User").val();
 
@@ -592,12 +592,12 @@ function open_outbound_model(row_number) {
         method: 'POST',
         headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
         data: {
-            'campaign_id': campaign_id_,
+            'profile_id_': profile_id_,
             'organization_services_id': organization_services_id,
             'extension': extension
         },
         success: function (response) {
-            $("#skill_name").text(campaign_id_);
+            $("#skill_name").text(profile_id_);
 
             var html = '';
 
