@@ -2,7 +2,7 @@
 
 @php
     $edit_data = session('org-user-edit');
-   
+
 
 @endphp
 
@@ -16,10 +16,10 @@
                 <h3 class="card-title">Update User</h3>
                 <div class="card-tools">
                     <a href="javascript:;" onclick="change_tab('org-user');" class="btn btn-sm btn-primary">
-                    Users List 
+                    Users List
                     </a>
                 </div>
-                
+
             </div>
             <div class="card-body">
 
@@ -97,9 +97,9 @@
                             <div class="row" id="Services_row" @error('Services') aria-invalid="true" @enderror>
                             @foreach($edit_data['organizationServices'] as $Services)
 
-                    
-                  
-                            
+
+
+
 
                             @php
                                 $check_valied = true;
@@ -108,7 +108,7 @@
                                 }
                             @endphp
 
-              
+
                          @if ($check_valied)
 
                             <div class="col-sm-4 mb-3">
@@ -129,7 +129,7 @@
                         </span>
                         </div>
                     </div>
-                    
+
                 </div>
 
                 {{-- <input type="hidden" name="close_service[]" id="close_service"> --}}

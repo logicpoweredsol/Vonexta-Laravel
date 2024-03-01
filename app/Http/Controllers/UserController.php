@@ -298,8 +298,16 @@ class UserController extends Controller
         }
 
 
+        $GetCustomAttributes = $this->GetCustomAttributes($organization_services_id ,$AgentID);
 
        
+
+        // if ($GetCustomAttributes['result'] == 'success') {
+        //     $attributes = $GetCustomAttributes['data'];
+        //     return response()->json($attributes);
+        // }
+        
+
 
         
 
@@ -503,6 +511,38 @@ class UserController extends Controller
         return json_decode($response, true);
     }
 
+
+    public function GetCustomAttributes($organization_service_id,$AgentID)
+    {
+        $OrganizationServices = OrganizationServices::find($organization_service_id);
+        $phpArray = json_decode($OrganizationServices->connection_parameters, true);
+        $apiEndpoint = 'https://' . $phpArray['server_url'] . '/APIv2/SystemSettings/API.php';
+        // POST data
+        $postData = [
+            'Action' => 'GetCustomAttributes',
+            'apiUser' =>  $phpArray['api_user'],
+            'apiPass' =>  $phpArray['api_pass'],
+            'session_user' =>  auth()->user()->email,
+            'responsetype' => 'json',
+            'module'=>'Agents'
+        ];
+        $ch = curl_init($apiEndpoint);
+    
+        // Set cURL options
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
+    
+        // Execute cURL session and get the response
+        $response = curl_exec($ch);
+    
+        // Close cURL session
+        curl_close($ch);
+        
+        return json_decode($response, true);
+
+    }
+
     public function GetMissingLoginInboundGroups($organization_services_id,$AgentID)
     {
         $OrganizationServices = OrganizationServices::find($organization_services_id);
@@ -584,9 +624,6 @@ class UserController extends Controller
         // $world = [];
         // $length = count($request->custom_attribute);
 
-        // dd($request->all());
-
-
         $userAgent = userAgent::where('api_user',$request->User)->first();
         $userAgent->name=$request->name;
         $userAgent->status=$request->status;
@@ -624,16 +661,31 @@ class UserController extends Controller
              'modify_same_user_level' =>'',
          ];
 
-         if(is_array($request->custom_attribute)) {
-                $count = count($request->custom_attribute);
-                for ($i = 0; $i < $count; $i++) {
-                    $attribute = $this->numberToString($i + 1);
-                    $postData["custom_$attribute"] = $request->custom_attribute[$i]; // Adjusted index here
-                }
+
+
+         for ($i = 1; $i < 11; $i++) {
+            $attribute = $this->numberToString($i);
+            $custom_attribute = "custom_attribute_" . $i; // Corrected concatenation here
+            if(isset($request->$custom_attribute)){ // Corrected access to request variable here
+                $postData["custom_$attribute"] = $request->$custom_attribute;
             } else {
-                // Handle the case where $request->custom_attribute is not an array
-                // You might want to log an error, throw an exception, or handle it in another way based on your requirements.
+                $postData["custom_$attribute"] = "";
             }
+        }
+
+        
+
+
+        //  if(is_array($request->custom_attribute)) {
+        //         $count = count($request->custom_attribute);
+        //         for ($i = 0; $i < $count; $i++) {
+        //             $attribute = $this->numberToString($i + 1);
+        //             $postData["custom_$attribute"] = $request->custom_attribute[$i]; // Adjusted index here
+        //         }
+        //     } else {
+        //         // Handle the case where $request->custom_attribute is not an array
+        //         // You might want to log an error, throw an exception, or handle it in another way based on your requirements.
+        //     }
 
          
 
@@ -673,6 +725,11 @@ class UserController extends Controller
             3 => 'three',
             4 => 'four',
             5 => 'five',
+            6 => 'six',
+            7 => 'seven',
+            8 => 'eight',
+            9 => 'nine',
+            10 => 'ten',
         
         ];
         return isset($numbers[$number]) ? $numbers[$number] : (string)$number;

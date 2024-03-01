@@ -75,9 +75,15 @@
                         <li class="nav-item vonext-campaign-item">
                             <a class="nav-link" id="Dynamic-tab" data-toggle="pill" href="#caller" role="tab" aria-controls="dynamic-leadRecycling" aria-selected="false">Dynamic Caller ID</a>
                         </li>
+                        <li class="nav-item vonext-campaign-item">
+                            <a class="nav-link" id="attributes-tab" data-toggle="pill" href="#attributes" role="tab" aria-controls="dynamic-leadRecycling" aria-selected="false">Custom attributes</a>
+                        </li>
                     </ul>
 
                     <div class="tab-content" id="campaigns-tabs Content">
+
+
+                    
 
                     
                         <div class="tab-pane fade show @if( !session()->has('tab') && !session('tab')) show active @endif   " id="Organization-home" role="tabpanel" aria-labelledby="Organization-home-tab">
@@ -89,6 +95,7 @@
                                 <div class="card">
                                     <div class="card-header">
                                         <h3 class="card-title">Edit outbound Profile</h3>
+                                        
                                     </div>
                                     <div class="card-body">
                                         <div class="row">
@@ -130,10 +137,13 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col-sm-12 col-md-6 col-lg-6" id="speed_div">
+                                            
+
+                                            <div class="col-sm-12 col-md-6 col-lg-6" id="speed_div"  >
+                                                <input type="hidden" readonly id='velocity_val' value='{{$velocity}}'>
                                                 <div class="form-group">
                                                     <label for="Velocity" class="form-label">Velocity</label>
-                                                    <select name="field_55" class="form-control" id="Velocity" value="">
+                                                    <select name="field_55" class="form-control" id="Velocity">
                                                     </select>
                                                 </div>
                                             </div>
@@ -165,20 +175,25 @@
                                             <div class="col-sm-12 col-md-6 col-lg-6">
                                                 <div class="form-group">
                                                     <label for="status" class="form-label">status</label>
+                                                    
 
-                                                    <select name="status" class="form-control select2 " id="status">    
-                                                        <option value="Y">Active</option>
-                                                        <option value="N">Not Active</option>
+
+
+                                                    <select name="status" class="form-control select2" id="status">    
+                                                        <option value="Y" {{ (isset($edit_compaigns['data']['active']) && $edit_compaigns['data']['active'] == 'Y') ? 'selected' : '' }}>Active</option>
+                                                        <option value="N" {{ (isset($edit_compaigns['data']['active']) && $edit_compaigns['data']['active'] == 'N') ? 'selected' : '' }}>Not Active</option>
                                                     </select>
+
                                                 </div>
                                             </div>                  
                                         </div>
+                                      
                                     </div>
                                     <!-- /.card-body -->
                                     <div class="card-footer">
                                         <div class="row">
                                             <div class="col-sm-12 col-md-2 col-lg-2 mb-3">
-                                                <a class="btn btn-default btn-md btn-block" href="#">Cancel</a>
+                                                <a class="btn btn-default btn-md btn-block" href="{{ route('services.campaigns', ['service' => strtolower('dailer'), 'organization_services_id' => $organization_service_id]) }}">Cancel</a>
                                             </div>
                                             <div class="col-sm-12 col-md-8 col-lg-8"></div>
                                             <div class="col-sm-12 col-md-2 col-lg-2 mb-3">
@@ -364,6 +379,12 @@
 
                             <div class="col-md-4 mt-3">
                                 <h4>Dynamic Caller ID</h4>
+                            </div>   
+                        </div>
+                        <div class="tab-pane fade" id="attributes" role="tabpanel" aria-labelledby="attributes-tab">
+
+                            <div class="col-md-4 mt-3">
+                                <h4>custom attribute</h4>
                             </div>   
                         </div>
 

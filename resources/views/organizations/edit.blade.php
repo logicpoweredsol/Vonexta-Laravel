@@ -26,8 +26,8 @@
         </script>
     @endif
 
-    
-    
+
+
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <div class="container-fluid">
@@ -51,7 +51,7 @@
 
         <div class="card">
             <div class="card-body">
-               
+
                 <ul class="nav nav-tabs vonexta-nav" id="campaigns-tabs" role="tablist">
                     <li class="nav-item vonext-campaign-item">
                         <a class="nav-link @if(session()->has('tab') && session('tab') == 'Organization-home')  active @endif  @if( !session()->has('tab') && !session('tab')) active @endif   " id="Organization-home-tab" data-toggle="pill" href="#Organization-home" role="tab" aria-controls="Organization-home" aria-selected="true">Organization Details</a>
@@ -64,13 +64,13 @@
                     <li class="nav-item vonext-campaign-item">
                         <a class="nav-link @if(session()->has('tab') && session('tab') == 'Organization-user')  active @endif " id="Organization-user-tab" data-toggle="pill" href="#Organization-user" onclick="change_tab('org-user');" role="tab" aria-controls="campaigns-leadRecycling" aria-selected="false">Users</a>
                     </li>
-                    
-                   
+
+
                 </ul>
 
                 <div class="tab-content" id="campaigns-tabs Content">
 
-                    
+
                     <div class="tab-pane fade @if(session()->has('tab') && session('tab') == 'Organization-home') show active @endif   @if( !session()->has('tab') && !session('tab')) show active @endif  "  id="Organization-home" role="tabpanel" aria-labelledby="Organization-home-tab">
 
                         <form method="POST" action="{{ route('organizations.edit', $organization->id) }}" class="form-horizontal">
@@ -193,7 +193,7 @@
                                         </div>
                                     </div>
                                     {{-- <hr> --}}
-                                    
+
                                 </div>
                                 <!-- /.card-body -->
                                 <div class="card-footer">
@@ -254,15 +254,15 @@
                                                 @foreach($organizationServices as $myService)
 
 
-                                                
-                                         
+
+
                                                 @php
                                                    $check_valied =ceck_service_detail($myService->pivot->id);
                                                 @endphp
-                                                
+
 
                                                     @if ($check_valied)
-                                                        
+
                                                         <tr class="myService">
                                                             <td>{{ $loop->index+1 }}</td>
                                                             <td>{{ $myService->name }}</td>
@@ -276,10 +276,10 @@
                                                                         <span class="sr-only">Toggle Dropdown</span>
                                                                     </button>
                                                                     <div class="dropdown-menu" role="menu">
-                                                                  
+
                                                                         <a class="dropdown-item btnEditService" data-id="{{ $myService->pivot->id  }}" href="javascript:void(0);">Edit</a>
                                                                         <a class="dropdown-item btnRemoveService" data-id="{{ $myService->pivot->id  }}" href="javascript:void(0);">Delete</a>
-                                                                    
+
                                                                     </div>
                                                             </div>
                                                                 <!-- <a href="javascript:void(0);" class="btn btn-sm btn-primary btnEditService" data-id="{{ $myService->pivot->id  }}"><i class="fas fa-pencil-alt"></i></a>
@@ -290,7 +290,7 @@
                                                     @endif
 
 
-                                                   
+
                                                 @endforeach
                                                 </tbody>
                                             </table>
@@ -306,30 +306,23 @@
                         <div id="org-user" @if(!session()->has('tab-action') || (session('tab-action') != 'org-user')) class='d-none' @endif>
                             @include('organizations/user/search')
                         </div>
-                        
+
                         {{-- <div id="add-org-user" @if(!session()->has('tab-action') || (session('tab-action') != 'add-org-user')) class='d-none' @endif>
                             @include('organizations/user/add')
                         </div> --}}
-                        
+
                         <div id="edit-org-user" @if(!session()->has('tab-action') || (session('tab-action') != 'edit-org-user')) class='d-none' @endif>
                             @include('organizations/user/edit')
                         </div>
 
-                        
-                        
-                       
-
-                       
-
-                           
                     </div>
 
-                   
+
                 </div>
             </div>
             <!-- /.card-body -->
             <div class="card-footer">
-              
+
             </div>
             <!-- /.card-footer-->
         </div>
@@ -345,7 +338,7 @@
             <input type="hidden" id="add_service_type" value="">
             {{-- <input type="hidden" id="add_org_id" value=""> --}}
             <input type="hidden" id="add_serive_Nickname" value="">
-            
+
             <form id="formConnectionParameters" class="form-horizontal">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -371,7 +364,7 @@
 <!-- Modal to get connection parameters from the super admin to connect to the service... -->
 <!-- <div class="modal fade" id="modalEditOgService" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="modalTitleEditOgService" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
-      
+
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="modalTitleEditOgService">Edit service connection</h5>
@@ -404,7 +397,7 @@
 
                         </div>
                         </form>
-                   
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

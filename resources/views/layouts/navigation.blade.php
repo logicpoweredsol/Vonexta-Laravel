@@ -47,9 +47,10 @@ $sub_menu_sub = null!==request()->segment(4) && !is_numeric(request()->segment(4
             </a>
             </li>
 
+          
             @php
                  $services = get_user_nav(Auth::user()->id);
-                //  {{dd($services);}}
+               
             
             @endphp
                   
@@ -180,6 +181,13 @@ $sub_menu_sub = null!==request()->segment(4) && !is_numeric(request()->segment(4
                                     <p>Outcomes</p>
                                     </a>
                                 </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('services.custom-attribute', ['service' => strtolower($service->name), 'organization_services_id' => $user_have->user_have_service->id]) }}" class="nav-link">
+
+                                     <i class="fas fa-list"></i>
+                                    <p>Custom Attributes</p>
+                                    </a>
+                                </li>
                                 </ul>
                             </li>
                             <li class="nav-item">
@@ -265,7 +273,7 @@ $sub_menu_sub = null!==request()->segment(4) && !is_numeric(request()->segment(4
                 </ul>
             </li>
             @endif
-            
+
 
 
         </ul>

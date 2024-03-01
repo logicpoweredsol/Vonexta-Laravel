@@ -276,6 +276,64 @@ class UserOrganizationController extends Controller
     public function send_impersonation_email(Request $request)
     {
         $user = User::find($request->user);
+
+        $code = $this->generateRandomCode();
+
+        if($request->type == 'email'){
+            $sender_email = $user->email;
+            Mail::to($sender_email)->send(new SendImpersonation($code));
+        }
+         elseif($request->type == 'text'){
+            $this->send_sms($user->phone ,$code);
+         }
+        $user->code = $code;
+        $user->save(); 
+        return true;
+
+    }
+
+    function send_sms($to ,$code) {
+        $message = $code ;
+        $Fields = array(
+            'to' => $to,
+            'message' => "Your Vonexta Support Code:  $message ",
+            'Key' => 'TF4fWJVK6Wv7oQKLKCEdYwxDMY'
+        );
+
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => 'https://scripts.vonexta.com/LT_Platform/sms_pass_through.php',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_SSL_VERIFYPEER => false, // You can change this back to true in a production environment
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS => $Fields,
+        ));
+
+        $response = curl_exec($curl);
+
+
+        // Check for cURL errors
+        if (curl_errno($curl)) {
+            $error_message = curl_error($curl);
+            curl_close($curl);
+            return "cURL Error: " . $error_message;
+        }
+
+        curl_close($curl);
+        return $response;
+    }
+
+
+
+    public function send_impersonation_message(Request $request)
+    {
+        $user = User::find($request->user);
         $code = $this->generateRandomCode();
 
         if($request->type == 'email'){
@@ -325,8 +383,6 @@ class UserOrganizationController extends Controller
         }else{
             return redirect()->back()->with('error', 'Incorrect code. Please resend the code.');
         }
-
-        
     }
 
 
@@ -337,38 +393,7 @@ class UserOrganizationController extends Controller
         return redirect('/organizations');
     }
 
-    function send_sms($message,$to){
 
-        //$_REQUEST['to'] = $to;
-        //$_REQUEST['message'] = $message;
-        
-        $Fields = array(
-        'to' => $to,
-        'message' => $message,
-        'Key' => 'TF4fWJVK6Wv7oQKLKCEdYwxDMY'
-        );
-        
-        $curl = curl_init();
-        
-        curl_setopt_array($curl, array(
-          CURLOPT_URL => 'https://scripts.clearplot.com/LT_Platform/sms_pass_through.php',
-          CURLOPT_RETURNTRANSFER => true,
-          CURLOPT_SSL_VERIFYPEER => 0,
-          CURLOPT_ENCODING => '',
-          CURLOPT_MAXREDIRS => 10,
-          CURLOPT_TIMEOUT => 0,
-          CURLOPT_FOLLOWLOCATION => true,
-          CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-          CURLOPT_CUSTOMREQUEST => 'POST',
-          CURLOPT_POSTFIELDS => $Fields,
-        ));
-        
-        $response = curl_exec($curl);
-        
-        curl_close($curl);
-        return $response;
-        
-        }
 
     
 }

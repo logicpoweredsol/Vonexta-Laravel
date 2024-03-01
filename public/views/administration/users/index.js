@@ -78,6 +78,11 @@ function show_user_on_administrtion()
     $("#administration_user_modal").modal('show');
 }
 
+function add_custom_attributes()
+{
+    $("#add_custom_attributes_modal").modal('show');
+}
+
 function toggal_service(){
     var role = $('#role').val();
 

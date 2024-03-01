@@ -222,14 +222,14 @@
 // $(document).ready(function()
 // {
 
-//     var showPagination =true;
-//     var showPagination2 =true;
+// var showPagination = true;
 
-//     if ($('#Compaign-tableSS').find('tbody tr').length <= 10) {
+// $(document).ready(function() {
+//     if ($('#tablessss').find('tbody tr').length <= 10) {
 //         showPagination = false;  // If records are 10 or less, hide pagination
 //     }
 
-//     $('#Compaign-tableSS').DataTable({
+//     $('#tablessss').DataTable({
 //         "paging": showPagination,
 //         "lengthChange": true,
 //         "searching": true,
@@ -238,10 +238,10 @@
 //         "autoWidth": true,
 //         "responsive": true
 //     });
+// });
 
    
 
-// });
 
 
 

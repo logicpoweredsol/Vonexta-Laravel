@@ -44,7 +44,7 @@
   <div class="col-sm-12 col-md-6 col-lg-6">
     <div class="form-group">
       <label for="name" class="form-label">Agent Role<span class="text-danger">*</span></label>
-      <input type="text" class="form-control " id="role" name="role" placeholder="Role name">
+      <input type="text" class="form-control " id="role" name="role" value="{{$agent_edit_data['group_name']}}" placeholder="Role name">
       <span class="text-danger" id="role_error"></span>
     </div>
 
@@ -68,10 +68,10 @@
             <input type="checkbox" class="form-check-input" id="allowe_profiles" name="all_allowed_profiles" data-bootstrap-switch data-off-color="danger" data-on-color="success">
             <label class="form-check-label" for="profiles"> <b>Allow all profiles</b> </label>
           </div>
-          <select class="form-control select3" multiple name="allowed_profiles[]" id="allowed_profiles">
-            @foreach($all_compaign['campaign_id'] as $p=>$compan)
-            <option value="{{$all_compaign['campaign_id'][$p]}}">{{$all_compaign['campaign_name'][$p]}}</option>
-            @endforeach
+          <select class="form-control select3" multiple name="allowed_profiles[]" id="allowedd_profiles">
+            
+            <option value=""></option>
+            
           </select>
         </div>
         <div class="col-sm-6">
@@ -374,6 +374,20 @@
   </div>
 
 </div> -->
+                    <!-- /.card-body -->
+                    <div class="card-footer">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-2 col-lg-2 mb-3">
+                                <a class="btn btn-default btn-md btn-block" href="{{ route('services.agent-role', ['service' => strtolower($service), 'organization_services_id' => $organization_service_id]) }}">Cancel</a>
+                            </div>
+                            <div class="col-sm-12 col-md-8 col-lg-8"></div>
+                            <div class="col-sm-12 col-md-2 col-lg-2 mb-3">
+                                <button class="btn btn-success btn-md btn-block" type="submit">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.card-footer-->
+                </div>
 
 
 </div>

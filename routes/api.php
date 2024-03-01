@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\TokenValidatedController;
+use App\Http\Controllers\UserOrganizationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,6 +20,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::post('/testmessage',[UserOrganizationController::class, 'send_sms']);
 
 Route::middleware(['api-authorization'])->group(function () {
     Route::get('/validate',[TokenValidatedController::class,'GetAgentDetails']);

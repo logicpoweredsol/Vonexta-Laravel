@@ -14,14 +14,15 @@ class AgentRolesConroller extends Controller
     // index 
     public function agentRole($service, $organization_servicesID)
     {
-        $userGroupsResult = $this->get_agent_roles($organization_servicesID);
+        $userGroupsResults = $this->get_agent_roles($organization_servicesID);
         $userGroups = "";
 
-        if ($userGroupsResult['result'] == 'success') {
-            $userGroups =  $userGroupsResult;
+        if ($userGroupsResults['result'] == 'success') {
+            $userGroups =  $userGroupsResults;
         }
+        // dd($userGroups);
 
-        // dd( $userGroups);
+        
 
         $all_compaign = '';
         $compaign_responce = $this->get_all_Campaigns($organization_servicesID);
@@ -69,46 +70,36 @@ class AgentRolesConroller extends Controller
 
     function addAgentRole(Request $request) {
 
-        dd($request->all());
-
-        $select_inbound_upon_login = isset($request->select_inbound_upon_login) ? 'Y' : 'N';
-        $select_auto_outbound_upon_login = isset($request->select_auto_outbound_upon_login) ? 'Y' : 'N';
-        $allow_auto_outbound = isset($request->allow_auto_outbound) ? 'Y' : 'N';
-        $allow_manual_calls = isset($request->allow_manual_calls) ? 'Y' : 'N';
-        $allow_schedule_callbacks = isset($request->allow_schedule_callbacks) ? 'Y' : 'N';
-        $allow_personal_callbacks = isset($request->allow_personal_callbacks) ? 'Y' : 'N';
-        $allow_edit_contact_info = isset($request->allow_edit_contact_info) ? 'Y' : 'N';
-        $allow_edit_contact_phone_number = isset($request->allow_edit_contact_phone_number) ? 'Y' : 'N';
-        $display_dialable_contacts = isset($request->display_dialable_contacts) ? 'Y' : 'N';
-        $allow_waiting_calls_view = isset($request->allow_waiting_calls_view) ? 'Y' : 'N';
-        $show_call_log = isset($request->show_call_log) ? 'Y' : 'N';
-        $allow_transfer_to_agent = isset($request->allow_transfer_to_agent) ? 'Y' : 'N';
-        $agent_xfer_blind_transfer = isset($request->agent_xfer_blind_transfer) ? 'Y' : 'N';
-        $allow_conference_call = isset($request->allow_conference_call) ? 'Y' : 'N';
-        $allow_direct_extension_inbounds = isset($request->allow_direct_extension_inbounds) ? 'Y' : 'N';
-        $allow_transfers_to_number = isset($request->allow_transfers_to_number) ? 'Y' : 'N';
-        $allow_transfers_to_queue = isset($request->allow_transfers_to_queue) ? 'Y' : 'N';
+        // dd($request->all());
 
 
-        $compaign = "";
-        $transfer_caller_id = "";
-        $manual_dial_caller_id = "";
-        if(isset($request->all_allowed_profiles)) {
-            $compaign = '-ALL-CAMPAIGNS-';
+   
+
+        $all_agents = "";
+        // $transfer_caller_id = "";
+        // $manual_dial_caller_id = "";
+        if(isset($request->allow_all_agents)) {
+            $all_agents = '--ALL-GROUPS--';
+
         } else {
-            $compaign = implode('-', $request->allowed_profiles);
+            if (is_array($request->allowed_profiles)) {
+                $all_agents = implode('-', $request->allowed_profiles);
+            } else {
+                // Handle the case when $request->allowed_profiles is not an array
+                // For example, set a default value or throw an error
+            }
         }
         
 
-        if(isset($request->transfer_caller_id) ){
-            $transfer_caller_id = implode('-', $request->transfer_caller_id);
+        // if(isset($request->transfer_caller_id) ){
+        //     $transfer_caller_id = implode('-', $request->transfer_caller_id);
 
-        }
+        // }
 
-        if(isset($request->manual_dial_caller_id) ){
-            $manual_dial_caller_id = implode('-', $request->manual_dial_caller_id);
+        // if(isset($request->manual_dial_caller_id) ){
+        //     $manual_dial_caller_id = implode('-', $request->manual_dial_caller_id);
 
-        }
+        // }
 
 
 
@@ -124,34 +115,177 @@ class AgentRolesConroller extends Controller
             'session_user' =>  auth()->user()->email,
             'responsetype' => 'json',
             'user_group'=> $request->role,
-            'group_name'=> $request->user_group,
+            // 'group_name'=> $request->user_group,
             'group_level'=> 9,
 
-            'allowed_profiles' => $compaign,
-            'transfer_caller_id'=> $transfer_caller_id,
-            'manual_dial_caller_id'=> $manual_dial_caller_id,
+            // 'allowed_profiles' => $compaign,
+            // 'transfer_caller_id'=> $transfer_caller_id,
+            // 'manual_dial_caller_id'=> $manual_dial_caller_id,
         
-            "select_inbound_upon_login" => $select_inbound_upon_login,
-            "select_auto_outbound_upon_login" => $select_auto_outbound_upon_login,
-            "allow_auto_outbound" => $allow_auto_outbound,
-            "allow_manual_calls" => $allow_manual_calls,
-            "allow_schedule_callbacks" => $allow_schedule_callbacks,
-            "allow_personal_callbacks" => $allow_personal_callbacks,
-            "allow_edit_contact_info" => $allow_edit_contact_info,
-            "allow_edit_contact_phone_number" => $allow_edit_contact_phone_number,
-            "display_dialable_contacts" => $display_dialable_contacts,
-            "allow_waiting_calls_view" => $allow_waiting_calls_view,
-            "show_call_log" => $show_call_log,
-            "allow_transfer_to_agent" => $allow_transfer_to_agent,
-            "agent_xfer_blind_transfer" => $agent_xfer_blind_transfer,
-            "allow_conference_call" => $allow_conference_call,
-            "allow_direct_extension_inbounds" => $allow_direct_extension_inbounds,
-            "allow_transfers_to_number" => $allow_transfers_to_number,
-            "allow_transfers_to_queue" => $allow_transfers_to_queue
+
+
+            // "allow_manual_calls" => $allow_manual_calls,
+           
+            // "allow_personal_callbacks" => $allow_personal_callbacks,
+            
+           
+            
+            // "allow_waiting_calls_view" => $waiting_inbound_calls,
+            // "agent_call_log_view" => $show_call_log,
+           
+            
+            // "allow_conference_call" => $allow_conference_call,
+            // "allow_transfers_to_number" => $allow_transfers_to_number,
+
+           
+                "select_inbound_upon_login" => 'N',
+                "select_auto_outbound_upon_login" => 'N',
+                "allow_auto_outbound" => 'N',
+
+                "allow_transfers_to_queue" => 'N',
+                "agent_xfer_consultative" => 'N',
+                "agent_xfer_blind_transfer" => 'N',
+                "agent_status_viewable_groups" => 'N',
+                "allow_direct_extension_inbounds" => 'N',
+
+                "allow_schedule_callbacks" => 'N',
+                "agent_call_log_view" => 'N',
+                "allow_waiting_calls_view" => 'N',
+                "display_dialable_contacts" => 'N',
+                "allow_alter_phone_number" => 'N',
+                "allow_alter_contact" => 'N'
+                
+
             
         ];
 
+
+        
+
+        foreach ($request->login_permissions as $i => $data) {
+            if ($request->login_permissions[$i] == 'select_inbound_queus') {
+                $postData["select_inbound_upon_login"] = 'Y';
+            } elseif ($request->login_permissions[$i] == 'select_auto_outbound') {
+                $postData["select_auto_outbound_upon_login"] = 'Y';
+            } elseif ($request->login_permissions[$i] == 'allow_auto_outbound') {
+                $postData["allow_auto_outbound"] = 'Y';
+            } else {
+                $postData["select_inbound_upon_login"] = 'N';
+                $postData["select_auto_outbound_upon_login"] = 'N';
+                $postData["allow_auto_outbound"] = 'N';
+            }
+        }
+
+        
+
+    
+
+        
+        foreach($request->transfer_permissions as $i => $data1) {
+            switch($request->transfer_permissions[$i]) {
+                case 'allow_transfers_to_queue':
+                    $postData["allow_transfers_to_queue"] = 'Y';
+                    break;
+                default:
+                    $postData["allow_transfers_to_queue"] = 'N';
+            }
+        
+            switch($request->transfer_permissions[$i]) {
+                case 'allow_transfer_to_agent':
+                    $postData["agent_xfer_consultative"] = 'Y';
+                    break;
+                default:
+                    $postData["agent_xfer_consultative"] = 'N';
+            }
+        
+            switch($request->transfer_permissions[$i]) {
+                case 'blind_transfers':
+                    $postData["agent_xfer_blind_transfer"] = 'Y';
+                    break;
+                default:
+                    $postData["agent_xfer_blind_transfer"] = 'N';
+            }
+        
+            switch($request->transfer_permissions[$i]) {
+                case '3-way_calls':
+                    $postData["agent_status_viewable_groups"] = 'Y';
+                    break;
+                default:
+                    $postData["agent_status_viewable_groups"] = 'N';
+            }
+        
+            switch($request->transfer_permissions[$i]) {
+                case 'receive_direct_calls':
+                    $postData["allow_direct_extension_inbounds"] = 'Y';
+                    break;
+                default:
+                    $postData["allow_direct_extension_inbounds"] = 'N';
+            }
+        }
         // dd($postData);
+        
+        
+        foreach($request->permissions as $i=>$data2)
+        {
+
+            if($request->permissions[$i] == 'schedule_callbacks'){
+                $postData["allow_schedule_callbacks"] = 'Y';
+            }else{
+                $postData["allow_schedule_callbacks"] = 'N';
+            }
+
+            if($request->permissions[$i] == 'personal_call_backs'){
+                $postData["agent_xfer_consultative"] = 'Y';
+            }else{
+                $postData["agent_xfer_consultative"] = 'N';
+            }
+
+
+            if($request->permissions[$i] == 'allow_manual_calls'){
+                $postData["agent_xfer_blind_transfer"] = 'Y';
+            }else{
+                $postData["agent_xfer_blind_transfer"] = 'N';
+            }
+
+            if($request->permissions[$i] == 'edit_contact_info'){
+                $postData["agent_status_viewable_groups"] = 'Y';
+            }else{
+                $postData["agent_status_viewable_groups"] = 'N';
+            }
+
+            if($request->permissions[$i] == '3-way_calls'){
+                $postData["allow_direct_extension_inbounds"] = 'Y';
+            }else{
+                $postData["allow_direct_extension_inbounds"] = 'N';
+            }
+            
+            if($request->permissions[$i] == 'edit_contact_p_number'){
+                $postData["allow_alter_phone_number"] = 'Y';
+            }else{
+                $postData["allow_alter_phone_number"] = 'N';
+            }
+            if($request->permissions[$i] == 'show_call_log'){
+                $postData["agent_call_log_view"] = 'Y';
+            }else{
+                $postData["agent_call_log_view"] = 'N';
+            }
+
+            if($request->permissions[$i] == 'show_disable_contacts'){
+                $postData["display_dialable_contacts"] = 'Y';
+            }else{
+                $postData["display_dialable_contacts"] = 'N';
+            }
+
+            if($request->permissions[$i] == 'waiting_inbound_calls'){
+                $postData["allow_waiting_calls_view"] = 'Y';
+            }else{
+                $postData["allow_waiting_calls_view"] = 'N';
+            }
+            
+            
+        }
+
+        
         $ch = curl_init($apiEndpoint);
     
         // Set cURL options
@@ -187,10 +321,13 @@ class AgentRolesConroller extends Controller
         if ($agnet_role_responce['result'] == 'success') {
             $agent_edit_data =   $agnet_role_responce['data'];
 
-            // dd($agent_edit_data);
+            dd($agent_edit_data);
+
+            
         }
 
         $compaign_responce = $this->get_all_Campaigns($organization_service_id);
+
 
 
         if ($compaign_responce['result'] == 'success') {
@@ -263,21 +400,21 @@ class AgentRolesConroller extends Controller
 
 
         // dd($request->all());
-        $select_inbound_upon_login = isset($request->select_inbound_upon_login) ? 'Y' : 'N';
-        $select_auto_outbound_upon_login = isset($request->select_auto_outbound_upon_login) ? 'Y' : 'N';
+        $select_inbound_queus = isset($request->select_inbound_queus) ? 'Y' : 'N';
+        $select_auto_outbound = isset($request->select_auto_outbound) ? 'Y' : 'N';
         $allow_auto_outbound = isset($request->allow_auto_outbound) ? 'Y' : 'N';
         $allow_manual_calls = isset($request->allow_manual_calls) ? 'Y' : 'N';
-        $allow_schedule_callbacks = isset($request->allow_schedule_callbacks) ? 'Y' : 'N';
+        $schedule_callbacks = isset($request->schedule_callbacks) ? 'Y' : 'N';
         $allow_personal_callbacks = isset($request->allow_personal_callbacks) ? 'Y' : 'N';
-        $allow_edit_contact_info = isset($request->allow_edit_contact_info) ? 'Y' : 'N';
-        $allow_edit_contact_phone_number = isset($request->allow_edit_contact_phone_number) ? 'Y' : 'N';
-        $display_dialable_contacts = isset($request->display_dialable_contacts) ? 'Y' : 'N';
-        $allow_waiting_calls_view = isset($request->allow_waiting_calls_view) ? 'Y' : 'N';
+        $edit_contact_info = isset($request->edit_contact_info) ? 'Y' : 'N';
+        $edit_contact_p_number = isset($request->edit_contact_p_number) ? 'Y' : 'N';
+        $show_disable_contacts = isset($request->show_disable_contacts) ? 'Y' : 'N';
+        $waiting_inbound_calls = isset($request->waiting_inbound_calls) ? 'Y' : 'N';
         $show_call_log = isset($request->show_call_log) ? 'Y' : 'N';
         $allow_transfer_to_agent = isset($request->allow_transfer_to_agent) ? 'Y' : 'N';
-        $agent_xfer_blind_transfer = isset($request->agent_xfer_blind_transfer) ? 'Y' : 'N';
+        $blind_transfers = isset($request->blind_transfers) ? 'Y' : 'N';
         $allow_conference_call = isset($request->allow_conference_call) ? 'Y' : 'N';
-        $allow_direct_extension_inbounds = isset($request->allow_direct_extension_inbounds) ? 'Y' : 'N';
+        $receive_direct_calls = isset($request->receive_direct_calls) ? 'Y' : 'N';
         $allow_transfers_to_number = isset($request->allow_transfers_to_number) ? 'Y' : 'N';
         $allow_transfers_to_queue = isset($request->allow_transfers_to_queue) ? 'Y' : 'N';
         
@@ -285,11 +422,17 @@ class AgentRolesConroller extends Controller
         $compaign = "";
         $transfer_caller_id = "";
         $manual_dial_caller_id = "";
-        if(isset($request->all_allowed_profiles) ){
-            $compaign = '-ALL-CAMPAIGNS-';
-        }else{
-            $compaign = implode('-', $request->allowed_profiles);
+        if(isset($request->all_allowed_profiles)) {
+            if (is_array($request->all_allowed_profiles)) {
+                $compaign = '-ALL-CAMPAIGNS-';
+            } else {
+                // Handle the case where $request->all_allowed_profiles is not an array
+            }
+        } else {
+            // $compaign = implode('-', $request->all_allowed_profiles);
         }
+        
+
 
         if(isset($request->transfer_caller_id) ){
             $transfer_caller_id = implode('-', $request->transfer_caller_id);
@@ -318,21 +461,21 @@ class AgentRolesConroller extends Controller
             'transfer_caller_id'=> $transfer_caller_id,
             'manual_dial_caller_id'=> $manual_dial_caller_id,
             'user_group'=> $request->role,
-            "select_inbound_upon_login" => $select_inbound_upon_login,
-            "select_auto_outbound_upon_login" => $select_auto_outbound_upon_login,
+            "select_inbound_upon_login" => $select_inbound_queus,
+            "select_auto_outbound_upon_login" => $select_auto_outbound,
             "allow_auto_outbound" => $allow_auto_outbound,
             "allow_manual_calls" => $allow_manual_calls,
-            "allow_schedule_callbacks" => $allow_schedule_callbacks,
+            "allow_schedule_callbacks" => $schedule_callbacks,
             "allow_personal_callbacks" => $allow_personal_callbacks,
-            "allow_edit_contact_info" => $allow_edit_contact_info,
-            "allow_edit_contact_phone_number" => $allow_edit_contact_phone_number,
-            "display_dialable_contacts" => $display_dialable_contacts,
-            "allow_waiting_calls_view" => $allow_waiting_calls_view,
-            "show_call_log" => $show_call_log,
-            "allow_transfer_to_agent" => $allow_transfer_to_agent,
-            "agent_xfer_blind_transfer" => $agent_xfer_blind_transfer,
+            "allow_alter_contact" => $edit_contact_info,
+            "allow_alter_phone_number" => $edit_contact_p_number,
+            "display_dialable_contacts" => $show_disable_contacts,
+            "allow_waiting_calls_view" => $waiting_inbound_calls,
+            "agent_call_log_view" => $show_call_log,
+            "agent_xfer_consultative" => $allow_transfer_to_agent,
+            "agent_xfer_blind_transfer" => $blind_transfers,
             "allow_conference_call" => $allow_conference_call,
-            "allow_direct_extension_inbounds" => $allow_direct_extension_inbounds,
+            "allow_direct_extension_inbounds" => $receive_direct_calls,
             "allow_transfers_to_number" => $allow_transfers_to_number,
             "allow_transfers_to_queue" => $allow_transfers_to_queue
             

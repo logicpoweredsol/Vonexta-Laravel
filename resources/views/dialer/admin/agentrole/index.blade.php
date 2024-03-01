@@ -215,7 +215,7 @@
                   <div class="row mb-4">
                     <div class="col-sm-6">
                       <b class="d-block mb-3">transfer permissions:</b>
-                      <select class="form-control select3" multiple name="transfer_permissions[]" id="">
+                      <select class="form-control select3" id="transferOption" multiple name="transfer_permissions[]" id="">
                         <option value="allow_transfers_to_queue">Allow Transfer To Queue</option>
                         <option value="allow_transfer_to_agent">Allow Transfer To Agent</option>
                         <option value="transfer_external" >Allow external transfers</option>
@@ -224,7 +224,9 @@
                         <option value="receive_direct_calls">Allow Receive Direct Calls</option>
                       </select>
                     </div>
-                    <div class="col-sm-6" id="transferredd">
+
+                    <!-- <button type="button"  class="btn btn-danger" onclick="click_me();">click me</button> -->
+                    <div class="col-sm-6" id="transferredd" style="display: none;">
                       <label class="d-block mb-3" for="allowed-Transfer Caller">Allowed Transfer Caller IDs</label>
                       <select class="form-control select3" multiple name="allowd_transfer_caller_id[]" id="">
                         <option value="System"> System </option>
@@ -239,10 +241,17 @@
                         <input type="checkbox" class="form-check-input" id="toggle5" name="allow_all_agents" data-bootstrap-switch data-off-color="danger" data-on-color="success">
                         <label class="form-check-label" for="toggle5"><b> Allow All Agents</b></label>
                       </div>
+                      <div class="col-sm-6" id="xyz">
                       <select class="form-control select3" multiple name="Outbound_profile[]" id="Outbound_profile">
-                        <option value="online_agents_in_outbound_profile">Online Agents in Outbound Profile</option>
+                      @foreach($userGroups['user_group'] as $p=>$userGroup)
+
+                        
+                        <option value="{{$userGroups['user_group'][$p]}}">{{$userGroups['user_group'][$p]}}</option>
+                        @endforeach
                         <option value="admin">Admin</option>
                       </select>
+                      </div>
+                      
                     </div>
                   </div>
                 </div>
@@ -270,13 +279,13 @@
                         <option value="3-way_calls">Allow 3-way calls</option>
                         <option value="edit_contact_p_number">Edit contact-phone-number</option>
                         <option value="show_call_log">Show call log</option>
-                        <option value="show_disable_contacts">show disable contacts count</option>
+                        <option value="show_disable_contacts">show dialable contacts count</option>
                         <option value="waiting_inbound_calls">Show waiting inbound calls</option>
                       </select>
                     </div>
-                    <div class="col-sm-6">
+                    <div class="col-sm-6" id="manual_dialer">
                       <b class="d-block mb-3">Allowed Manual Dial caller IDs:</b>
-                      <select class="form-control select3" multiple name="manual_dial_caller_id[]" id="">
+                      <select class="form-control select3" style="display: none;" multiple name="manual_dial_caller_id[]" id="">
                         <option value="System">System</option>
                         <option value="Agent">Agent</option>
                       </select>

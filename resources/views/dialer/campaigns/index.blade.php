@@ -33,11 +33,11 @@
     <!-- Default box -->
     <div class="card">
       <div class="card-header">
-        <h3 class="card-title">All compaigns</h3>
+        <h3 class="card-title">Outbound Profiles</h3>
 
         <div class="card-tools">
 
-          <a href="javascript:void(0);" type="button" class="btn btn-sm btn-primary" onclick="show_add_compaign_modal();"> <i class="fas fa-plus"></i> Add compaigns </a>
+          <a href="javascript:void(0);" type="button" class="btn btn-sm btn-primary" onclick="show_add_compaign_modal();"> <i class="fas fa-plus"></i> Add outbound Profile </a>
 
         </div>
        
@@ -80,7 +80,7 @@
               <td>{{$get_compaignSkills['campaign_id'][$i]}}</td>
               <td>{{$get_compaignSkills['campaign_name'][$i]}}</td>
               <td>{{$get_compaignSkills['dial_method'][$i]}}</td>
-              <td></td>
+              <td>{{$get_compaignSkills['velocity'][$i]}}</td>
 
               <td>
                 @if ($get_compaignSkills['active'][$i] == 'Y')
@@ -128,7 +128,7 @@
       <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Create Compaigns</h5>
+            <h5 class="modal-title" id="exampleModalLabel">Create Outbound Profile</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
@@ -155,20 +155,20 @@
                 <div class="col-sm-12 col-md-6 col-lg-6">
                   <div class="form-group">
                     <label for="Profile Name" class="form-label">Profile Name</label>
-                    <input type="text" class="form-control" id="profile_name" name="profile_name" value="Profile Name">
+                    <input type="text" class="form-control" id="profile_name" name="profile_name" value="" placeholder="Profile name">
                   </div>
                 </div>
                 <div class="col-sm-12 col-md-6 col-lg-6">
                   <div class="form-group">
                     <label for="Type" class="form-label">Type</label>
 
-                    <input type="text" class="form-control" id="type" name="Type" value="Type">
+                    <input type="text" class="form-control" id="type" name="Type" value="" placeholder="Type">
                   </div>
                 </div>
                 <div class="col-sm-12 col-md-6 col-lg-6">
                   <div class="form-group">
                     <label for="velocity" class="form-label">Velocity</label>
-                    <input type="text" class="form-control" id="velocity" name="velocity" value="Velocity">
+                    <input type="text" class="form-control" id="velocity" name="velocity" value="" placeholder="Velocity">
                   </div>
                 </div>
                 <div class="col-sm-12 col-md-6 col-lg-6">

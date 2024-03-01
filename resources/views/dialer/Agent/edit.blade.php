@@ -77,6 +77,10 @@
                         <li class="nav-item vonext-campaign-item">
                             <a class="nav-link" id="activity-tab" data-toggle="pill" href="#activity" role="tab" aria-controls="campaigns-leadRecycling" aria-selected="false">Activity</a>
                         </li>
+                        <li class="nav-item vonext-campaign-item">
+                            <a class="nav-link" id="custom_attribute-tab" data-toggle="pill" href="#custom_attribute" role="tab" aria-controls="campaigns-leadRecycling" aria-selected="false">Custom Attributes</a>
+                        </li>
+
                     </ul>
 
                     <div class="tab-content" id="campaigns-tabs Content">
@@ -86,7 +90,7 @@
                                 <input type="hidden" class="form-control" id="User" name="User" value="{{ isset($dailer_agent_user['user']) ? $dailer_agent_user['user'] : '' }}">
                                 <input type="hidden" class="form-control" id="organization_services_id" name="organization_services_id" value="{{$organization_services_id}}">
 
-                           
+
 
                                 @csrf
                                 <div class="card">
@@ -121,9 +125,7 @@
                                                     <input type="text" class="form-control" id="extension" name="extension" disabled value="{{ isset($dailer_agent_user['user']) ? $dailer_agent_user['user'] : '' }}" placeholder="User">
                                                 </div>
 
-                                              
-                         
-                                             
+
 
                                             </div>
                                             <div class="col-sm-12 col-md-6 col-lg-6">
@@ -140,7 +142,7 @@
                                                     <select name="voice_mail" @if (!$responds) disabled @endif class="form-control select2" id="voice_mail">
                                                         <option value="" @if(!isset($dailer_agent_user['voicemail_id'])) selected @endif>No Voicemail</option>
                                                         <option value="{{$integerPart}}" @if(isset($dailer_agent_user['voicemail_id']) && $dailer_agent_user['voicemail_id'] == $integerPart) selected @endif>Agent's Voicemail ({{$integerPart}})</option>
-                                                        
+
                                                         @foreach ($responds['voicemail_id'] ?? [] as $i => $respond)
                                                             @if(is_array($responds['voicemail_id']) && is_array($responds['fullname']) && isset($responds['voicemail_id'][$i]) && isset($responds['fullname'][$i]))
                                                                 <option value="{{ $responds['voicemail_id'][$i] }}" @if(isset($dailer_agent_user['voicemail_id']) && $dailer_agent_user['voicemail_id'] == $responds['voicemail_id'][$i]) selected @endif>
@@ -150,9 +152,9 @@
                                                         @endforeach
 
                                                     </select>
-                                                   
 
-                                                    
+
+
 
                                                     {{-- <input type="text" class="form-control" id="Voice_Mail" name="Voice_Mail" value="{{ isset($dailer_agent_user['voicemail_id']) ? $dailer_agent_user['voicemail_id'] : '' }}" placeholder="Voice Mail.."> --}}
                                                 </div>
@@ -167,7 +169,7 @@
 
                                                     @php
                                                     $responses = get_group_user($organization_services_id);
-                                                     
+
                                                     @endphp
                                                     <select name="role" class="form-control select2 " id="role">
                                                         @foreach ($responses as $response)
@@ -185,12 +187,12 @@
                                             </div>
 
 
-                                            
-                                          
+
+
 
                                             <div class="col-sm-12 col-md-6 col-lg-6">
 
-                                            
+
                                                 <div class="form-group">
                                                     <label for="Status" class="form-label">Status</label>
                                                     <select name="status" class="form-control data select5" id="status">
@@ -201,19 +203,19 @@
                                             </div>
                                         </div>
 
-                                       
+
                                         <div class="row">
                                             <div class="col-sm-12 col-md-6 col-lg-6" id="body_attribute">
-                                                <div class="customfield-wrap" id="row_1">
-                                                    <div class="form-group fromgroup">
-                                                        <label for="active" class="form-label">Custom Attribute 1</label>
-                                                        <input type="text" class="form-control custom-attribute" name="custom_attribute[]" value="{{$dailer_agent_user['custom_one']}}" placeholder="Custom attribute 1">
-                                                    </div>
-                                                    <div class="additionalfield-wrap">
-                                                        <button type="button" onclick="add_row();" class="btn btn-success btn-sm mt-2"> + </button>
-                                                        <button type="button" onclick="remove_row();" class="btn btn-danger btn-sm mt-2"> - </button>
-                                                    </div>
-                                                </div>
+{{--                                                <div class="customfield-wrap" id="row_1">--}}
+{{--                                                    <div class="form-group fromgroup">--}}
+{{--                                                        <label for="active" class="form-label">Custom Attribute 1</label>--}}
+{{--                                                        <input type="text" class="form-control custom-attribute" name="custom_attribute[]" value="{{$dailer_agent_user['custom_one']}}" placeholder="Custom attribute 1">--}}
+{{--                                                    </div>--}}
+{{--                                                    <div class="additionalfield-wrap">--}}
+{{--                                                        <button type="button" onclick="add_row();" class="btn btn-success btn-sm mt-2"> + </button>--}}
+{{--                                                        <button type="button" onclick="remove_row();" class="btn btn-danger btn-sm mt-2"> - </button>--}}
+{{--                                                    </div>--}}
+{{--                                                </div>--}}
 
                                                 @if($dailer_agent_user['custom_two'] != "")
                                                 <div class="customfield-wrap" id="row_2">
@@ -225,7 +227,7 @@
                                                         <button type="button" onclick="add_row();" class="btn btn-success btn-sm mt-2"> + </button>
                                                         <button type="button" onclick="remove_row(2);" class="btn btn-danger btn-sm mt-2"> - </button>
                                                     </div>
-                                                    
+
                                                 </div>
                                                 @endif
                                                 @if($dailer_agent_user['custom_three'] != "")
@@ -327,17 +329,16 @@
 
                                             </div>
                                         </div>
-                                        
-                                        
-                                        
-                                        
+
+
+          
 
                                     </div>
                                     <!-- /.card-body -->
                                     <div class="card-footer">
                                         <div class="row">
                                             <div class="col-sm-12 col-md-2 col-lg-2 mb-3">
-                                                <a class="btn btn-default btn-md btn-block" href="#">Cancel</a>
+                                                <a class="btn btn-default btn-md btn-block" href="{{ route('services.agents', ['service' => strtolower('dailer'), 'organization_services_id' => $organization_services_id]) }}">Cancel</a>
                                             </div>
                                             <div class="col-sm-12 col-md-8 col-lg-8"></div>
                                             <div class="col-sm-12 col-md-2 col-lg-2 mb-3">
@@ -372,7 +373,7 @@
                                         </thead>
                                         <tbody>
 
-                                        
+
 
 
                                             @if(isset($call_log_inbounds))
@@ -406,7 +407,7 @@
 
                             </div>
 
-                            
+
                             <div class="card-body">
                                 <div class="row mb-3">
                                     <div class="col-md-4 mt-2">
@@ -415,7 +416,7 @@
                                     </div>
                                 </div>
                             </div>
-                           
+
 
                             <!-- outbound -->
                             <div class="card profile">
@@ -545,6 +546,18 @@
                             </div>
                         </div>
 
+
+                        <div class="tab-pane fade" id="custom_attribute" role="tabpanel" aria-labelledby="custom_attribute-tab">
+
+                        <div class="card-body">
+                            <h5>custom</h5>
+                                
+                        </div>
+
+
+                            
+                        </div>
+
                     </div>
                 </div>
 
@@ -577,11 +590,11 @@
                     </thead>
                     <tbody id='detail_modal_body'>
                         <tr>
-                        
+
                         </tr>
                     </tbody>
                 </table>
-              
+
             </div>
             <!-- <div class="modal-footer justify-content-between">
               <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -617,11 +630,11 @@
                     </thead>
                     <tbody id='Outbound-Skill-body'>
                         <tr>
-                        
+
                         </tr>
                     </tbody>
                 </table>
-              
+
             </div>
             <!-- <div class="modal-footer justify-content-between">
               <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -646,7 +659,7 @@
 
 
 <script>
-    
+
     function update_input_value(id) {
         var range = $("#" + id).val();
         var input_filed = id.replace("-range", "");
@@ -654,4 +667,3 @@
     }
 
 </script>
-    

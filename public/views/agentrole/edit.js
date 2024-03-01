@@ -13,8 +13,8 @@ $(function () {
 
 $('#allowe_profiles').on('switchChange.bootstrapSwitch', function(event, state) {
     if (this.checked) { 
-        $("#all_comp_select").prop('disabled',  true );
+        $("#allowedd_profiles").prop('disabled',  true );
     } else {
-        $("#all_comp_select").prop('disabled', false);
+        $("#allowedd_profiles").prop('disabled', false);
     }
 });

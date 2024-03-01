@@ -186,6 +186,39 @@ $('#toggle5').on('switchChange.bootstrapSwitch', function(event, state) {
 //   });
 // });
 
+$(document).ready(function() {
+
+  $("#xyz").hide(); // Initially hide the select box
+
+  $("#transferOption").change(function() {
+    if ($(this).val() && $(this).val().includes("allow_transfer_to_agent")) {
+      $("#transferredd").show();
+    } else {
+      $("#transferredd").hide();
+    }
+  });
+
+  $("#permissions").change(function() {
+    if ($(this).val() && $(this).val().includes('allow_manual_calls')) {
+      $("#manual_dialer").show();
+    } else {
+      $("#manual_dialer").hide();
+    }
+  });
+
+  $("#transferOption").change(function() {
+    if ($(this).val() && $(this).val().includes("allow_transfer_to_agent")) {
+      $("#xyz").show();
+    } else {
+      $("#xyz").hide();
+    }
+  });
+});
+
+
+
+
+
 
 
 

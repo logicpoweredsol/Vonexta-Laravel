@@ -12,6 +12,7 @@ use App\Models\OrganizationServices;
 
 class CampaignController extends Controller
 {
+
     public function index($service ,$organization_servicesID){
         //get users of logged in user's organization...
         $user = Auth::user();
@@ -20,19 +21,10 @@ class CampaignController extends Controller
             abort(403);
         }
        $get_compaignSkills =$this->get_compaigns($organization_servicesID);
-       
 
-
+    //    dd($get_compaignSkills);
         return view('dialer.campaigns.index',compact('service' ,'organization_servicesID','get_compaignSkills'));
     }
-
-    // public function save(Request $request)
-    // {
-
-
-
-    // }
-
 
 
     public function get_compaigns($organization_service_id)
@@ -99,10 +91,36 @@ class CampaignController extends Controller
     public function edit($service , $organization_service_id , $CampaignID)
     {
 
+
+
+        $velocity = "";
         $get_Scripts = "";
         $get_lists = "";
         $edit_compaigns  =  $this->fetch_compaigns_detail($organization_service_id,$CampaignID);
 
+
+        // dd( $edit_compaigns);
+
+
+
+        if( $edit_compaigns['data']['dial_method']  == 'RATIO'){
+            $velocity = $edit_compaigns['data']['auto_dial_level'];
+
+        }elseif($edit_compaigns['data']['dial_method']  == 'ADAPT_TAPERED'){
+            $velocity = $edit_compaigns['data']['adaptive_maximum_level'];
+
+        }elseif($edit_compaigns['data']['dial_method']  == 'INBOUND_MAN'){
+            if($edit_compaigns['data']['adaptive_maximum_level'] == "0" || $edit_compaigns['data']['adaptive_maximum_level'] == 0){
+                $velocity = $edit_compaigns['data']['adaptive_maximum_level'];
+            }else{
+                $velocity = $edit_compaigns['data']['manual_auto_next'];
+            }
+        }
+
+        // dd($velocity);
+
+
+  
 
         $get_Scripts_responce = $this->get_Scripts($organization_service_id);
         $lists = $this->get_contact($organization_service_id ,$CampaignID);
@@ -117,38 +135,36 @@ class CampaignController extends Controller
        }
 
 
-
-
-        return view('dialer.campaigns.edit' ,compact('edit_compaigns','get_Scripts','get_lists' ,'organization_service_id'));
+        return view('dialer.campaigns.edit' ,compact('edit_compaigns','get_Scripts','get_lists' ,'organization_service_id' ,'velocity'));
     }
 
 
     public function fetch_compaigns_detail($organization_service_id,$CampaignID)
     {
+
         $OrganizationServices = OrganizationServices::find($organization_service_id);
         $phpArray = json_decode($OrganizationServices->connection_parameters, true);
         $apiEndpoint = 'https://' . $phpArray['server_url'] . '/APIv2/Campaigns/API.php';
+
         // POST data
         $postData = [
             'Action' => 'GetCampaignInfo',
             'apiUser' =>  $phpArray['api_user'],
             'apiPass' =>  $phpArray['api_pass'],
-            'session_user' =>  auth()->user()->email,
+            'session_user' => auth()->user()->email,
             'responsetype' => 'json',
             'campaign_id'=> $CampaignID,
         ];
+
         $ch = curl_init($apiEndpoint);
-    
         // Set cURL options
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
         // Execute cURL session and get the response
         $response = curl_exec($ch);
-    
-        // Close cURL session
         curl_close($ch);
-        
+
         return json_decode($response, true);
 
     }
@@ -186,6 +202,11 @@ class CampaignController extends Controller
 
     public function update(Request $request)
     {
+        $request->validate([
+            'status' => 'required|in:Y,N', // Ensure the status is either Y or N
+        ]);
+
+        
 
         $organization_service_id = $request->organization_service_id;
         $profile_id = $request->profile_id;
@@ -198,13 +219,10 @@ class CampaignController extends Controller
         if(isset($request->field_55)){
             $speed =  $request->field_55;
         }
-      
+
         $profile_script = $request->profile_script;
         $status = $request->status;
 
-  
-
-        
         $OrganizationServices = OrganizationServices::find($organization_service_id);
         $phpArray = json_decode($OrganizationServices->connection_parameters, true);
         $apiEndpoint = 'https://' . $phpArray['server_url'] . '/APIv2/Campaigns/API.php';
@@ -220,29 +238,33 @@ class CampaignController extends Controller
             "lead_order" =>$sequence,
             "dial_method" =>$type,
             "campaign_script" =>$profile_script,
-            "active" => $status,            
+            "active" => $status,
         ];
 
-        if($type == 'RATIO'){
-            $postData["auto_dial_level"] = $speed; // Adjusted index here
+
+
+
+
+        if ($type == 'RATIO') {
+            $postData["auto_dial_level"] = $speed;
             $postData["adaptive_maximum_level"] = '1';
-            $postData["manual_auto_next"] = '0';
-
-        }elseif($type == 'ADAPT_TAPERED'){
-
-            $postData["manual_auto_next"] = $speed; // Adjusted index here
+            $postData["manual_auto_next"] = "0";
+    
+        } elseif ($type == 'ADAPT_TAPERED') {
             $postData["auto_dial_level"] = '1';
-            $postData["manual_auto_next"] = '0';
+            $postData["adaptive_maximum_level"] = $speed;
+            $postData["manual_auto_next"] = "0";
+        
+        } elseif ($type == 'INBOUND_MAN') {
+            if ($speed == 0) {
+                $postData["manual_auto_next"] = 0;
+                $postData["auto_dial_level"] = 1;
+                $postData["adaptive_maximum_level"] = 1;
+            } else {
 
-        }elseif($type == 'INBOUND_MAN'){
-            if($speed == 0){
-                $postData["auto_dial_level"] = $speed; // Adjusted index here
+                $postData["manual_auto_next"] = $speed;
+                $postData["auto_dial_level"] = '1';
                 $postData["adaptive_maximum_level"] = '1';
-                $postData["manual_auto_next"] = '1';
-            }else{
-                $postData["auto_dial_level"] = $speed; // Adjusted index here
-                $postData["adaptive_maximum_level"] = '1';
-                $postData["manual_auto_next"] = '1';
             }
         }
 
@@ -254,50 +276,26 @@ class CampaignController extends Controller
         curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
         // Execute cURL session and get the response
         $response = curl_exec($ch);
-    
+
+      
+
         // Close cURL session
         curl_close($ch);
-        
-        return json_decode($response, true);
 
-        if($response['result'] == 'success'){
+        // Decode the JSON response
+        $responseArray = json_decode($response, true);
+
+        // dd( $responseArray);
+
+        // Check if the response indicates success
+        if(isset($responseArray['result']) && $responseArray['result'] == 'success'){
             return redirect()->back()->with('success', 'Updated successfully');
-        }else{
-
-            return redirect()->back()->with('error', 'Some thing Went Wrong ');
-        }
-
+        } else {
+            return redirect()->back()->with('error', 'Something went wrong');
+         }
 
 
 
     }
 
 }
-
-
-  // // Determine the fields to update based on the type
-    // switch ($type) {
-    //     case 'Predictive':
-    //         $auto_dial_level = 1;
-    //         $adaptive_maximum_level = 0;
-    //         $manual_auto_next = 0;
-    //         break;
-    //     case 'Smart_Predictive':
-    //         $adaptive_maximum_level = 1;
-    //         $auto_dial_level = 0;
-    //         $manual_auto_next = 0;
-    //         break;
-    //     case 'Agent_Dial_Next':
-    //         $manual_auto_next = 1;
-    //         $auto_dial_level = 0;
-    //         $adaptive_maximum_level = 0;
-    //         break;
-    //     case 'Auto_Dial_Next':
-    //         $manual_auto_next = 0;
-    //         $auto_dial_level = 1;
-    //         $adaptive_maximum_level = 0;
-    //         break;
-    //     default:
-    //         // Handle unexpected or missing $type here
-    //         break;
-    // }

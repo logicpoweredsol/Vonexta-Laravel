@@ -15,6 +15,7 @@ use \App\Http\Controllers\PermissionController;
 use \App\Http\Controllers\SuperAdminController;
 use \App\Http\Controllers\HomeController;
 use \App\Http\Controllers\AgentRolesConroller;
+use \App\Http\Controllers\CustomAttributesController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -40,6 +41,8 @@ use \App\Http\Controllers\AgentRolesConroller;
 //     dd("Email is sent successfully.");
 // });
 
+
+
 Route::get('/', function () {
     if(Auth::check()) {
         if(auth()->user()->hasRole('superadmin')){
@@ -55,6 +58,7 @@ Route::get('home',[HomeController::class,'index'])->middleware(['auth', 'verifie
 
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified', 'checkUserStatus'])->name('dashboard');
+
 
 
 Route::middleware(['auth','checkUserStatus'])->group(function () {
@@ -107,6 +111,7 @@ Route::middleware(['auth','checkUserStatus'])->group(function () {
             Route::POST('/add-agent-role', [AgentRolesConroller::class, 'addAgentRole'])->name('services.add-agent-role');
             Route::get('/agent-role-edit/{organization_services_id}/{user_group}', [AgentRolesConroller::class, 'edit'])->name('services.agent-role-edit');
             Route::POST('/agent-role-update', [AgentRolesConroller::class, 'agentRoleUpdate'])->name('services.agent-role-update');
+            Route::get('/custom-attribute/{organization_services_id}',[CustomAttributesController::class, 'customattributes'])->name('services.custom-attribute');
 
 
 
@@ -144,6 +149,13 @@ Route::middleware(['auth','checkUserStatus'])->group(function () {
           
         // });
     });
+
+    // Route::get('/customattributes', [DashboardController::class, 'customattributes'])->middleware(['auth', 'verified', 'checkUserStatus'])->name('custom-attributes');
+    // Route::prefix('customattributes')->group(function(){
+    //     Route::get('/', [CustomAttributesController::class, 'index'])->name('custom-attributes');
+    //     Route::post('/store', [CustomAttributesController::class, 'add'])->name('customattributes.store');
+    // });
+
 });
 
 require __DIR__.'/auth.php';

@@ -17,4 +17,9 @@ class DashboardController extends Controller
         }
         return view('dashboard.index' ,compact('userAgents'));
     }
+
+    public function customattributes(Request $request){
+        return view('customattributes.index');
+    }
+
 }
