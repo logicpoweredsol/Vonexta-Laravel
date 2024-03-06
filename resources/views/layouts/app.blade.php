@@ -271,6 +271,11 @@
         <script src="{{ asset('views/administration/users/edit.js') }}"></script>
         <script src="{{ asset('views/administration/users/common.js') }}"></script>
          @endif
+
+         @if (Request::route()->getName() == 'services.custom-attribute')
+        <script src="{{ asset('views/customAttributes/index.js') }}"></script>
+        <script src="{{ asset('views/administration/users/common.js') }}"></script>
+         @endif
          
          
          

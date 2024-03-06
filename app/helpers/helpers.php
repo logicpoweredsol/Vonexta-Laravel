@@ -21,6 +21,10 @@ function get_user_nav($user_id) {
 
 
 
+
+
+
+
 function get_serive_type_id($org_ser_id) {
     $Organization = OrganizationServices::where('id',$org_ser_id)->first();
     return  $Organization->service_id;
@@ -289,6 +293,20 @@ function numberToString($number) {
     
     ];
     return isset($numbers[$number]) ? $numbers[$number] : (string)$number;
+}
+
+
+
+function custom_value($field_name, $custom_attribute) {
+    $file_value = "";
+    // Decode the JSON string to an associative array
+    $testArray = json_decode($custom_attribute, true);
+    // Check if the decoding was successful and if the key exists in the array
+    if($testArray !== null && array_key_exists($field_name, $testArray)) {
+        $file_value = $testArray[$field_name];
+    }
+    // Return the value or an empty string if the key doesn't exist
+    return $file_value;
 }
 
 

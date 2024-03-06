@@ -77,9 +77,12 @@ Route::middleware(['auth','checkUserStatus'])->group(function () {
             Route::get('/detail/{organization_services_id}/{AgentID}', [UserController::class, 'detail'])->name('services.agents.detail');
             Route::post('/update-agent-details', [UserController::class, 'update_agent_in_db_detail'])->name('services.update-agent.details');
             Route::post('/update-agent-options', [UserController::class, 'update_agent_in_db_options'])->name('services.update-agent.options');
+            Route::post('/add-custom-attribute',[CustomAttributesController::class,'store'])->name('services.store-custom-attribute');
+            Route::post('/update-agent-custom_attribute', [UserController::class, 'update_agent_in_db_custom_attribute'])->name('services.update-agent.custom_attribute');
     
 
             Route::POST('/check-extension', [UserController::class, 'check_extension'])->name('services.extenxion-detail');
+            Route::POST('/check-previous-api-name',[CustomAttributesController::class,'check_previous_api_name'])->name('services.check-previous-api');
             Route::POST('/copy-skill', [UserController::class, 'extension_skill'])->name('services.copy-skill');
 
             Route::post('/save-agent', [UserController::class, 'save_agents'])->name('services.save-agent');
@@ -107,25 +110,36 @@ Route::middleware(['auth','checkUserStatus'])->group(function () {
             // Route::POST('/inbound_Skills_on_add_agent',[UserController::class,'Skills_on_add_agent'])->name('services.Skills_on_add_agent');
             // Route::POST('/compaign_Skills_on_add_agent',[UserController::class,'compaign_Skills_on_add_agent'])->name('services.compaign_Skills_on_add_agent');
             
+          
+            //sydy this route
+            // Routes for rendering compaign
+            // Route::get('compaign', [CampaignController::class, 'all_compaigns'])->name('services.all_compaigns');
+        });
+
+
+        Route::prefix('admin')->group(function() {
+
             Route::get('agent-role/{organization_services_id}', [AgentRolesConroller::class, 'agentRole'])->name('services.agent-role');
             Route::POST('/add-agent-role', [AgentRolesConroller::class, 'addAgentRole'])->name('services.add-agent-role');
             Route::get('/agent-role-edit/{organization_services_id}/{user_group}', [AgentRolesConroller::class, 'edit'])->name('services.agent-role-edit');
             Route::POST('/agent-role-update', [AgentRolesConroller::class, 'agentRoleUpdate'])->name('services.agent-role-update');
-            Route::get('/custom-attribute/{organization_services_id}',[CustomAttributesController::class, 'customattributes'])->name('services.custom-attribute');
-
-
-
-            // Routes for rendering compaign
-            // Route::get('compaign', [CampaignController::class, 'all_compaigns'])->name('services.all_compaigns');
-
             
 
+            Route::get('custom-attribute/{organization_services_id}', [CustomAttributesController::class, 'customattributes'])->name('services.custom-attribute');
+
         });
+
+
+
 
         Route::middleware(['role_or_permission:admin|view campaigns'])->prefix('campaigns')->group(function() {
             Route::get('/{organization_services_id}',[CampaignController::class, 'index'])->name('services.campaigns');
             Route::get('/edit/{organization_services_id}/{CampaignID}',[CampaignController::class, 'edit'])->name('services.campaigns.edit');
             Route::post('/update',[CampaignController::class, 'update'])->name('services.campaigns.update');
+            Route::post('/add-custom-attributes',[CustomAttributesController::class,'store_custom_attribute_in_outbound'])->name('add-custom-attributes');
+            Route::post('/check-previous-api-name-outbound',[CustomAttributesController::class,'previous_api_name_outbound'])->name('check-previous-api-name-outbound');
+            Route::post('/update-profile-custom_attribute',[CampaignController::class,'update_profile_in_db_custom_attribute'])->name('update-profile-custom_attribute');
+            Route::post('/Outbound-customAttribute',[CampaignController::class, 'Servicescampaigns_customAttributes'])->name('Outbount.customAttribute');
         });
     });
 

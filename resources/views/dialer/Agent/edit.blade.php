@@ -90,8 +90,6 @@
                                 <input type="hidden" class="form-control" id="User" name="User" value="{{ isset($dailer_agent_user['user']) ? $dailer_agent_user['user'] : '' }}">
                                 <input type="hidden" class="form-control" id="organization_services_id" name="organization_services_id" value="{{$organization_services_id}}">
 
-
-
                                 @csrf
                                 <div class="card">
                                     <div class="card-header">
@@ -201,138 +199,9 @@
                                                     </select>
                                                 </div>
                                             </div>
+
                                         </div>
-
-
-                                        <div class="row">
-                                            <div class="col-sm-12 col-md-6 col-lg-6" id="body_attribute">
-{{--                                                <div class="customfield-wrap" id="row_1">--}}
-{{--                                                    <div class="form-group fromgroup">--}}
-{{--                                                        <label for="active" class="form-label">Custom Attribute 1</label>--}}
-{{--                                                        <input type="text" class="form-control custom-attribute" name="custom_attribute[]" value="{{$dailer_agent_user['custom_one']}}" placeholder="Custom attribute 1">--}}
-{{--                                                    </div>--}}
-{{--                                                    <div class="additionalfield-wrap">--}}
-{{--                                                        <button type="button" onclick="add_row();" class="btn btn-success btn-sm mt-2"> + </button>--}}
-{{--                                                        <button type="button" onclick="remove_row();" class="btn btn-danger btn-sm mt-2"> - </button>--}}
-{{--                                                    </div>--}}
-{{--                                                </div>--}}
-
-                                                @if($dailer_agent_user['custom_two'] != "")
-                                                <div class="customfield-wrap" id="row_2">
-                                                    <div class="form-group fromgroup">
-                                                        <label for="active" class="form-label">Custom Attribute 2</label>
-                                                        <input type="text" class="form-control custom-attribute" name="custom_attribute[]" value="{{$dailer_agent_user['custom_two']}}" placeholder="Custom attribute 1">
-                                                    </div>
-                                                    <div class="additionalfield-wrap">
-                                                        <button type="button" onclick="add_row();" class="btn btn-success btn-sm mt-2"> + </button>
-                                                        <button type="button" onclick="remove_row(2);" class="btn btn-danger btn-sm mt-2"> - </button>
-                                                    </div>
-
-                                                </div>
-                                                @endif
-                                                @if($dailer_agent_user['custom_three'] != "")
-                                                <div class="customfield-wrap" id="row_3">
-                                                    <div class="form-group fromgroup">
-                                                        <label for="active" class="form-label">Custom Attribute 3</label>
-                                                        <input type="text" class="form-control custom-attribute" name="custom_attribute[]" value="{{$dailer_agent_user['custom_three']}}" placeholder="Custom attribute 1">
-                                                    </div>
-                                                    <div class="additionalfield-wrap">
-                                                        <button type="button" onclick="add_row();" class="btn btn-success btn-sm mt-2"> + </button>
-                                                        <button type="button" onclick="remove_row(3);" class="btn btn-danger btn-sm mt-2"> - </button>
-                                                    </div>
-                                                </div>
-                                                @endif
-                                                @if($dailer_agent_user['custom_four'] != "")
-                                                <div class="customfield-wrap" id="row_4">
-                                                    <div class="form-group fromgroup">
-                                                        <label for="active" class="form-label">Custom Attribute 4</label>
-                                                        <input type="text" class="form-control custom-attribute" name="custom_attribute[]" value="{{$dailer_agent_user['custom_four']}}" placeholder="Custom attribute 1">
-                                                    </div>
-                                                    <div class="additionalfield-wrap">
-                                                        <button type="button" onclick="add_row();" class="btn btn-success btn-sm mt-2"> + </button>
-                                                        <button type="button" onclick="remove_row(4);" class="btn btn-danger btn-sm mt-2"> - </button>
-                                                    </div>
-                                                </div>
-                                                @endif
-                                                @if($dailer_agent_user['custom_five'] != "")
-                                                <div class="customfield-wrap" id="row_5">
-                                                    <div class="form-group fromgroup">
-                                                        <label for="active" class="form-label">Custom Attribute 5</label>
-                                                        <input type="text" class="form-control custom-attribute" name="custom_attribute[]" value="{{$dailer_agent_user['custom_five']}}" placeholder="Custom attribute 1">
-                                                    </div>
-                                                    <div class="additionalfield-wrap">
-                                                        <button type="button" onclick="add_row();" class="btn btn-success btn-sm mt-2"> + </button>
-                                                        <button type="button" onclick="remove_row(5);" class="btn btn-danger btn-sm mt-2"> - </button>
-                                                    </div>
-                                                </div>
-                                                @endif
-                                                @if($dailer_agent_user['custom_six'] != "")
-                                                <div class="customfield-wrap" id="row_6">
-                                                    <div class="form-group fromgroup">
-                                                        <label for="active" class="form-label">Custom Attribute 6</label>
-                                                        <input type="text" class="form-control custom-attribute" name="custom_attribute[]" value="{{$dailer_agent_user['custom_six']}}" placeholder="Custom attribute 1">
-                                                    </div>
-                                                    <div class="additionalfield-wrap">
-                                                        <button type="button" onclick="add_row();" class="btn btn-success btn-sm mt-2"> + </button>
-                                                        <button type="button" onclick="remove_row(6);" class="btn btn-danger btn-sm mt-2"> - </button>
-                                                    </div>
-                                                </div>
-                                                @endif
-                                                @if($dailer_agent_user['custom_seven'] != "")
-                                                <div class="customfield-wrap" id="row_7">
-                                                    <div class="form-group fromgroup">
-                                                        <label for="active" class="form-label">Custom Attribute 7</label>
-                                                        <input type="text" class="form-control custom-attribute" name="custom_attribute[]" value="{{$dailer_agent_user['custom_seven']}}" placeholder="Custom attribute 1">
-                                                    </div>
-                                                    <div class="additionalfield-wrap">
-                                                        <button type="button" onclick="add_row();" class="btn btn-success btn-sm mt-2"> + </button>
-                                                        <button type="button" onclick="remove_row(7);" class="btn btn-danger btn-sm mt-2"> - </button>
-                                                    </div>
-                                                </div>
-                                                @endif
-                                                @if($dailer_agent_user['custom_eight'] != "")
-                                                <div class="customfield-wrap" id="row_8">
-                                                    <div class="form-group fromgroup">
-                                                        <label for="active" class="form-label">Custom Attribute 8</label>
-                                                        <input type="text" class="form-control custom-attribute" name="custom_attribute[]" value="{{$dailer_agent_user['custom_eight']}}" placeholder="Custom attribute 1">
-                                                    </div>
-                                                    <div class="additionalfield-wrap">
-                                                        <button type="button" onclick="add_row();" class="btn btn-success btn-sm mt-2"> + </button>
-                                                        <button type="button" onclick="remove_row(8);" class="btn btn-danger btn-sm mt-2"> - </button>
-                                                    </div>
-                                                </div>
-                                                @endif
-                                                @if($dailer_agent_user['custom_nine'] != "")
-                                                <div class="customfield-wrap" id="row_9">
-                                                    <div class="form-group fromgroup">
-                                                        <label for="active" class="form-label">Custom Attribute 9</label>
-                                                        <input type="text" class="form-control custom-attribute" name="custom_attribute[]" value="{{$dailer_agent_user['custom_nine']}}" placeholder="Custom attribute 1">
-                                                    </div>
-                                                    <div class="additionalfield-wrap">
-                                                        <button type="button" onclick="add_row();" class="btn btn-success btn-sm mt-2"> + </button>
-                                                        <button type="button" onclick="remove_row(9);" class="btn btn-danger btn-sm mt-2"> - </button>
-                                                    </div>
-                                                </div>
-                                                @endif
-                                                @if($dailer_agent_user['custom_ten'] != "")
-                                                <div class="customfield-wrap" id="row_10">
-                                                    <div class="form-group fromgroup">
-                                                        <label for="active" class="form-label">Custom Attribute 10</label>
-                                                        <input type="text" class="form-control custom-attribute" name="custom_attribute[]" value="{{$dailer_agent_user['custom_ten']}}" placeholder="Custom attribute 1">
-                                                    </div>
-                                                    <div class="additionalfield-wrap">
-                                                        <button type="button" onclick="add_row();" class="btn btn-success btn-sm mt-2"> + </button>
-                                                        <button type="button" onclick="remove_row(10);" class="btn btn-danger btn-sm mt-2"> - </button>
-                                                    </div>
-                                                </div>
-                                                @endif
-
-                                            </div>
-                                        </div>
-
-
-          
-
+                                                      
                                     </div>
                                     <!-- /.card-body -->
                                     <div class="card-footer">
@@ -549,13 +418,72 @@
 
                         <div class="tab-pane fade" id="custom_attribute" role="tabpanel" aria-labelledby="custom_attribute-tab">
 
-                        <div class="card-body">
-                            <h5>custom</h5>
-                                
-                        </div>
 
 
-                            
+                       
+                        <form method="POST" action="{{ route('services.update-agent.custom_attribute', ['service' => strtolower('Dailer')]) }}" class="form-horizontal">
+                            <input type="hidden" class="form-control" id="User" name="User" value="{{ isset($dailer_agent_user['user']) ? $dailer_agent_user['user'] : '' }}">
+                            <input type="hidden" class="form-control" id="organization_services_id" name="organization_services_id" value="{{$organization_services_id}}">
+                            @csrf
+
+                            @if(isset($GetCustomAttributes))
+
+                            @php
+                                $fields = json_decode($GetCustomAttributes, true);
+                            @endphp
+
+
+
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                        <h3 class="card-title">Custom Attributes</h3>
+                                        </div>
+                                        <div class="col-md-6 text-end" style="text-align: end;">
+                                        <button type="button" class="btn btn-primary btn-sm" onclick="add_custom_attribute();">Add Custom Attribute</button>
+                                        </div>
+                                    </div>
+                                  
+                                        
+
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        @foreach($fields as $field)
+                                            <div class="col-sm-12 col-md-6 col-lg-6">
+                                                <div class="form-group">
+                                                    <label  class="form-label">{{ $field['display_name'] }}</label>
+                                                       
+                                                        @php
+                                                            $custom_value = custom_value($field['api_name'], $dailer_agent_user['custom_attributes']);
+                                                        @endphp
+
+
+                                                    <input type="text" class="form-control" value="{{$custom_value}}" name="{{ $field['api_name'] }}" >
+                                                </div>
+                                            </div>
+                                        @endforeach
+
+                                    </div>
+                                </div>
+                                <!-- /.card-body -->
+                                <div class="card-footer">
+                                    <div class="row">
+                                        <div class="col-sm-12 col-md-2 col-lg-2 mb-3">
+                                        <a class="btn btn-default btn-md btn-block" href="{{ route('services.agents', ['service' => strtolower('dailer'), 'organization_services_id' => $organization_services_id]) }}">Cancel</a>
+                                        </div>
+                                        <div class="col-sm-12 col-md-8 col-lg-8"></div>
+                                        <div class="col-sm-12 col-md-2 col-lg-2 mb-3">
+                                        <button class="btn btn-success btn-md btn-block" type="submit">Save</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /.card-footer-->
+                            </div>
+                            @endif
+                            <!-- /.card -->
+                        </form>
                         </div>
 
                     </div>
@@ -646,7 +574,56 @@
         <!-- /.modal-dialog -->
 </div>
 
+ </div>
+
+
+
+ <!-- modal for custom_attribute -->
+ <div class="modal fade" id="custommmmmm" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Custom Attribute :</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      <form id="myForm" method="post" action="{{ route('services.store-custom-attribute', ['service' => strtolower('Dailer')]) }}">
+            <input type="hidden" class="form-control" id="organization_services_id" name="organization_services_id" value="{{$organization_services_id}}">
+            @csrf
+            <div class="card-body">
+            <div class="row">
+            <div class="col-sm-6 col-md-6">
+                <div class="form-group">
+                    <label class="form-label">Api Name<span class="text-danger d-none" id="apiError">*</span></label>
+                    <input type="text" class="form-control" id="apiInput" name="api" onchange="check_previous_api_name('apiInput', {{$organization_services_id}}, 'add-apiname');" required>
+                    <span style="color:red" id="api-error"></span>
+                    <span style="color:green" id="api-success"></span>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-6">
+                <div class="form-group">
+                    <label class="form-label">Display Name<span class="text-danger d-none" id="nameError">*</span></label>
+                    <input type="text" class="form-control" name="name" required>
+                    
+                </div>
+            </div>
+        </div>
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">Close</button>
+                <button type="submit" id="submitButton" class="btn btn-primary btn-sm" disabled>Save</button>
+            </div>
+        </form>
+
+      </div>
+      
     </div>
+  </div>
+</div>
 @endSection
 
 

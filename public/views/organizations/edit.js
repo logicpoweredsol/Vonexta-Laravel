@@ -648,3 +648,18 @@ function send_sms()
 
 
 
+
+document.addEventListener('DOMContentLoaded', function () {
+    var inputs = document.querySelectorAll('.code_input');
+    for (let i = 0; i < inputs.length; i++) {
+        inputs[i].addEventListener('input', function() {
+            if (i < inputs.length - 1 && inputs[i].value) {
+                inputs[i + 1].focus(); // Move to next input
+            }
+        });
+    }
+});
+
+
+
+

@@ -145,8 +145,8 @@
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <!-- <div class="modal-header">
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div> -->
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div> -->
                                 <div class="modal-body">
                                     <input type="hidden" readonly id="org_user_id">
                                     <div class="userauth-box" id="user_email_box">
@@ -174,8 +174,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <form action="{{route('organizations.user.verified')}}" method="post"
-                                        id="verify_form">
+                                    <form action="{{route('organizations.user.verified')}}" method="post" id="verify_form">
                                         @csrf
                                         <input type="hidden" name="user_idd" readonly id="user_idd">
                                         <div class="userauth-box codebox d-none" id="user_password_box">
@@ -185,12 +184,12 @@
                                             </div>
                                             <div class="codecontent-wrap">
                                                 <ul class="d-flex">
-                                                    <li><input maxlength="1" name="code_1" type="text"></li>
-                                                    <li><input maxlength="1" name="code_2" type="text"></li>
-                                                    <li><input maxlength="1" name="code_3" type="text"></li>
-                                                    <li><input maxlength="1" name="code_4" type="text"></li>
-                                                    <li><input maxlength="1" name="code_5" type="text"></li>
-                                                    <li><input maxlength="1" name="code_6" type="text"></li>
+                                                    <li><input maxlength="1" name="code_1" class="code_input" type="text"></li>
+                                                    <li><input maxlength="1" name="code_2" class="code_input" type="text"></li>
+                                                    <li><input maxlength="1" name="code_3" class="code_input" type="text"></li>
+                                                    <li><input maxlength="1" name="code_4" class="code_input" type="text"></li>
+                                                    <li><input maxlength="1" name="code_5" class="code_input" type="text"></li>
+                                                    <li><input maxlength="1" name="code_6" class="code_input" type="text"></li>
                                                 </ul>
                                                 <span class="digitleft"><em>6</em> Digits left</span>
                                             </div>

@@ -91,9 +91,7 @@
                                               <i class="fas fa-minus"></i>
                                             </button> -->
 
-{{--                                            <a href="javascript:;" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#add_custom_attributes_modal">--}}
-{{--                                                <i class="fas fa-plus"></i> Add Attribute--}}
-{{--                                            </a>--}}
+
                                         </div>
                                     </div>
                                     <div class="card-body">
@@ -126,17 +124,13 @@
                                                                     </tr>
                                                                     </thead>
                                                                     <tbody>
-                                                                    </tbody>
-                                                                    <tbody>
-                                                                    {{--                                                                        @foreach($users as $user)--}}
+
+                                                                    @foreach($custom_attributes['agent'] as $i=> $custom_attribute)
+                                                                        
                                                                     <tr>
 
-                                                                        <td>
-                                                                            test name
-                                                                        </td>
-                                                                        <td>
-                                                                            test display name
-                                                                        </td>
+                                                                        <td>{{$custom_attribute['display_name']}}</td>
+                                                                        <td>{{$custom_attribute['api_name']}}</td>
 
                                                                         <td>
                                                                             <div class="btn-group">
@@ -145,21 +139,14 @@
                                                                                     <span class="sr-only">Toggle Dropdown</span>
                                                                                 </button>
                                                                                 <div class="dropdown-menu" role="menu">
-                                                                                    {{--                                                                                            @if(Auth::user()->can('edit attribute'))--}}
-                                                                                    {{--                                                                                                <a class="dropdown-item" href="{{ route('administration.users.view', $user->id) }}">Edit</a>--}}
-                                                                                    <a class="dropdown-item" href="#!">Edit</a>
-                                                                                    {{--                                                                                            @endif--}}
-
-                                                                                    {{--                                                                                            @if(Auth::user()->can('delete attribute'))--}}
-                                                                                    {{--                                                                                                <a class="dropdown-item btnDelete" href="javascript:;" data-id="{{ $user->id }}">Delete</a>--}}
-                                                                                    <a class="dropdown-item btnDelete" href="#!" data-id="">Delete</a>
-                                                                                    {{--                                                                                            @endif--}}
+                                                                                
+                                                                                  <a class="dropdown-item" href="javascript:;">Edit</a>
+                                                                                
                                                                                 </div>
                                                                             </div>
-
                                                                         </td>
                                                                     </tr>
-                                                                    {{--                                                                        @endforeach--}}
+                                                                    @endforeach
 
                                                                     </tbody>
                                                                 </table>
@@ -195,9 +182,9 @@
                                             </button> -->
 
                                         <!-- {{ route('administration.users.new') }} -->
-                                            <a href="javascript:;" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#add_custom_attributes_modal">
+                                            <!-- <a href="javascript:;" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#add_custom_attributes_modal">
                                                 <i class="fas fa-plus"></i> Add Attribute
-                                            </a>
+                                            </a> -->
                                         </div>
                                     </div>
                                     <div class="card-body">
@@ -229,17 +216,17 @@
                                                                         <th>Actions</th>
                                                                     </tr>
                                                                     </thead>
-                                                                    <tbody>
-                                                                    </tbody>
                                                                         <tbody>
-{{--                                                                        @foreach($users as $user)--}}
+                                                                            @foreach($custom_attributes['profile'] as $i=> $custom_attribute)
                                                                             <tr>
 
                                                                                 <td>
-                                                                                    test name
+                                                                                    {{$custom_attribute['display_name']}}
                                                                                 </td>
                                                                                 <td>
-                                                                                    test display name
+
+                                                                                {{$custom_attribute['api_name']}}
+                                                                                    
                                                                                 </td>
 
                                                                                 <td>
@@ -249,21 +236,15 @@
                                                                                             <span class="sr-only">Toggle Dropdown</span>
                                                                                         </button>
                                                                                         <div class="dropdown-menu" role="menu">
-{{--                                                                                            @if(Auth::user()->can('edit attribute'))--}}
-{{--                                                                                                <a class="dropdown-item" href="{{ route('administration.users.view', $user->id) }}">Edit</a>--}}
-                                                                                                <a class="dropdown-item" href="#!">Edit</a>
-{{--                                                                                            @endif--}}
-
-{{--                                                                                            @if(Auth::user()->can('delete attribute'))--}}
-{{--                                                                                                <a class="dropdown-item btnDelete" href="javascript:;" data-id="{{ $user->id }}">Delete</a>--}}
+                                                                                                
                                                                                                 <a class="dropdown-item btnDelete" href="#!" data-id="">Delete</a>
-{{--                                                                                            @endif--}}
+
                                                                                         </div>
                                                                                     </div>
 
                                                                                 </td>
                                                                             </tr>
-{{--                                                                        @endforeach--}}
+                                                                            @endforeach
 
                                                                         </tbody>
                                                                 </table>
@@ -278,107 +259,6 @@
 
                             </section>
 
-                            <div class="modal fade" id="add_custom_attributes_modal">
-                                <div class="bs-stepper" id="newUserWizard">
-                                    <div class="modal-dialog modal-lg">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h4 class="modal-title">Add Attribute:</h4>
-
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-
-
-                                            <form id="addAttributesForm" action="" method="post" class="form-horizontal">
-                                                {{-- {{ route("customattributes.store") }} --}}
-                                            @csrf
-                                            <!-- Default box -->
-
-
-                                                <div class="card-body">
-                                                    @if(null!==session('msg'))
-                                                        <div class="row">
-                                                            <div class="col-sm-12 col-md-12 col-lg-12">
-                                                                <div class="alert alert-success alert-dismissible">
-                                                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                                                                    {{ session('msg') }}
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    @endif
-                                                    @if(null!==session('error'))
-                                                        <div class="row">
-                                                            <div class="col-sm-12 col-md-12 col-lg-12">
-                                                                <div class="alert alert-danger alert-dismissible">
-                                                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                                                                    {{ session('error') }}
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    @endif
-                                                    <div class="form-group row">
-                                                        <label for="name" class="col-sm-2 col-form-label">Api name</label>
-                                                        <div class="col-sm-10">
-                                                            <input type="text" class="form-control @error('api_name') is-invalid @enderror" id="api_name" name="api_name" value="{{ old('api_name')  }}" placeholder="Api Name" @error('api_name') aria-invalid="true" @enderror>
-                                                            <span class="error">
-                                @error('api_name')
-                                    <label id="api_name-error" class="error invalid-feedback" for="api_name" style="display: inline-block;">{{ $message }}</label>
-                                @enderror
-                            </span>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="form-group row">
-                                                        <label for="password" class="col-sm-2 col-form-label">Display Name</label>
-                                                        <div class="col-sm-10">
-                                                            <input type="text" class="form-control" id="display_name" name="Display Name" value="{{ old('display_name')  }}" placeholder="Display Name">
-                                                            <span class="error"></span>
-                                                        </div>
-                                                    </div>
-
-
-
-
-                                                    {{-- <div class="form-group row">
-                                                        <label for="permissions_row" class="col-sm-2 col-form-label">This user can</label>
-                                                        <div class="col-sm-10">
-                                                            <div class="row" id="permissions_row" @error('permissions') aria-invalid="true" @enderror>
-                                                                @foreach($permissions as $permission)
-                                                                    <div class="col-sm-6 mb-3">
-                                                                        <div class="form-check">
-                                                                            <input type="checkbox" class="form-check-input" id="{{ str_replace(" ", "_", $permission->name) }}" name="permissions[]" data-bootstrap-switch data-off-color="danger" data-on-color="success" checked value="{{ $permission->name }}">
-                                                                            <label class="form-check-label" for="{{ str_replace(" ", "_", $permission->name) }}">{{ ucwords($permission->name) }}</label>
-                                                                        </div>
-                                                                    </div>
-                                                                @endforeach
-                                                            </div>
-                                                            <span class="error">
-                                                                @error('permissions')
-                                                                    <label id="permissions-error" class="error invalid-feedback" for="permissions_row" style="display: inline-block;">{{ $message }}</label>
-                                                                @enderror
-                                                            </span>
-                                                        </div>
-                                                    </div> --}}
-                                                </div>
-                                                <!-- /.card-body -->
-
-                                                <!-- /.card-footer-->
-                                                `
-                                                <div class="card-footer">
-                                                    <button type="submit" class="btn btn-primary float-right">Save</button>
-                                                    <a href="#!" class="btn btn-default">Cancel</a>
-                                                </div>
-                                                <!-- /.card -->
-                                            </form>
-
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
                         </div>
 
                         <div class="tab-pane fade @if(session()->has('tab') && session('tab') == 'Customattributes-inboundquesues') show active @endif  " id="Customattributes-inboundquesues" role="tabpanel" aria-labelledby="Customattributes-outboundprofiles-tab">
@@ -387,7 +267,7 @@
                                 <!-- Default box -->
                                 <div class="card">
                                     <div class="card-header">
-                                        <h3 class="card-title">Outbound Profile Attributes</h3>
+                                        <h3 class="card-title">Inbound Queues Attributes</h3>
 
                                         <div class="card-tools">
                                             <!-- <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
@@ -395,9 +275,7 @@
                                             </button> -->
 
                                         <!-- {{ route('administration.users.new') }} -->
-{{--                                            <a href="javascript:;" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#add_custom_attributes_modal">--}}
-{{--                                                <i class="fas fa-plus"></i> Add Attribute--}}
-{{--                                            </a>--}}
+
                                         </div>
                                     </div>
                                     <div class="card-body">
@@ -429,17 +307,18 @@
                                                                         <th>Actions</th>
                                                                     </tr>
                                                                     </thead>
+                                                                   
                                                                     <tbody>
-                                                                    </tbody>
-                                                                    <tbody>
-                                                                    {{--                                                                        @foreach($users as $user)--}}
+
+                                                                    @foreach($custom_attributes['queues'] as $i => $custom_attribute)
                                                                     <tr>
 
                                                                         <td>
-                                                                            test name
+                                                                            {{$custom_attribute['display_name']}}
+                                                                            
                                                                         </td>
                                                                         <td>
-                                                                            test display name
+                                                                        {{$custom_attribute['api_name']}}
                                                                         </td>
 
                                                                         <td>
@@ -449,21 +328,17 @@
                                                                                     <span class="sr-only">Toggle Dropdown</span>
                                                                                 </button>
                                                                                 <div class="dropdown-menu" role="menu">
-                                                                                    {{--                                                                                            @if(Auth::user()->can('edit attribute'))--}}
-                                                                                    {{--                                                                                                <a class="dropdown-item" href="{{ route('administration.users.view', $user->id) }}">Edit</a>--}}
+                                                                                 
                                                                                     <a class="dropdown-item" href="#!">Edit</a>
-                                                                                    {{--                                                                                            @endif--}}
-
-                                                                                    {{--                                                                                            @if(Auth::user()->can('delete attribute'))--}}
-                                                                                    {{--                                                                                                <a class="dropdown-item btnDelete" href="javascript:;" data-id="{{ $user->id }}">Delete</a>--}}
+                                                                                  
                                                                                     <a class="dropdown-item btnDelete" href="#!" data-id="">Delete</a>
-                                                                                    {{--                                                                                            @endif--}}
+                                                                                   
                                                                                 </div>
                                                                             </div>
 
                                                                         </td>
                                                                     </tr>
-                                                                    {{--                                                                        @endforeach--}}
+                                                                    @endforeach
 
                                                                     </tbody>
                                                                 </table>
@@ -485,16 +360,12 @@
                                 <!-- Default box -->
                                 <div class="card">
                                     <div class="card-header">
-                                        <h3 class="card-title">Outbound Profile Attributes</h3>
+                                        <h3 class="card-title">TFN Attributes</h3>
 
                                         <div class="card-tools">
                                             <!-- <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
                                               <i class="fas fa-minus"></i>
                                             </button> -->
-
-{{--                                            <a href="javascript:;" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#add_custom_attributes_modal">--}}
-{{--                                                <i class="fas fa-plus"></i> Add Attribute--}}
-{{--                                            </a>--}}
                                         </div>
                                     </div>
                                     <div class="card-body">
@@ -515,8 +386,6 @@
                                                                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                                                                     {{ session('error'); }}
                                                                 </div>
-                                                                <div>
-                                                                </div>
                                                                 @endif
                                                                 <table id="usersDT" class="table table-striped table-hover vonexta-table">
                                                                     <thead>
@@ -526,17 +395,17 @@
                                                                         <th>Actions</th>
                                                                     </tr>
                                                                     </thead>
+                                                                    
                                                                     <tbody>
-                                                                    </tbody>
-                                                                    <tbody>
-                                                                    {{--                                                                        @foreach($users as $user)--}}
-                                                                    <tr>
 
+                                                                    @foreach($custom_attributes['tfn'] as $i => $custom_attribute)
+                                                                        <tr>
+                                                                          
                                                                         <td>
-                                                                            test name
+                                                                        {{$custom_attribute['display_name']}}
                                                                         </td>
                                                                         <td>
-                                                                            test display name
+                                                                        {{$custom_attribute['api_name']}}
                                                                         </td>
 
                                                                         <td>
@@ -546,22 +415,16 @@
                                                                                     <span class="sr-only">Toggle Dropdown</span>
                                                                                 </button>
                                                                                 <div class="dropdown-menu" role="menu">
-                                                                                    {{--                                                                                            @if(Auth::user()->can('edit attribute'))--}}
-                                                                                    {{--                                                                                                <a class="dropdown-item" href="{{ route('administration.users.view', $user->id) }}">Edit</a>--}}
-                                                                                    <a class="dropdown-item" href="#!">Edit</a>
-                                                                                    {{--                                                                                            @endif--}}
-
-                                                                                    {{--                                                                                            @if(Auth::user()->can('delete attribute'))--}}
-                                                                                    {{--                                                                                                <a class="dropdown-item btnDelete" href="javascript:;" data-id="{{ $user->id }}">Delete</a>--}}
-                                                                                    <a class="dropdown-item btnDelete" href="#!" data-id="">Delete</a>
-                                                                                    {{--                                                                                            @endif--}}
-                                                                                </div>
+                                                                                    
+                                                                                   <a class="dropdown-item" href="#!">Edit</a>
+                                                                                   
+                                                                                 </div>
                                                                             </div>
 
                                                                         </td>
                                                                     </tr>
-                                                                    {{--                                                                        @endforeach--}}
-
+                                                                    @endforeach
+                                                        
                                                                     </tbody>
                                                                 </table>
                                                             </div>

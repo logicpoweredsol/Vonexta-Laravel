@@ -66,7 +66,7 @@
                         </li>
 
                         <li class="nav-item vonext-campaign-item">
-                            <a class="nav-link @if(session()->has('tab') && session('tab') == 'call-Logs')  active @endif " id="call-logs-tab" data-toggle="pill" href="#call-log" role="tab" aria-controls="campaigns-leadRecycling" aria-selected="false">Contact List</a>
+                            <a class="nav-link " id="call-logs-tab" data-toggle="pill" href="#call-log" role="tab" aria-controls="campaigns-leadRecycling" aria-selected="false">Contact List</a>
                         </li>
 
                         <li class="nav-item vonext-campaign-item">
@@ -82,128 +82,136 @@
 
                     <div class="tab-content" id="campaigns-tabs Content">
 
-
                     
-
-                    
-                        <div class="tab-pane fade show @if( !session()->has('tab') && !session('tab')) show active @endif   " id="Organization-home" role="tabpanel" aria-labelledby="Organization-home-tab">
+                        <div class="tab-pane fade show active " id="Organization-home" role="tabpanel" aria-labelledby="Organization-home-tab">
                             <form method="POST" action="{{ route('services.campaigns.update', ['service' => strtolower('Dailer')]) }}" class="form-horizontal">
 
-                            <input type="hidden" name="organization_service_id" value="{{$organization_service_id}}" readonly>
-                            <input type="hidden" name="profile_id" value="{{$edit_compaigns['data']['campaign_id']}}" readonly>
-                                @csrf
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h3 class="card-title">Edit outbound Profile</h3>
-                                        
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-sm-12 col-md-6 col-lg-6">
-                                                <div class="form-group">
-                                                    <label for="name" class="form-label">Name</label>
-                                                    <input type="text" class="form-control @error('name') is-invalid @enderror" id="profile_name" name="profile_name" value="{{$edit_compaigns['data']['campaign_name']}}">
-                                                </div>
-                                                <span>
-                                                    @error('name')
-                                                    <div class="text-danger">{{ $message }}</div>
-                                                    @enderror
-                                                </span>    
-                                            </div>
-                                            <div class="col-sm-12 col-md-6 col-lg-6">
-                                                <div class="form-group">
-                                                    <label for="type" class="form-label">Type</label>
-                                                    <select name="type" class="form-control" id="type" onchange="speed_calculate(this.id);">
-                                                        <option value="select" selected disabled >Select Type</option>
-                                                        <option {{$edit_compaigns['data']['dial_method'] == 'RATIO' ? 'selected' : ''}} value="RATIO">Predictive</option>
-                                                        <option {{$edit_compaigns['data']['dial_method'] == 'ADAPT_TAPERED' ? 'selected' : ''}} value="ADAPT_TAPERED">Smart Predictive</option>
-                                                        <option {{$edit_compaigns['data']['dial_method'] == 'INBOUND_MAN' ? 'selected' : ''}} value="INBOUND_MAN">Agent Dial Next</option>
-                                                        <option  {{$edit_compaigns['data']['dial_method'] == 'INBOUND_MAN' ? 'selected' : ''}} value="INBOUND_MAN">Auto Dial Next</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-sm-12 col-md-6 col-lg-6">
-                                                <div class="form-group">
-                                                    <label for="Sequence" class="form-label">Sequence</label>
-                                                    <select name="sequence" class="form-control" id="Sequence">    
-                                                        <option {{$edit_compaigns['data']['lead_order'] == 'Up' ? 'selected' : ''}}  value="Up">Newest to Oldest</option>
-                                                        <option {{$edit_compaigns['data']['lead_order'] == 'Down' ? 'selected' : ''}} value="Down">Oldest to Newest</option>
-                                                        <option {{$edit_compaigns['data']['lead_order'] == 'Down Count' ? 'selected' : ''}} value="Down Count">Most Called First</option>
-                                                        <option {{$edit_compaigns['data']['lead_order'] == 'Up Count' ? 'selected' : ''}} value="Up Count">Least Called First</option>
-                                                        <option {{$edit_compaigns['data']['lead_order'] == 'Random' ? 'selected' : ''}} value="Random">Shuffled</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-
+                                <input type="hidden" name="organization_service_id" value="{{$organization_service_id}}" readonly>
+                                <input type="hidden" name="profile_id" value="{{$edit_compaigns['data']['campaign_id']}}" readonly>
+                                    @csrf
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h3 class="card-title">Edit outbound Profile</h3>
                                             
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-sm-12 col-md-6 col-lg-6">
+                                                    <div class="form-group">
+                                                        <label for="name" class="form-label">Name</label>
+                                                        <input type="text" class="form-control @error('name') is-invalid @enderror" id="profile_name" name="profile_name" value="{{$edit_compaigns['data']['campaign_name']}}">
+                                                    </div>
+                                                    <span>
+                                                        @error('name')
+                                                        <div class="text-danger">{{ $message }}</div>
+                                                        @enderror
+                                                    </span>    
+                                                </div>
+                                                <div class="col-sm-12 col-md-6 col-lg-6">
+                                                    <div class="form-group">
+                                                        <label for="type" class="form-label">Type</label>
+                                                        <select name="type" class="form-control" id="type" onchange="speed_calculate(this.id);">
+                                                            <option value="select" selected disabled >Select Type</option>
+                                                            <option {{$edit_compaigns['data']['dial_method'] == 'RATIO' ? 'selected' : ''}} value="RATIO">Predictive</option>
+                                                            <option {{$edit_compaigns['data']['dial_method'] == 'ADAPT_TAPERED' ? 'selected' : ''}} value="ADAPT_TAPERED">Smart Predictive</option>
+                                                        
+                                                            <option @if($edit_compaigns['data']['dial_method'] == 'INBOUND_MAN' && $velocity == "0") selected @endif value="INBOUND_MAN">Agent Dial Next</option>
+                                                            <option @if($edit_compaigns['data']['dial_method'] == 'INBOUND_MAN' && $velocity > "0") selected @endif value="INBOUND_MAN">Auto Dial Next</option>
 
-                                            <div class="col-sm-12 col-md-6 col-lg-6" id="speed_div"  >
-                                                <input type="hidden" readonly id='velocity_val' value='{{$velocity}}'>
-                                                <div class="form-group">
-                                                    <label for="Velocity" class="form-label">Velocity</label>
-                                                    <select name="field_55" class="form-control" id="Velocity">
-                                                    </select>
+                                                        </select>
+                                                    </div>
                                                 </div>
                                             </div>
 
 
+                                            <div class="row">
+                                                <div class="col-sm-12 col-md-6 col-lg-6">
+                                                    <div class="form-group">
+                                                        <label for="Sequence" class="form-label">Sequence</label>
+                                                        <select name="sequence" class="form-control">   
+                                                            <option {{ $edit_compaigns['data']['lead_order'] === 'UP' ? 'selected' : '' }} value="Up">Newest to Oldest</option>
+                                                            <option {{ $edit_compaigns['data']['lead_order'] === 'DOWN' ? 'selected' : '' }} value="Down">Oldest to Newest</option>
+                                                            <option {{ $edit_compaigns['data']['lead_order'] === 'DOWN COUNT' ? 'selected' : '' }} value="Down Count">Most Called First</option>
+                                                            <option {{ $edit_compaigns['data']['lead_order'] === 'UP COUNT' ? 'selected' : '' }} value="Up Count">Least Called First</option>
+                                                            <option {{ $edit_compaigns['data']['lead_order'] === 'RANDOM' ? 'selected' : '' }}   value="RANDOM">Shuffled</option>
 
-                                            <div class="col-sm-12 col-md-6 col-lg-6">
-                                                <div class="form-group">
-                                                    <label for="Call Guide" class="form-label">Call Guide</label>
-                                                    {{-- <input type="text" class="form-control" id="group" name="group" value="{{ isset($dailer_agent_user['user_group']) ? $dailer_agent_user['user_group'] : '' }}" placeholder="Group .."> --}}
-                                                    <select name="profile_script" class="form-control" id="call_guide">
 
-                                                        @if ($get_Scripts != "" && $get_Scripts !=NULL)
-                                                            @foreach ($get_Scripts['script_id'] as $i=>$scrip)
-                                                            @if ($get_Scripts['active'][$i] == 'Y')
-                                                                <option {{$edit_compaigns['data']['campaign_script'] == $get_Scripts['script_id'][$i]  ? 'selected' : ''}}    value="{{$get_Scripts['script_id'][$i]}}">{{$get_Scripts['script_name'][$i]}}</option>
-                                                                
-                                                            @endif
-                                                           
-                                                            @endforeach
+                                                            <!-- <option {{$edit_compaigns['data']['lead_order'] == 'Up' ? 'selected' : ''}}  value="Up">Newest to Oldest</option>
+                                                            <option {{$edit_compaigns['data']['lead_order'] == 'Down' ? 'selected' : ''}} value="Down">Oldest to Newest</option>
+                                                            <option {{$edit_compaigns['data']['lead_order'] == 'Down Count' ? 'selected' : ''}} value="Down Count">Most Called First</option>
+                                                            <option {{$edit_compaigns['data']['lead_order'] == 'Up Count' ? 'selected' : ''}} value="Up Count">Least Called First</option>
+                                                            <option {{$edit_compaigns['data']['lead_order'] == 'Random' ? 'selected' : ''}} value="Random">Shuffled</option> -->
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                
+
+                                                <div class="col-sm-12 col-md-6 col-lg-6 {{ $velocity == '0' ? 'd-none' : '' }} " id="speed_div"  >
+                                                    <input type="hidden" readonly id='velocity_val' value='{{$velocity}}'>
+                                                    <div class="form-group "  >
+                                                        <label for="Velocity" class="form-label">Velocity</label>
+                                                        <select name="field_55" class="form-control" id="Velocity">
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+
+
+                                                <div class="col-sm-12 col-md-6 col-lg-6">
+                                                    <div class="form-group">
+                                                        <label for="Call Guide" class="form-label">Call Guide</label>
+                                                        {{-- <input type="text" class="form-control" id="group" name="group" value="{{ isset($dailer_agent_user['user_group']) ? $dailer_agent_user['user_group'] : '' }}" placeholder="Group .."> --}}
+                                                        <select name="profile_script" class="form-control" id="call_guide">
+
+                                                            @if ($get_Scripts != "" && $get_Scripts !=NULL)
+                                                                @foreach ($get_Scripts['script_id'] as $i=>$scrip)
+                                                                @if ($get_Scripts['active'][$i] == 'Y')
+                                                                    <option {{$edit_compaigns['data']['campaign_script'] == $get_Scripts['script_id'][$i]  ? 'selected' : ''}}    value="{{$get_Scripts['script_id'][$i]}}">{{$get_Scripts['script_name'][$i]}}</option>
+                                                                    
+                                                                @endif
                                                             
-                                                        @else
-                                                        <option value="">None</option>
-                                                        @endif
-                                                    </select>
+                                                                @endforeach
+                                                                
+                                                            @else
+                                                            <option value="">None</option>
+                                                            @endif
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-sm-12 col-md-6 col-lg-6">
+                                                    <div class="form-group">
+                                                        <label for="status" class="form-label">status</label>
+                                                        
+
+
+
+                                                        <select name="status" class="form-control select2" id="status">    
+                                                            <option value="Y" {{ (isset($edit_compaigns['data']['active']) && $edit_compaigns['data']['active'] == 'Y') ? 'selected' : '' }}>Active</option>
+                                                            <option value="N" {{ (isset($edit_compaigns['data']['active']) && $edit_compaigns['data']['active'] == 'N') ? 'selected' : '' }}>Not Active</option>
+                                                        </select>
+
+                                                    </div>
+                                                </div>                  
+                                            </div>
+                                        
+                                        </div>
+                                        <!-- /.card-body -->
+                                        <div class="card-footer">
+                                            <div class="row">
+                                                <div class="col-sm-12 col-md-2 col-lg-2 mb-3">
+                                                    <a class="btn btn-default btn-md btn-block" href="{{ route('services.campaigns', ['service' => strtolower('dailer'), 'organization_services_id' => $organization_service_id]) }}">Cancel</a>
+                                                </div>
+                                                <div class="col-sm-12 col-md-8 col-lg-8"></div>
+                                                <div class="col-sm-12 col-md-2 col-lg-2 mb-3">
+                                                    <button class="btn btn-success btn-md btn-block" type="submit">Save</button>
                                                 </div>
                                             </div>
-
-                                            <div class="col-sm-12 col-md-6 col-lg-6">
-                                                <div class="form-group">
-                                                    <label for="status" class="form-label">status</label>
-                                                    
-
-
-
-                                                    <select name="status" class="form-control select2" id="status">    
-                                                        <option value="Y" {{ (isset($edit_compaigns['data']['active']) && $edit_compaigns['data']['active'] == 'Y') ? 'selected' : '' }}>Active</option>
-                                                        <option value="N" {{ (isset($edit_compaigns['data']['active']) && $edit_compaigns['data']['active'] == 'N') ? 'selected' : '' }}>Not Active</option>
-                                                    </select>
-
-                                                </div>
-                                            </div>                  
                                         </div>
-                                      
+                                        <!-- /.card-footer-->
                                     </div>
-                                    <!-- /.card-body -->
-                                    <div class="card-footer">
-                                        <div class="row">
-                                            <div class="col-sm-12 col-md-2 col-lg-2 mb-3">
-                                                <a class="btn btn-default btn-md btn-block" href="{{ route('services.campaigns', ['service' => strtolower('dailer'), 'organization_services_id' => $organization_service_id]) }}">Cancel</a>
-                                            </div>
-                                            <div class="col-sm-12 col-md-8 col-lg-8"></div>
-                                            <div class="col-sm-12 col-md-2 col-lg-2 mb-3">
-                                                <button class="btn btn-success btn-md btn-block" type="submit">Save</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- /.card-footer-->
-                                </div>
-                                <!-- /.card -->
+                                    <!-- /.card -->
                             </form>
                         </div>
 
@@ -383,9 +391,71 @@
                         </div>
                         <div class="tab-pane fade" id="attributes" role="tabpanel" aria-labelledby="attributes-tab">
 
-                            <div class="col-md-4 mt-3">
-                                <h4>custom attribute</h4>
-                            </div>   
+                            <form method="POST" action="{{ route('Outbount.customAttribute', ['service' => strtolower('Dailer')]) }}" class="form-horizontal">
+                            @csrf
+                                <input type="hidden" name="organization_service_id" value="" readonly>
+                                <input type="hidden" name="profile_id" value="{{$edit_compaigns['data']['campaign_id']}}" readonly>
+                              
+                                @if(isset($GetCustomAttributes))
+
+                                @php
+                                    $fields = json_decode($GetCustomAttributes, true);
+                                @endphp
+                                <div class="card">
+                                    <div class="card-header">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                            <h3 class="card-title">Custom Attributes</h3>
+                                            </div>
+                                            <div class="col-md-6 text-end" style="text-align: end;">
+                                            <button type="button" class="btn btn-primary btn-sm" onclick="add_custom_attribute();">Add Custom Attribute</button>
+                                            </div>
+                                        </div>
+                                    
+                                            
+
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            @foreach($fields as $field)
+                                                <div class="col-sm-12 col-md-6 col-lg-6">
+                                                    <div class="form-group">
+                                                        <label  class="form-label">{{ $field['display_name'] }}</label>
+
+                                                        @php
+                                                            $custom_value = custom_value($field['api_name'], $edit_compaigns['data']['custom_attributes']);
+                                                        @endphp
+
+
+                                                        <input type="text" class="form-control" value="{{$custom_value}}" name="{{ $field['api_name'] }}" >
+
+                                                       
+                                                    </div>
+                                                </div>
+                                            @endforeach
+
+                                        </div>
+                                    </div>
+                                    <!-- /.card-body -->
+                                    <div class="card-footer">
+                                        <div class="row">
+                                            <div class="col-sm-12 col-md-2 col-lg-2 mb-3">
+                                            <a class="btn btn-default btn-md btn-block" href="{{ route('services.campaigns', ['service' => strtolower('dailer'), 'organization_services_id' => $organization_service_id]) }}">Cancel</a>
+                                            </div>
+                                            <div class="col-sm-12 col-md-8 col-lg-8"></div>
+                                            <div class="col-sm-12 col-md-2 col-lg-2 mb-3">
+                                            <button class="btn btn-success btn-md btn-block" type="submit">Save</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /.card-footer-->
+                                </div>
+                                @endif
+                                <!-- /.card -->
+                            </form>
+                        
+                        
+                        
                         </div>
 
                     </div>
@@ -394,6 +464,56 @@
             </div>
     </div>
     <!-- /.card-body -->
+</div>
+
+
+
+
+ <!-- modal for custom_attribute -->
+ <div class="modal fade" id="outbound_cutom_attributes" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Custom Attribute :</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      <form id="myForm" method="post" action="{{ route('add-custom-attributes', ['service' => strtolower('Dailer')]) }}">
+            <input type="hidden" class="form-control" id="organization_services_id" name="organization_services_id" value="{{$organization_service_id}}">
+            @csrf
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-sm-6 col-md-6 ">
+                        <div class="form-group">
+                            <label  class="form-label">Api Name<span class="text-danger d-none" id="apiError">*</span></label>
+                            <input type="text" class="form-control" name="api" id="apiInput" onchange="check_previous_api_name('apiInput', {{$organization_service_id}}, 'add-apiname')" required>
+                            <span style="color:red" id="api-error"></span>
+                            <span style="color:green" id="api-success"></span>
+                        </div>
+                    </div>
+                
+                    <div class="col-sm-6 col-md-6 ">
+                        <div class="form-group">
+                            <label  class="form-label">Display Name<span class="text-danger d-none" id="nameError">*</span></label>
+                            <input type="text" class="form-control" name="name" required>
+                            
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">Close</button>
+                <button type="submit" id="submitButton" class="btn btn-primary btn-sm" disabled>Save</button>
+            </div>
+        </form>
+
+      </div>
+      
+    </div>
+  </div>
 </div>
 </section>
 <!-- /.content -->

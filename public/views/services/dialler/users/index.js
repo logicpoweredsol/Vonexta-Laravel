@@ -1118,7 +1118,5 @@ function open_outbound_model(row_number)
 
 
 
-// function show_user_on_administrtion()
-// {
-//     alert('ok');
-// }
+
+

@@ -110,8 +110,8 @@ class UserController extends Controller
 
 
 
-       // inbound skills on add agent
-       function get_Inbound_skill($organization_servicesID){
+    // inbound skills on add agent
+    function get_Inbound_skill($organization_servicesID){
         $OrganizationServices = OrganizationServices::find($organization_servicesID);
             if ($OrganizationServices) {
                 $phpArray = json_decode($OrganizationServices->connection_parameters, true);
@@ -143,40 +143,40 @@ class UserController extends Controller
     }
 
 
-        // compaign skills on agent
-        function get_Campaigns_skill($organization_servicesID)
-        {
-        
-        
-            $OrganizationServices = OrganizationServices::find($organization_servicesID);
-        
-            if ($OrganizationServices) {
-                $phpArray = json_decode($OrganizationServices->connection_parameters, true);
-        
-                $apiEndpoint = 'https://' . $phpArray['server_url'] . '/APIv2/Campaigns/API.php';
-        
-                $postData = [
-                    'Action' => 'GetAllCampaigns',
-                    'apiUser' =>  $phpArray['api_user'],
-                    'apiPass' =>  $phpArray['api_pass'],
-                    'session_user' =>auth()->user()->email,
-                ];
-                $ch = curl_init($apiEndpoint);
-        
-                // Set cURL options
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($ch, CURLOPT_POST, true);
-                curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
-                $response = curl_exec($ch);
-                curl_close($ch);
-        
-                $api_response = json_decode($response, true);
-                return $api_response;
-            } else {
-                // Handle the case when $OrganizationServices is null
-                return response()->json(['error' => 'Organization Services not found'], 404);
-            }
+    // compaign skills on agent
+    function get_Campaigns_skill($organization_servicesID)
+    {
+    
+    
+        $OrganizationServices = OrganizationServices::find($organization_servicesID);
+    
+        if ($OrganizationServices) {
+            $phpArray = json_decode($OrganizationServices->connection_parameters, true);
+    
+            $apiEndpoint = 'https://' . $phpArray['server_url'] . '/APIv2/Campaigns/API.php';
+    
+            $postData = [
+                'Action' => 'GetAllCampaigns',
+                'apiUser' =>  $phpArray['api_user'],
+                'apiPass' =>  $phpArray['api_pass'],
+                'session_user' =>auth()->user()->email,
+            ];
+            $ch = curl_init($apiEndpoint);
+    
+            // Set cURL options
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
+            $response = curl_exec($ch);
+            curl_close($ch);
+    
+            $api_response = json_decode($response, true);
+            return $api_response;
+        } else {
+            // Handle the case when $OrganizationServices is null
+            return response()->json(['error' => 'Organization Services not found'], 404);
         }
+    }
 
 
 
@@ -256,13 +256,14 @@ class UserController extends Controller
     
 
      // Start Edit User
-     public function edit($service , $organization_services_id ,$AgentID){
+    public function edit($service , $organization_services_id ,$AgentID){
 
       
         $dailer_agent_user = '';
         $call_log_inbounds = '';
         $call_log_outbounds = '';
         $varaibles = [];
+        $GetCustomAttributes = "";
 
 
         $dailer_agent_user_response =   $this->get_agent_detail($organization_services_id ,$AgentID);
@@ -298,20 +299,22 @@ class UserController extends Controller
         }
 
 
-        $GetCustomAttributes = $this->GetCustomAttributes($organization_services_id ,$AgentID);
+        $GetCustomAttributes_responce = $this->GetCustomAttributes($organization_services_id);
 
        
 
-        // if ($GetCustomAttributes['result'] == 'success') {
-        //     $attributes = $GetCustomAttributes['data'];
-        //     return response()->json($attributes);
-        // }
+        if ($GetCustomAttributes_responce['result'] == 'success') {
+            $GetCustomAttributes = json_encode( $GetCustomAttributes_responce['data']);
+        }
+
+        // dd($GetCustomAttributes);
+
         
 
 
         
 
-            return view('dialer.Agent.edit' ,compact('service','dailer_agent_user','organization_services_id','call_log_inbounds' ,'call_log_outbounds','varaibles'));
+            return view('dialer.Agent.edit' ,compact('service','dailer_agent_user','organization_services_id','call_log_inbounds' ,'call_log_outbounds','varaibles','GetCustomAttributes'));
     }
 
 
@@ -512,7 +515,7 @@ class UserController extends Controller
     }
 
 
-    public function GetCustomAttributes($organization_service_id,$AgentID)
+    public function GetCustomAttributes($organization_service_id)
     {
         $OrganizationServices = OrganizationServices::find($organization_service_id);
         $phpArray = json_decode($OrganizationServices->connection_parameters, true);
@@ -621,8 +624,8 @@ class UserController extends Controller
     //   Update Function Deaatil Tabk of Agent 
     public function update_agent_in_db_detail(Request $request){
 
-        // $world = [];
-        // $length = count($request->custom_attribute);
+
+
 
         $userAgent = userAgent::where('api_user',$request->User)->first();
         $userAgent->name=$request->name;
@@ -659,36 +662,8 @@ class UserController extends Controller
              'agent_lead_search_override' => "DISABLED",
              'vdc_agent_api_access' =>1,
              'modify_same_user_level' =>'',
+            //  'custom_attributes' =>$options_value['custom_attributes'],
          ];
-
-
-
-         for ($i = 1; $i < 11; $i++) {
-            $attribute = $this->numberToString($i);
-            $custom_attribute = "custom_attribute_" . $i; // Corrected concatenation here
-            if(isset($request->$custom_attribute)){ // Corrected access to request variable here
-                $postData["custom_$attribute"] = $request->$custom_attribute;
-            } else {
-                $postData["custom_$attribute"] = "";
-            }
-        }
-
-        
-
-
-        //  if(is_array($request->custom_attribute)) {
-        //         $count = count($request->custom_attribute);
-        //         for ($i = 0; $i < $count; $i++) {
-        //             $attribute = $this->numberToString($i + 1);
-        //             $postData["custom_$attribute"] = $request->custom_attribute[$i]; // Adjusted index here
-        //         }
-        //     } else {
-        //         // Handle the case where $request->custom_attribute is not an array
-        //         // You might want to log an error, throw an exception, or handle it in another way based on your requirements.
-        //     }
-
-         
-
 
          $ch = curl_init($apiEndpoint);
      
@@ -717,23 +692,92 @@ class UserController extends Controller
    
     }
 
-    function numberToString($number) {
-       
-        $numbers = [
-            1 => 'one',
-            2 => 'two',
-            3 => 'three',
-            4 => 'four',
-            5 => 'five',
-            6 => 'six',
-            7 => 'seven',
-            8 => 'eight',
-            9 => 'nine',
-            10 => 'ten',
+
+    public function update_agent_in_db_custom_attribute(Request $request){
+
+
+        $requestData = $request->all();
+
+        // Define keys that you want to exclude
+        $excludeKeys = ['User', 'organization_services_id', '_token'];
+
+        // Filter out the keys you want to exclude
+        $filteredData = array_filter($requestData, function($key) use ($excludeKeys) {
+            return !in_array($key, $excludeKeys);
+        }, ARRAY_FILTER_USE_KEY);
+
+
+        // Convert the modified data to JSON
+        $jsonData = json_encode($filteredData);
+
+
+
+        $OrganizationServices = OrganizationServices::find($request->organization_services_id);
+        $phpArray = json_decode($OrganizationServices->connection_parameters, true);
+ 
+        $Agent_detail= $this->get_agent_detail($request->organization_services_id,$request->User);
+
+        $options_value = $Agent_detail['data'];
         
-        ];
-        return isset($numbers[$number]) ? $numbers[$number] : (string)$number;
+         $apiEndpoint = 'https://' . $phpArray['server_url'] . '/APIv2/Users/API.php';
+         // POST data
+         $postData = [
+             
+             'Action' => 'EditUser',
+             'apiUser' =>  $phpArray['api_user'],
+             'apiPass' =>  $phpArray['api_pass'],
+             'session_user' => auth()->user()->email,
+             'responsetype' => 'json',
+             'user' => $request->User,
+ 
+             'full_name'=> $options_value['full_name'],
+             'user_group'=>  $options_value['user_group'],
+             'active' => $options_value['active'],
+             'voicemail_id'=> $options_value['voicemail_id'],
+             'email'=>$options_value['email'],
+             'mobile_number' =>  $options_value['mobile_number'],
+             'hotkeys_active' => 0,
+             'user_level' => 1,
+             'vicidial_recording_override' => "DISABLED",
+             'agent_lead_search_override' => "DISABLED",
+             'vdc_agent_api_access' =>1,
+             'modify_same_user_level' =>'',
+             'custom_attributes' =>$jsonData,
+
+         ];
+
+
+        //  dd($postData);
+         $ch = curl_init($apiEndpoint);
+     
+         // Set cURL options
+         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+         curl_setopt($ch, CURLOPT_POST, true);
+         curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
+     
+         // Execute cURL session and get the response
+         $response = curl_exec($ch);
+     
+         // Close cURL session
+         curl_close($ch);
+         
+         $responce =  json_decode($response, true);
+
+        //  dd($responce);
+
+        if($responce['result'] == 'success'){
+            return redirect()->back()->with('success', 'Agent Updated successfully');
+        }else{
+
+
+            return redirect()->back()->with('error', 'Some thing Went Wrong ');
+        }
+
+   
     }
+
+
+  
 
 
    

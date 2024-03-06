@@ -37,7 +37,7 @@
 
         <div class="card-tools">
 
-          <a href="javascript:void(0);" type="button" class="btn btn-sm btn-primary" onclick="show_add_compaign_modal();"> <i class="fas fa-plus"></i> Add outbound Profile </a>
+          <a href="javascript:void(0);" type="button" class="btn btn-sm btn-primary" onclick="add_outbound_profile();"> <i class="fas fa-plus"></i> Add outbound Profile </a>
 
         </div>
        
@@ -46,21 +46,21 @@
 
       <div class="acbz" style="position: absolute;width: 250px;right: 275px;top: 20px ;z-index:9;">
 
-        {{-- <div class="btn-group" style="margin-left:50px;">
+        <div class="btn-group" style="margin-left:50px;">
             <button type="button" class="btn btn-default">Status - <span id="cur_status">All</span> </button>
             <button type="button" class="btn btn-default dropdown-toggle dropdown-icon" data-toggle="dropdown">
                 <span class="sr-only">Toggle Dropdown</span>
             </button>
             <div class="dropdown-menu" role="menu" >
-                <a class="dropdown-item" href="javascript:;" onclick="search_filter('All')">All</a>
-                <a class="dropdown-item" href="javascript:" onclick="search_filter('Active')" >Active</a>
-                <a class="dropdown-item" href="javascript:" onclick="search_filter('Not Active')" >Not Active</a>
+                <a class="dropdown-item" href="javascript:;" onclick="outbound_filter('All')">All</a>
+                <a class="dropdown-item" href="javascript:" onclick="outbound_filter('Active')" >Active</a>
+                <a class="dropdown-item" href="javascript:" onclick="outbound_filter('Not Active')" >Not Active</a>
             </div>
-        </div> --}}
+        </div>
       </div>
 
 
-        <table id="Compaign-tableSS" class="table table-striped table-hover vonexta-table">
+        <table id="outbound-profile" class="table table-striped table-hover vonexta-table">
           <thead>
             <tr>
               <th>Profile ID</th>
@@ -124,7 +124,7 @@
     <!-- /.card -->
   
     <!-- add-compaign-modal -->
-    <div class="modal fade" id="compaignn-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="outboundprofile-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
           <div class="modal-header">

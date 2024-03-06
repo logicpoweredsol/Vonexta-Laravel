@@ -183,8 +183,7 @@ $sub_menu_sub = null!==request()->segment(4) && !is_numeric(request()->segment(4
                                 </li>
                                 <li class="nav-item">
                                     <a href="{{ route('services.custom-attribute', ['service' => strtolower($service->name), 'organization_services_id' => $user_have->user_have_service->id]) }}" class="nav-link">
-
-                                     <i class="fas fa-list"></i>
+                                     <i class="fas fa-list nav-icon"></i>
                                     <p>Custom Attributes</p>
                                     </a>
                                 </li>

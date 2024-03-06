@@ -676,6 +676,21 @@ div.dataTables_wrapper div.dataTables_info {
     width: 24px !important;
 }
 
+.select2-container,
+.select2-container--default .select2-selection--single{
+    height: 38px !important;
+}
+.select2-container--default .select2-selection--single .select2-selection__arrow{
+    top: 6px !important;
+}
+.select2-container--default .select2-selection--multiple .select2-selection__choice{
+    background: #007bff !important;
+    color: #fff;
+}
+.select2-container--default .select2-selection--multiple .select2-selection__choice__remove{
+    color: #fff !important;
+}
+
 
 #circle{
     width: 16px;
@@ -688,4 +703,6 @@ div.dataTables_wrapper div.dataTables_info {
     vertical-align:middle;
     text-align:center;
     color:white;
+    display: inline-block;
+    margin-left: 5px;
     }

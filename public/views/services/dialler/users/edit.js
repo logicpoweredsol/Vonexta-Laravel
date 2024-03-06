@@ -663,6 +663,126 @@ function add_row() {
 
 
 
+
+    function add_custom_attribute()
+    {
+       $("#custommmmmm").modal('show');
+    }
+
+
+
+    $(document).ready(function() {
+        // Function to check if the fields are empty
+        function checkFields() {
+            var apiValue = $('input[name="api"]').val();
+            var nameValue = $('input[name="name"]').val();
+            
+            if (apiValue.trim() !== '') {
+                $('#apiError').addClass('d-none');
+            } else {
+                $('#apiError').removeClass('d-none');
+            }
+            
+            if (nameValue.trim() !== '') {
+                $('#nameError').addClass('d-none');
+            } else {
+                $('#nameError').removeClass('d-none');
+            }
+            
+            if (apiValue.trim() !== '' && nameValue.trim() !== '') {
+                $('#submitButton').prop('disabled', false); // Enable the submit button
+            } else {
+                $('#submitButton').prop('disabled', true); // Disable the submit button
+            }
+        }
+    
+        // Call the function on keyup event for both fields
+        $('input[name="api"], input[name="name"]').on('keyup', function() {
+            checkFields();
+        });
+    
+        // Call the function on page load to set initial state of the submit button
+        checkFields();
+    });
+    
+    
+    
+    function check_previous_api_name(inputId, organization_servicesID, action) {
+        $('#api-error').html('');
+        $('#api-success').html('');
+        
+        var extensionField = $("#" + inputId);
+        var extension = extensionField.val(); // Retrieve the value of the input field
+        
+        // Regular expression to match only '-' and '_' characters
+        var regex = /^[a-zA-Z0-9_-]+$/;
+        
+        if (!extension) {
+            // If the input is empty, clear any previous error messages and exit
+            $('#api-error').html('');
+            $('#submitButton').prop('disabled', true);
+            return;
+        }
+        
+        if (!regex.test(extension)) {
+            // If the input doesn't match the allowed characters, show an error
+            $('#api-error').html('Only "-" and "_" characters are allowed.');
+            $('#submitButton').prop('disabled', true); // Disable the submit button
+            return; 
+        } else {
+            $('#api-error').html(''); // Clear any previous error messages
+            $('#submitButton').prop('disabled', false); // Enable the submit button
+        }
+        
+        $.ajax({
+            url: `${baseUrl}/services/dialer/agents/check-previous-api-name`,
+            method: 'POST',
+            headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+            data: {
+                'api_name': extension,
+                'organization_servicesID': organization_servicesID
+            },
+            success: function(response) {
+                if (action == 'add-apiname') {
+                    if (response.status == 'success') {
+                        $('#api-success').html(response.message);
+                    } 
+                    if (response.status == 'failed') {
+                        $('#api-error').html(response.message);
+                    } 
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error("Error occurred:", error);
+            }
+        });
+    
+        // Attach an event listener to the input field to re-validate whenever it changes
+        extensionField.on('input', function() {
+            var newExtension = $(this).val();
+            if (!newExtension) {
+                $('#api-error').html(''); 
+                $('#submitButton').prop('disabled', true); 
+                return;
+            }
+            if (!regex.test(newExtension)) {
+                $('#api-error').html('Only "-" and "_" characters are allowed.');
+                $('#submitButton').prop('disabled', true); 
+            } else {
+                $('#api-error').html(''); 
+                $('#submitButton').prop('disabled', false); 
+            }
+        });
+    }
+    
+    
+    
+    
+    
+    
+
+
+
     
 
    

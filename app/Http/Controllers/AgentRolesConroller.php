@@ -14,6 +14,7 @@ class AgentRolesConroller extends Controller
     // index 
     public function agentRole($service, $organization_servicesID)
     {
+
         $userGroupsResults = $this->get_agent_roles($organization_servicesID);
         $userGroups = "";
 
